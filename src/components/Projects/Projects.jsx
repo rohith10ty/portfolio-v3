@@ -460,14 +460,14 @@ function Projects() {
       const getOffscreenTop = () => -(window.innerHeight + 350);
       const getOffscreenBottom = () => window.innerHeight + 350;
 
-      // Initial State: Tree is placed off-screen at the TOP
+      // Initial State: Tree enters from the BOTTOM
       gsap.set(treeWrapper, {
-        y: getOffscreenTop,
+        y: getOffscreenBottom,
         x: 0,
         opacity: 0,
       });
 
-      // Timeline: Top -> Center (stay for scrolls) -> Bottom
+      // Timeline: Bottom -> Center (stay for scrolls) -> Top
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: stage,
@@ -483,7 +483,7 @@ function Projects() {
         },
       });
 
-      // STAGE 1: Smoothly enter from TOP into the center
+      // STAGE 1: Smoothly enter from BOTTOM into the center
       tl.to(
         treeWrapper,
         {
@@ -498,11 +498,11 @@ function Projects() {
       // STAGE 2: Rest in the center
       tl.to({}, { duration: 1.2 });
 
-      // STAGE 3: Smoothly exit to the BOTTOM
+      // STAGE 3: Smoothly exit into the TOP
       tl.to(
         treeWrapper,
         {
-          y: getOffscreenBottom,
+          y: getOffscreenTop,
           opacity: 0,
           duration: 0.6,
           ease: "power1.in",
