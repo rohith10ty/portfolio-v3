@@ -589,142 +589,140 @@ function Projects() {
 
       {/* ========================================================
           2. SHOWCASE STAGE: Tree comes from left, stays in center, goes to right
-          Responsive spacing on compact mobile (iPhone SE & Samsung S26)
+          Responsive proportional scaler for compact mobile (iPhone SE & Samsung A55)
           ======================================================== */}
       <div
         ref={stageRef}
-        className="relative z-20 flex h-[100svh] w-full items-center justify-center overflow-hidden px-3 sm:px-6 md:px-8 lg:px-12 pt-14 sm:pt-16 lg:pt-0"
+        className="relative z-20 flex h-[100svh] w-full items-center justify-center overflow-hidden px-4 md:px-8 lg:px-12"
       >
         <div
           ref={treeWrapperRef}
           className="relative w-full max-w-[1420px] will-change-transform flex items-center justify-center"
         >
-          <div
-            className={`grid grid-cols-1 items-center gap-3 sm:gap-6 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
-              activeProject
-                ? "lg:grid-cols-12 lg:gap-6 xl:gap-8"
-                : "grid-cols-1 place-items-center"
-            }`}
-          >
-          {/* 1. File Tree Window: Centered when no repo selected, shifts to left column when a repo is clicked */}
-          <div
-            className={`relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              activeProject
-                ? "lg:col-span-4 max-w-[340px] sm:max-w-[380px] xl:max-w-[400px] mx-auto lg:mx-0 w-full"
-                : "w-full max-w-[480px] mx-auto"
-            }`}
-          >
-            <div className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl">
-              {/* Window Bar */}
-              <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-3 sm:px-4 py-2 sm:py-2.5">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#e0564c]/85 shadow-[0_0_6px_rgba(224,86,76,0.3)]" />
-                  <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#e5a038]/85 shadow-[0_0_6px_rgba(229,160,56,0.3)]" />
-                  <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#52ba69]/85 shadow-[0_0_6px_rgba(82,186,105,0.3)]" />
-                </div>
-
-                <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono tracking-wider text-[#e1dcc9]/60">
-                  <FolderGit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#d8a05e]" />
-                  <span>github: rohith10ty</span>
-                </div>
-
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  {activeProject && (
-                    <button
-                      onClick={() => setSelectedProjectId(null)}
-                      className="rounded border border-[rgba(225,188,120,0.25)] bg-[rgba(216,160,94,0.1)] px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-mono text-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white transition-colors cursor-pointer"
-                      title="Close preview and center categories"
-                    >
-                      ✕ Close
-                    </button>
-                  )}
-                  <span className="text-[9px] sm:text-[10px] font-mono text-[#e1dcc9]/40">
-                    {repoCount} repos
-                  </span>
-                </div>
-              </div>
-
-              {/* Scrollable File Tree: Adaptive compact height on iPhone SE & Samsung S26 when project selected */}
-              <div
-                ref={treeScrollRef}
-                onWheel={handleTreeWheel}
-                className={`custom-scrollbar overflow-y-auto overscroll-contain p-2.5 sm:p-3.5 transition-[height] duration-500 ease-out ${
-                  activeProject
-                    ? "h-[105px] min-[390px]:h-[125px] sm:h-[145px] lg:h-[380px] lg:max-h-[420px]"
-                    : "h-[260px] min-[390px]:h-[300px] sm:h-[340px] md:h-[380px] max-h-[420px]"
-                }`}
-              >
-                <Tree
-                  elements={treeElements}
-                  initialSelectedId={selectedProjectId}
-                  initialExpandedItems={["root-repos"]}
-                  onSelect={(id) => setSelectedProjectId(id)}
-                />
-              </div>
-
-              {/* Helper hint banner when no project is selected */}
-              {!activeProject && (
-                <div className="border-t border-[rgba(225,188,120,0.12)] bg-[#17100a]/80 px-3 sm:px-4 py-2 sm:py-2.5 text-center text-[10px] sm:text-[11px] font-mono tracking-wide text-[#e1dcc9]/55">
-                  Click a category to open, then select any project to preview
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 2. Devices Container: Appears smoothly on screen ONLY when a project is selected */}
-          {activeProject && (
+          <div className="projects-stage-scaler w-full flex items-center justify-center">
             <div
-              className="relative lg:col-span-8 flex flex-col lg:flex-row items-center justify-center lg:justify-end gap-3 sm:gap-6 xl:gap-8 w-full transition-opacity duration-500 ease-out animate-in fade-in"
+              className={`grid grid-cols-1 items-center gap-6 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
+                activeProject
+                  ? "lg:grid-cols-12 lg:gap-6 xl:gap-8"
+                  : "grid-cols-1 place-items-center"
+              }`}
             >
-              {/* Desktop Center Column: iPhone Mockup in the center (visible on lg+) */}
-              <div className="relative hidden lg:flex items-center justify-center shrink-0">
-                <div className="w-[135px] sm:w-[150px] md:w-[160px] xl:w-[175px]">
-                  <Iphone url={activeProject.homepage} />
+            {/* 1. File Tree Window: Centered when no repo selected, shifts to left column when a repo is clicked */}
+            <div
+              className={`relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                activeProject
+                  ? "lg:col-span-4 max-w-[380px] xl:max-w-[400px] mx-auto lg:mx-0 w-full"
+                  : "w-full max-w-[480px] mx-auto"
+              }`}
+            >
+              <div className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl">
+                {/* Window Bar */}
+                <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-4 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-[#e0564c]/85 shadow-[0_0_6px_rgba(224,86,76,0.3)]" />
+                    <div className="h-3 w-3 rounded-full bg-[#e5a038]/85 shadow-[0_0_6px_rgba(229,160,56,0.3)]" />
+                    <div className="h-3 w-3 rounded-full bg-[#52ba69]/85 shadow-[0_0_6px_rgba(82,186,105,0.3)]" />
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-wider text-[#e1dcc9]/60">
+                    <FolderGit2 className="h-3.5 w-3.5 text-[#d8a05e]" />
+                    <span>github: rohith10ty</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {activeProject && (
+                      <button
+                        onClick={() => setSelectedProjectId(null)}
+                        className="rounded border border-[rgba(225,188,120,0.25)] bg-[rgba(216,160,94,0.1)] px-2 py-0.5 text-[10px] font-mono text-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white transition-colors cursor-pointer"
+                        title="Close preview and center categories"
+                      >
+                        ✕ Close
+                      </button>
+                    )}
+                    <span className="text-[10px] font-mono text-[#e1dcc9]/40">
+                      {repoCount} repos
+                    </span>
+                  </div>
                 </div>
+
+                {/* Scrollable File Tree: Restored to full size */}
+                <div
+                  ref={treeScrollRef}
+                  onWheel={handleTreeWheel}
+                  className="custom-scrollbar h-[360px] md:h-[380px] max-h-[420px] overflow-y-auto overscroll-contain p-3.5"
+                >
+                  <Tree
+                    elements={treeElements}
+                    initialSelectedId={selectedProjectId}
+                    initialExpandedItems={["root-repos"]}
+                    onSelect={(id) => setSelectedProjectId(id)}
+                  />
+                </div>
+
+                {/* Helper hint banner when no project is selected */}
+                {!activeProject && (
+                  <div className="border-t border-[rgba(225,188,120,0.12)] bg-[#17100a]/80 px-4 py-2.5 text-center text-[11px] font-mono tracking-wide text-[#e1dcc9]/55">
+                    Click a category to open, then select any project to preview
+                  </div>
+                )}
               </div>
+            </div>
 
-              {/* Desktop Screen Mockup & Action Buttons Just Below */}
-              <div className="relative flex flex-col items-center justify-center w-full max-w-[250px] min-[390px]:max-w-[285px] sm:max-w-[360px] md:max-w-[440px] lg:max-w-[480px] xl:max-w-[540px]">
-                <div className="relative w-full">
-                  <MacbookPro url={activeProject.homepage} className="max-w-full" />
-
-                  {/* Mobile-only iPhone overlay: sits attached to front-left of screen on mobile (< lg) */}
-                  <div className="absolute -bottom-2.5 -left-2 min-[390px]:-bottom-3.5 min-[390px]:-left-3 sm:-bottom-4 sm:-left-5 z-30 w-[72px] min-[390px]:w-[84px] sm:w-[110px] lg:hidden drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)]">
+            {/* 2. Devices Container: Appears smoothly on screen ONLY when a project is selected */}
+            {activeProject && (
+              <div
+                className="relative lg:col-span-8 flex flex-col lg:flex-row items-center justify-center lg:justify-end gap-6 xl:gap-8 w-full transition-opacity duration-500 ease-out animate-in fade-in"
+              >
+                {/* Desktop Center Column: iPhone Mockup in the center (visible on lg+) */}
+                <div className="relative hidden lg:flex items-center justify-center shrink-0">
+                  <div className="w-[135px] sm:w-[150px] md:w-[160px] xl:w-[175px]">
                     <Iphone url={activeProject.homepage} />
                   </div>
                 </div>
 
-                {/* Code and Live Preview Buttons Just Below the Desktop Screen */}
-                <div className="mt-2.5 sm:mt-4 flex items-center justify-center gap-2.5 sm:gap-3 w-full">
-                  {activeProject.github && (
-                    <a
-                      href={activeProject.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border border-[rgba(225,188,120,0.25)] bg-[#140e09]/92 px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
-                      title="View GitHub Repository Source Code"
-                    >
-                      <GitHubIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
-                      <span>Code</span>
-                    </a>
-                  )}
+                {/* Desktop Screen Mockup & Action Buttons Just Below */}
+                <div className="relative flex flex-col items-center justify-center w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px]">
+                  <div className="relative w-full">
+                    <MacbookPro url={activeProject.homepage} className="max-w-full" />
 
-                  {activeProject.homepage && (
-                    <a
-                      href={activeProject.homepage}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
-                      title="Open Live Preview in a New Tab"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      <span>Live Preview</span>
-                    </a>
-                  )}
+                    {/* Mobile-only iPhone overlay: sits attached to front-left of screen on mobile (< lg) */}
+                    <div className="absolute -bottom-4 -left-3 sm:-left-5 z-30 w-[105px] sm:w-[130px] lg:hidden drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)]">
+                      <Iphone url={activeProject.homepage} />
+                    </div>
+                  </div>
+
+                  {/* Code and Live Preview Buttons Just Below the Desktop Screen */}
+                  <div className="mt-4 flex items-center justify-center gap-3 w-full">
+                    {activeProject.github && (
+                      <a
+                        href={activeProject.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center gap-2 rounded-xl border border-[rgba(225,188,120,0.25)] bg-[#140e09]/92 px-4 py-2 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
+                        title="View GitHub Repository Source Code"
+                      >
+                        <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <span>Code</span>
+                      </a>
+                    )}
+
+                    {activeProject.homepage && (
+                      <a
+                        href={activeProject.homepage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
+                        title="Open Live Preview in a New Tab"
+                      >
+                        <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        <span>Live Preview</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
+            )}
             </div>
-          )}
           </div>
         </div>
       </div>

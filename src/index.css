@@ -282,3 +282,25 @@ body {
   }
 }
 
+/* =========================================================
+   PROJECTS SECTION: RESPONSIVE FIT FOR COMPACT MOBILE SCREENS
+   Applies ONLY to short mobile viewports (iPhone SE & Samsung Galaxy A55).
+   Leaves iPhone 16 Pro Max, iPads, and desktops completely untouched at 100% scale.
+   ========================================================= */
+@media (max-width: 767px) and (max-height: 720px) {
+  /* iPhone SE (375x667) and similar compact mobile screens */
+  .projects-stage-scaler {
+    transform: scale(0.78);
+    transform-origin: center center;
+  }
+}
+
+@media (max-width: 767px) and (min-height: 721px) and (max-height: 840px) {
+  /* Samsung Galaxy A55 (~780px - 840px usable mobile viewport) */
+  .projects-stage-scaler {
+    transform: scale(0.88);
+    transform-origin: center center;
+  }
+}
+
+
