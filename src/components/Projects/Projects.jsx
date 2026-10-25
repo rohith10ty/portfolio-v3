@@ -597,89 +597,89 @@ function Projects() {
         >
           <div className="projects-stage-scaler w-full flex items-center justify-center">
             <div
-              className={`grid grid-cols-1 items-center gap-6 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
+              className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
                 activeProject
-                  ? "md:grid-cols-12 md:gap-5 lg:gap-6 xl:gap-8"
-                  : "grid-cols-1 place-items-center"
+                  ? "flex flex-col md:flex-row items-center justify-center gap-6 md:gap-7 lg:gap-8 max-w-[1100px] mx-auto"
+                  : "flex flex-col items-center justify-center max-w-[480px] mx-auto"
               }`}
             >
-            {/* 1. File Tree Window: Centered when no repo selected, shifts to left column when a repo is clicked */}
-            <div
-              className={`relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                activeProject
-                  ? "md:col-span-5 lg:col-span-4 max-w-[380px] xl:max-w-[400px] mx-auto md:mx-0 w-full"
-                  : "w-full max-w-[480px] mx-auto"
-              }`}
-            >
+              {/* 1. File Tree Window: Centered when no repo selected, sits right beside preview when active */}
               <div
-                ref={treeCardRef}
-                data-lenis-prevent="true"
-                className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl"
+                className={`relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
+                  activeProject
+                    ? "max-w-[360px] lg:max-w-[380px] shrink-0"
+                    : "max-w-[480px] mx-auto"
+                }`}
               >
-                {/* Window Bar */}
-                <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-4 py-2.5">
-                  <div className="flex items-center gap-2">
-                    <div className="h-3 w-3 rounded-full bg-[#e0564c]/85 shadow-[0_0_6px_rgba(224,86,76,0.3)]" />
-                    <div className="h-3 w-3 rounded-full bg-[#e5a038]/85 shadow-[0_0_6px_rgba(229,160,56,0.3)]" />
-                    <div className="h-3 w-3 rounded-full bg-[#52ba69]/85 shadow-[0_0_6px_rgba(82,186,105,0.3)]" />
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-wider text-[#e1dcc9]/60">
-                    <FolderGit2 className="h-3.5 w-3.5 text-[#d8a05e]" />
-                    <span>github: rohith10ty</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    {activeProject && (
-                      <button
-                        onClick={() => setSelectedProjectId(null)}
-                        className="rounded border border-[rgba(225,188,120,0.25)] bg-[rgba(216,160,94,0.1)] px-2 py-0.5 text-[10px] font-mono text-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white transition-colors cursor-pointer"
-                        title="Close preview and center categories"
-                      >
-                        ✕ Close
-                      </button>
-                    )}
-                    <span className="text-[10px] font-mono text-[#e1dcc9]/40">
-                      {repoCount} repos
-                    </span>
-                  </div>
-                </div>
-
-                {/* Scrollable File Tree: Restored to full size with complete wheel trapping */}
                 <div
-                  ref={treeScrollRef}
+                  ref={treeCardRef}
                   data-lenis-prevent="true"
-                  style={{ overscrollBehavior: "contain" }}
-                  className="custom-scrollbar h-[360px] md:h-[380px] max-h-[420px] overflow-y-auto overscroll-contain p-3.5"
+                  className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl"
                 >
-                  <Tree
-                    elements={treeElements}
-                    initialSelectedId={selectedProjectId}
-                    initialExpandedItems={["root-repos"]}
-                    onSelect={(id) => setSelectedProjectId(id)}
-                  />
-                </div>
-
-                {/* Helper hint banner when no project is selected */}
-                {!activeProject && (
-                  <div className="border-t border-[rgba(225,188,120,0.12)] bg-[#17100a]/80 px-4 py-2.5 text-center text-[11px] font-mono tracking-wide text-[#e1dcc9]/55">
-                    Click a category to open, then select any project to preview
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* 2. Devices Container: Appears smoothly on screen ONLY when a project is selected */}
-            {activeProject && (
-              <div
-                className="relative md:col-span-7 lg:col-span-8 flex flex-col items-center justify-center w-full transition-opacity duration-500 ease-out animate-in fade-in"
-              >
-                {previewMode === "laptop" ? (
-                  /* LAPTOP VIEW: Wide display frame with 4 separate same-sized options below */
-                  <div className="relative flex flex-col items-center justify-center w-full animate-in fade-in duration-300">
-                    <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px]">
-                      <MacbookPro url={activeProject.homepage} className="max-w-full" />
+                  {/* Window Bar */}
+                  <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-4 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <div className="h-3 w-3 rounded-full bg-[#e0564c]/85 shadow-[0_0_6px_rgba(224,86,76,0.3)]" />
+                      <div className="h-3 w-3 rounded-full bg-[#e5a038]/85 shadow-[0_0_6px_rgba(229,160,56,0.3)]" />
+                      <div className="h-3 w-3 rounded-full bg-[#52ba69]/85 shadow-[0_0_6px_rgba(82,186,105,0.3)]" />
                     </div>
+
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-wider text-[#e1dcc9]/60">
+                      <FolderGit2 className="h-3.5 w-3.5 text-[#d8a05e]" />
+                      <span>github: rohith10ty</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {activeProject && (
+                        <button
+                          onClick={() => setSelectedProjectId(null)}
+                          className="rounded border border-[rgba(225,188,120,0.25)] bg-[rgba(216,160,94,0.1)] px-2 py-0.5 text-[10px] font-mono text-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white transition-colors cursor-pointer"
+                          title="Close preview and center categories"
+                        >
+                          ✕ Close
+                        </button>
+                      )}
+                      <span className="text-[10px] font-mono text-[#e1dcc9]/40">
+                        {repoCount} repos
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Scrollable File Tree: Restored to full size with complete wheel trapping */}
+                  <div
+                    ref={treeScrollRef}
+                    data-lenis-prevent="true"
+                    style={{ overscrollBehavior: "contain" }}
+                    className="custom-scrollbar h-[360px] md:h-[380px] max-h-[420px] overflow-y-auto overscroll-contain p-3.5"
+                  >
+                    <Tree
+                      elements={treeElements}
+                      initialSelectedId={selectedProjectId}
+                      initialExpandedItems={["root-repos"]}
+                      onSelect={(id) => setSelectedProjectId(id)}
+                    />
+                  </div>
+
+                  {/* Helper hint banner when no project is selected */}
+                  {!activeProject && (
+                    <div className="border-t border-[rgba(225,188,120,0.12)] bg-[#17100a]/80 px-4 py-2.5 text-center text-[11px] font-mono tracking-wide text-[#e1dcc9]/55">
+                      Click a category to open, then select any project to preview
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 2. Devices Container: Sits right beside the tree with comfortable gap */}
+              {activeProject && (
+                <div
+                  className="relative flex flex-col items-center justify-center transition-opacity duration-500 ease-out animate-in fade-in shrink-0"
+                >
+                  {previewMode === "laptop" ? (
+                    /* LAPTOP VIEW: Wide display frame with 4 separate same-sized options below */
+                    <div className="relative flex flex-col items-center justify-center w-full max-w-[460px] lg:max-w-[500px] xl:max-w-[530px] animate-in fade-in duration-300">
+                      <div className="relative w-full">
+                        <MacbookPro url={activeProject.homepage} className="max-w-full" />
+                      </div>
 
                     {/* Laptop View Controls: 4 separate standalone buttons with exact same size */}
                     <div className="mt-4 flex flex-wrap items-center justify-center gap-3 w-full">
