@@ -368,15 +368,15 @@ function AboutSkills() {
         </header>
 
         {/* Responsive Stage for Desktop & iPad (Centered 3-Column Composition) */}
-        <div className="absolute inset-x-0 bottom-0 top-[12svh] flex items-center justify-center pointer-events-none max-md:block">
-          <div className="w-full max-w-[1520px] h-full flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-md:contents">
+        <div className="about-stage-wrapper absolute inset-x-0 bottom-0 top-[16svh] flex items-center justify-center pointer-events-none max-md:block">
+          <div className="about-stage-content w-full max-w-[1520px] h-full flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-md:contents">
 
             {/* 1. LEFT COLUMN: Selected Toolkit (Centered in Left Side) */}
-            <div className="flex-1 flex justify-center items-center pointer-events-auto max-md:contents">
+            <div className="about-col-toolkit flex-1 flex justify-center items-center pointer-events-auto max-md:contents">
               <div
                 ref={wheelRef}
                 id="skills"
-                className="relative h-[min(56vh,480px)] w-full max-w-[320px] lg:max-w-[360px] max-md:absolute max-md:left-1/2 max-md:top-[56%] max-md:h-[52vh] max-md:w-[min(90vw,340px)]"
+                className="relative h-[min(56vh,480px)] w-full max-w-[320px] lg:max-w-[360px] max-md:absolute max-md:left-1/2 max-md:top-[58%] max-md:h-[52vh] max-md:w-[min(90vw,340px)]"
               >
                 <div className="absolute left-0 top-0 flex flex-col items-start text-[11px] font-semibold tracking-[0.25em] text-[#8d877d]">
                   <span className="whitespace-nowrap">SELECTED TOOLKIT</span>
@@ -428,11 +428,11 @@ function AboutSkills() {
               </div>
             </div>
 
-            {/* 2. CENTER COLUMN: Photo Card (Centered & Bigger) */}
-            <div className="shrink-0 flex justify-center items-center pointer-events-auto px-2 lg:px-8 max-md:contents">
+            {/* 2. CENTER COLUMN: Photo Card (Moved Down Slightly & Prominent) */}
+            <div className="about-col-photo shrink-0 flex justify-center items-center pointer-events-auto px-2 lg:px-8 max-md:contents">
               <div
                 ref={portraitRef}
-                className="relative w-[clamp(250px,21vw,330px)] max-md:absolute max-md:left-1/2 max-md:top-[56%] max-md:w-[min(72vw,255px)]"
+                className="relative w-[clamp(250px,21vw,330px)] translate-y-3 lg:translate-y-6 max-md:translate-y-0 max-md:absolute max-md:left-1/2 max-md:top-[58%] max-md:w-[min(72vw,255px)]"
               >
                 <CometCard rotateDepth={6} translateDepth={5}>
                   <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_38px_3px_38px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_24px_3px_24px]">
@@ -462,7 +462,7 @@ function AboutSkills() {
                   </div>
                 </CometCard>
 
-                {/* Centered ROLE Badge below photo (APPROACH removed) */}
+                {/* Centered ROLE Badge below photo (Moved down with photo) */}
                 <div className="mt-3 flex justify-center">
                   <div className="inline-flex flex-col items-center justify-center rounded-[3px_14px_3px_14px] border border-[#9a6a3538] bg-[#1c120bed] px-5 py-2.5 shadow-[inset_0_0_20px_rgba(154,106,53,0.06)] backdrop-blur-sm">
                     <span className="block text-[9px] font-semibold tracking-[0.22em] text-[#8d877d]">
@@ -476,11 +476,11 @@ function AboutSkills() {
               </div>
             </div>
 
-            {/* 3. RIGHT COLUMN: Message Box (Centered in the Right Side) */}
-            <div className="flex-1 flex justify-center items-center pointer-events-auto max-md:contents">
+            {/* 3. RIGHT COLUMN: Message Box (Centered in Right Side, moves to bottom in iPad Portrait) */}
+            <div className="about-col-message flex-1 flex justify-center items-center pointer-events-auto max-md:contents">
               <div
                 ref={messageBoxRef}
-                className="relative w-full max-w-[320px] lg:max-w-[370px] max-md:absolute max-md:left-1/2 max-md:top-[56%] max-md:w-[min(88vw,330px)]"
+                className="relative w-full max-w-[320px] lg:max-w-[370px] max-md:absolute max-md:left-1/2 max-md:top-[58%] max-md:w-[min(88vw,330px)]"
               >
                 <div className="relative rounded-[3px_26px_3px_26px] border border-[#9a6a3538] bg-[#17110df0] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.45),inset_0_0_30px_rgba(154,106,53,0.06)] backdrop-blur-md max-md:p-5">
                   {/* Top Row: Icon Badge & Label */}
