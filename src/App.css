@@ -1,0 +1,32 @@
+.portfolio-app {
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+
+  overflow-x: clip;
+}
+
+.portfolio-main {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+}
+
+.temporary-portfolio-section {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(225, 220, 201, 0.16);
+
+  font-size: clamp(60px, 10vw, 170px);
+
+  font-weight: 600;
+
+  letter-spacing: -0.06em;
+}

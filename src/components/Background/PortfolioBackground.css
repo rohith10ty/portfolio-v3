@@ -1,0 +1,144 @@
+/* =========================================================
+   PORTFOLIO BACKGROUND (Subtle, Cinematic Dark-Warm Atmosphere)
+========================================================= */
+
+.portfolio-background {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0B0908;
+  transform: translateZ(0);
+  contain: strict;
+}
+
+/* =========================================================
+   BASE GRADIENTS: Deep dark-brown foundation & muted lighting
+========================================================= */
+
+.portfolio-background-base {
+  position: absolute;
+  inset: 0;
+  background:
+    /* Diffused upper-right muted-gold ambiance (#8B5E3C / #B58A59) */
+    radial-gradient(
+      ellipse 80% 65% at 78% 16%,
+      rgba(139, 94, 60, 0.13) 0%,
+      rgba(23, 17, 13, 0.05) 55%,
+      transparent 80%
+    ),
+    /* Soft lower-left warm-brown tonal depth (#17110D / #8B5E3C) */
+    radial-gradient(
+      ellipse 75% 60% at 18% 82%,
+      rgba(105, 70, 42, 0.15) 0%,
+      rgba(23, 17, 13, 0.05) 60%,
+      transparent 85%
+    ),
+    /* Deep multi-stop rich dark base */
+    linear-gradient(
+      155deg,
+      #0B0908 0%,
+      #0F0C09 30%,
+      #17110D 68%,
+      #0D0A08 100%
+    );
+}
+
+/* =========================================================
+   DIFFUSED ATMOSPHERIC GLOWS (Ultra-soft, no circular edges)
+========================================================= */
+
+.portfolio-background-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(140px);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Upper-right warm-brown illumination */
+.portfolio-background-glow-one {
+  width: 520px;
+  height: 520px;
+  right: -80px;
+  top: 4%;
+  background: rgba(139, 94, 60, 0.22);
+  opacity: 0.85;
+}
+
+/* Lower-left muted gold tone */
+.portfolio-background-glow-two {
+  width: 480px;
+  height: 480px;
+  left: -100px;
+  bottom: 4%;
+  background: rgba(181, 138, 89, 0.08);
+  opacity: 0.9;
+}
+
+/* =========================================================
+   EDGE VIGNETTE (Gentle cinematic darkening toward perimeter)
+========================================================= */
+
+.portfolio-background-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 85% 80% at 50% 50%,
+    transparent 35%,
+    rgba(11, 9, 8, 0.35) 70%,
+    rgba(7, 5, 4, 0.82) 100%
+  );
+  pointer-events: none;
+}
+
+/* =========================================================
+   MICRO-GRAIN TEXTURE
+========================================================= */
+
+.portfolio-background-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   RESPONSIVE TUNING
+========================================================= */
+
+@media (max-width: 768px) {
+  .portfolio-background-glow {
+    filter: blur(85px);
+  }
+
+  .portfolio-background-glow-one {
+    width: 320px;
+    height: 320px;
+    opacity: 0.65;
+  }
+
+  .portfolio-background-glow-two {
+    width: 300px;
+    height: 300px;
+    opacity: 0.65;
+  }
+
+  .portfolio-background-vignette {
+    background: radial-gradient(
+      ellipse 90% 85% at 50% 50%,
+      transparent 30%,
+      rgba(11, 9, 8, 0.38) 72%,
+      rgba(7, 5, 4, 0.85) 100%
+    );
+  }
+
+  .portfolio-background-noise {
+    opacity: 0.015;
+  }
+}

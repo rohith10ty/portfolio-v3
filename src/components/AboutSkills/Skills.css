@@ -1,0 +1,467 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+
+/* =========================================================
+   SKILLS / CAPABILITIES 3D SECTION
+   ========================================================= */
+
+.skills-3d-section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100svh;
+  color: var(--cream, #e1dcc9);
+  background: transparent;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.skills-3d-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Ambient Bronze Glow behind stage */
+.skills-ambient-glow {
+  position: absolute;
+  inset: 15% 10% 10%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(169, 121, 66, 0.16) 0%,
+    rgba(93, 60, 29, 0.08) 40%,
+    transparent 70%
+  );
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* =========================================================
+   MOBILE-ONLY TOP 3 HORIZONTAL CARDS (Hidden on Desktop)
+   ========================================================= */
+
+.skills-mobile-top-cards {
+  display: none;
+}
+
+/* =========================================================
+   3D CARDS CONTAINER
+   ========================================================= */
+
+.skills-cards-container {
+  position: relative;
+  width: min(85vw, 1050px);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  perspective: 1000px;
+}
+
+.skills-cards-container .skill-card {
+  flex: 1;
+  position: relative;
+  aspect-ratio: 5 / 7;
+  max-width: 320px;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+/* Subtle Floating Breathing Motion */
+.skills-cards-container .skill-card .card-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  animation: floating 2.8s infinite ease-in-out;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -54%);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* =========================================================
+   BRONZE SHINING GLASS CARDS
+   ========================================================= */
+
+.bronze-glass {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(
+    145deg,
+    rgba(52, 33, 17, 0.78) 0%,
+    rgba(26, 16, 8, 0.88) 50%,
+    rgba(13, 8, 4, 0.95) 100%
+  );
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border: 1px solid rgba(211, 163, 105, 0.35);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(169, 121, 66, 0.15),
+    inset 0 1px 0 rgba(255, 238, 215, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Diagonal Specular Glass Shine */
+.bronze-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 235, 205, 0.16) 0%,
+    rgba(211, 163, 105, 0.08) 28%,
+    transparent 55%,
+    rgba(169, 121, 66, 0.06) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Inner Top Highlight */
+.bronze-glass::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 230, 190, 0.5) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* =========================================================
+   CARD FRONT FACE
+   ========================================================= */
+
+.flip-card-front {
+  transform: rotateY(0deg);
+  align-items: center;
+}
+
+.card-title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.card-title span {
+  font-family: "DM Mono", monospace;
+  font-size: clamp(0.72rem, 0.85vw, 0.85rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #d8a05e;
+  letter-spacing: 0.06em;
+}
+
+/* =========================================================
+   CARD BACK FACE
+   ========================================================= */
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.card-copy {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.card-copy p {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "DM Sans", sans-serif;
+  font-size: clamp(0.85rem, 1vw, 1.05rem);
+  font-weight: 500;
+  color: #f3efe6;
+  border-radius: 0.35rem;
+  background: rgba(169, 121, 66, 0.14);
+  border: 1px solid rgba(211, 163, 105, 0.2);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  margin: 0;
+}
+
+.card-copy p:hover {
+  background: rgba(191, 136, 76, 0.28);
+  border-color: rgba(211, 163, 105, 0.45);
+  color: #ffffff;
+}
+
+/* =========================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================= */
+
+/* Tablets & iPad (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .skills-cards-container {
+    width: 92vw;
+    gap: 1.5rem;
+  }
+
+  .skills-cards-container .skill-card {
+    max-width: 290px;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 1rem;
+  }
+
+  .card-copy {
+    gap: 0.4rem;
+  }
+
+  .card-copy p {
+    font-size: 0.88rem;
+  }
+}
+
+/* Mobile Devices (<= 768px): Single Card Centered Depth Stage */
+@media (max-width: 768px) {
+  .skills-section {
+    min-height: 100svh;
+    height: 100svh;
+    width: 100vw;
+  }
+
+  .skills-3d-stage {
+    padding: 0;
+    width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* 3 Top Horizontal Preview Cards on Mobile (Centered in the exact middle of screen at start) */
+  .skills-mobile-top-cards {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .mobile-top-card {
+    flex: 1;
+    max-width: 95px;
+    aspect-ratio: 5 / 7;
+    position: relative;
+    will-change: transform, opacity;
+  }
+
+  .mobile-top-card .card-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: mobileFloating 2.8s infinite ease-in-out;
+  }
+
+  .mobile-top-card-body {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.65rem;
+    padding: 0.55rem 0.45rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  @keyframes mobileFloating {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-top-card .card-title span {
+    font-family: "DM Mono", monospace;
+    font-size: 0.58rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #d8a05e;
+    letter-spacing: 0.05em;
+  }
+
+  .skills-cards-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(82vw, 310px);
+    height: auto;
+    aspect-ratio: 5 / 7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    gap: 0;
+    z-index: 5;
+  }
+
+  .skills-cards-container .skill-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 5 / 7;
+    margin: auto;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 1.15rem;
+    border-radius: 1rem;
+  }
+
+  .card-title span {
+    font-size: 0.72rem;
+  }
+
+  .card-copy {
+    gap: 0.45rem;
+    margin: 0.65rem 0;
+  }
+
+  .card-copy p {
+    font-size: 0.88rem;
+    padding: 6px 8px;
+    border-radius: 0.35rem;
+  }
+}
+
+/* Small Mobile Devices (<= 380px) */
+@media (max-width: 380px) {
+  .skills-mobile-top-cards {
+    top: 50%;
+    gap: 0.35rem;
+  }
+
+  .mobile-top-card {
+    max-width: 88px;
+    padding: 0.45rem 0.35rem;
+  }
+
+  .mobile-top-card .card-title span {
+    font-size: 0.52rem;
+  }
+
+  .skills-cards-container {
+    width: 88vw;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 1rem 0.85rem;
+  }
+
+  .card-title span {
+    font-size: 0.68rem;
+  }
+
+  .card-copy {
+    gap: 0.35rem;
+    margin: 0.5rem 0;
+  }
+
+  .card-copy p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .skills-mobile-top-cards {
+    display: none !important;
+  }
+
+  .skills-cards-container .skill-card .card-wrapper {
+    animation: none !important;
+  }
+
+  .skills-cards-container .skill-card,
+  .flip-card-inner {
+    will-change: auto;
+  }
+}
+
+
+

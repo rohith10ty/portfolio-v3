@@ -1,0 +1,397 @@
+/* =========================================
+   HERO SCROLL-DRIVEN CONTAINER & PINNING
+========================================= */
+
+.hero-scroll-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 320vh;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.hero-pinned-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: transparent;
+  isolation: isolate;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+/* =========================================
+   LEFT & RIGHT DOOR PANELS (R on Left, N on Right)
+========================================= */
+
+.hero-panel {
+  position: absolute;
+  top: 0;
+  width: 50vw;
+  height: 100vh;
+  min-height: 100svh;
+  background-color: #000000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  will-change: transform;
+  border: none;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  pointer-events: auto;
+}
+
+.hero-panel-left {
+  left: 0;
+  justify-content: flex-end;
+  padding-right: 0.16em;
+}
+
+.hero-panel-right {
+  left: 50vw;
+  justify-content: flex-start;
+  padding-left: 0.16em;
+}
+
+.panel-word {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.door-heading {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(2.4rem, 6.5vw, 5.8rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  margin: 0;
+  color: var(--cream, #e1dcc9);
+  position: relative;
+  z-index: 2;
+}
+
+.rest {
+  display: inline-flex;
+  align-items: baseline;
+  overflow: hidden;
+  white-space: nowrap;
+  will-change: width, opacity;
+}
+
+.char {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.1;
+}
+
+.char span {
+  position: relative;
+  display: inline-block;
+  transform: translateY(0%);
+  will-change: transform;
+}
+
+.initial {
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+  will-change: transform, color, opacity;
+}
+
+/* =========================================
+   UI OVERLAYS: ROLE RHOMBUS, SLOGAN & SCROLL
+========================================= */
+
+.hero-ui-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  pointer-events: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Geometric Rhombus Role Badge */
+.hero-role-wrapper {
+  position: absolute;
+  top: calc(50% + clamp(42px, 6vh, 68px));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  z-index: 16;
+}
+
+.hero-role-wrapper::before,
+.hero-role-wrapper::after {
+  content: "";
+  display: inline-block;
+  width: clamp(20px, 3vw, 42px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(225, 220, 201, 0.45));
+}
+
+.hero-role-wrapper::before {
+  margin-right: clamp(10px, 1.5vw, 16px);
+}
+
+.hero-role-wrapper::after {
+  margin-left: clamp(10px, 1.5vw, 16px);
+  transform: rotate(180deg);
+}
+
+.hero-role-rhombus {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(6px, 1.1vh, 9px) clamp(20px, 2.5vw, 32px);
+  background: rgba(22, 14, 8, 0.75);
+  transform: skewX(-12deg);
+  border: 1px solid rgba(225, 188, 120, 0.35);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 25px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(139, 98, 52, 0.18);
+}
+
+.hero-role-text {
+  display: inline-block;
+  transform: skewX(12deg);
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(11px, 0.95vw, 13.5px);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cream, #e1dcc9);
+  white-space: nowrap;
+}
+
+/* =========================================
+   RIGHT-SIDE HERO CONTENT (ONE LEFT-ALIGNED GROUP)
+========================================= */
+
+.hero-support-block {
+  position: absolute;
+  right: clamp(35px, 6vw, 110px);
+  bottom: clamp(65px, 9.5vh, 120px);
+  z-index: 16;
+  width: clamp(240px, 20vw, 290px);
+  text-align: left;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  will-change: transform, opacity;
+}
+
+.hero-support-eyebrow {
+  color: rgba(225, 220, 201, 0.6);
+  font-family: "Outfit", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  text-align: left;
+  display: block;
+}
+
+.hero-support-heading {
+  margin: 0;
+  color: var(--cream, #e1dcc9);
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(26px, 2.2vw, 36px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.hero-support-heading strong {
+  color: #8b6234;
+  font-weight: 600;
+}
+
+.hero-support-desc {
+  margin: 14px 0 0;
+  color: rgba(225, 220, 201, 0.64);
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(13px, 0.92vw, 14.5px);
+  font-weight: 300;
+  line-height: 1.6;
+  max-width: 270px;
+  text-align: left;
+}
+
+/* Scroll Explorer Indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  z-index: 16;
+  left: 50%;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-50%);
+  color: rgba(225, 220, 201, 0.28);
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.hero-scroll-indicator span {
+  font-family: "Outfit", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+
+.hero-scroll-indicator i {
+  position: relative;
+  width: 1px;
+  height: 28px;
+  overflow: hidden;
+  background: rgba(225, 220, 201, 0.12);
+}
+
+.hero-scroll-indicator i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -100%;
+  width: 100%;
+  height: 65%;
+  background: #e1dcc9;
+  animation: heroScrollLine 1.8s ease-in-out infinite;
+}
+
+@keyframes heroScrollLine {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(300%);
+  }
+}
+
+/* =========================================
+   TABLET & MOBILE RESPONSIVENESS (<= 768px)
+========================================= */
+
+@media (max-width: 768px) {
+  .door-heading {
+    font-size: clamp(1.8rem, 7vw, 3.2rem);
+  }
+
+  .hero-panel-left {
+    padding-right: 0.12em;
+  }
+
+  .hero-panel-right {
+    padding-left: 0.12em;
+  }
+
+  .hero-role-wrapper {
+    top: calc(50% + clamp(32px, 5vh, 50px));
+  }
+
+  .hero-role-wrapper::before,
+  .hero-role-wrapper::after {
+    width: clamp(14px, 4vw, 24px);
+  }
+
+  .hero-role-rhombus {
+    padding: 6px clamp(14px, 3.5vw, 22px);
+  }
+
+  .hero-role-text {
+    font-size: clamp(10px, 2.8vw, 12px);
+    letter-spacing: 0.16em;
+  }
+
+  .hero-support-block {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    bottom: clamp(75px, 11vh, 105px);
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    align-items: center;
+  }
+
+  .hero-support-eyebrow {
+    font-size: clamp(9.5px, 2.6vw, 11px);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .hero-support-heading {
+    font-size: clamp(22px, 6.2vw, 28px);
+    text-align: center;
+  }
+
+  .hero-support-desc {
+    max-width: 290px;
+    font-size: clamp(12.5px, 3.4vw, 13.5px);
+    margin-top: 8px;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .hero-scroll-indicator {
+    bottom: 16px;
+  }
+
+  .hero-scroll-indicator i {
+    height: 22px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE (<= 420px)
+========================================= */
+
+@media (max-width: 420px) {
+  .door-heading {
+    font-size: clamp(1.5rem, 6.8vw, 2.4rem);
+  }
+
+  .hero-role-rhombus {
+    padding: 5px 14px;
+  }
+
+  .hero-role-text {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-indicator i::after {
+    animation: none;
+  }
+}

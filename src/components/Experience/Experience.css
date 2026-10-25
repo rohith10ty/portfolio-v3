@@ -1,0 +1,904 @@
+/* =========================================================
+   EXPERIENCE SECTION
+========================================================= */
+
+.experience-section {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+
+  padding: 145px clamp(35px, 5vw, 90px) 170px;
+
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.experience-header {
+  width: min(820px, 100%);
+
+  margin-bottom: clamp(85px, 9vw, 130px);
+}
+
+.experience-header > span {
+  display: block;
+
+  color: rgba(225, 220, 201, 0.62);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  letter-spacing: 0.23em;
+}
+
+.experience-header h2 {
+  margin: 17px 0 0;
+
+  color: var(--cream);
+
+  font-size: clamp(56px, 6.5vw, 100px);
+
+  font-weight: 500;
+
+  line-height: 0.85;
+
+  letter-spacing: -0.065em;
+}
+
+.experience-header h2 strong {
+  color: #8b6234;
+
+  font-weight: 500;
+}
+
+.experience-header p {
+  max-width: 560px;
+
+  margin-top: 26px;
+
+  color: rgba(225, 220, 201, 0.6);
+
+  font-size: 17px;
+  font-weight: 300;
+
+  line-height: 1.8;
+}
+
+/* =========================================================
+   MAIN EXPERIENCE LAYOUT
+========================================================= */
+
+.experience-layout {
+  display: grid;
+
+  grid-template-columns:
+    220px
+    minmax(0, 1fr);
+
+  gap: clamp(55px, 7vw, 115px);
+
+  align-items: start;
+}
+
+/* =========================================================
+   LEFT SIDE TIMELINE
+========================================================= */
+
+.experience-side {
+  position: sticky;
+
+  top: 150px;
+
+  height: fit-content;
+
+  padding-left: 24px;
+}
+
+/* glowing vertical line */
+
+.experience-side-line {
+  position: relative;
+
+  width: 1px;
+  height: 100px;
+
+  margin-bottom: 24px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(225, 220, 201, 0.2),
+    rgba(203, 145, 69, 0.9),
+    rgba(139, 98, 52, 0.35)
+  );
+
+  box-shadow: 0 0 12px rgba(203, 145, 69, 0.35);
+}
+
+.experience-side-line::before {
+  content: "";
+
+  position: absolute;
+
+  top: -2px;
+  left: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background: #e1dcc9;
+
+  box-shadow:
+    0 0 8px #e1dcc9,
+    0 0 18px rgba(203, 145, 69, 0.7);
+}
+
+/* TIMELINE label */
+
+.experience-side > span {
+  display: block;
+
+  color: rgba(225, 220, 201, 0.58);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 0.25em;
+}
+
+/* =========================================================
+   2015 — 2026
+
+   MADE MUCH MORE VISIBLE
+========================================================= */
+
+.experience-side > strong {
+  display: block;
+
+  margin-top: 22px;
+
+  color: rgba(225, 220, 201, 0.7);
+
+  font-size: clamp(46px, 4vw, 68px);
+
+  font-weight: 400;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.055em;
+
+  text-shadow:
+    0 0 10px rgba(225, 220, 201, 0.08),
+    0 0 30px rgba(139, 98, 52, 0.15);
+}
+
+/* GOLD YEAR ACCENT */
+
+.experience-side > strong::first-line {
+  color: #a97942;
+}
+
+/* =========================================================
+   EXPERIENCE LIST
+========================================================= */
+
+.experience-list {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.experience-glow {
+  z-index: 1;
+  background: rgba(225, 220, 201, 0.015);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.experience-glow:hover {
+  transform: translateX(4px);
+  border-color: rgba(225, 220, 201, 0.1);
+  background: rgba(225, 220, 201, 0.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 12px 38px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================
+   TIMELINE VERTICAL CONNECTING LINE
+========================================================= */
+
+.experience-list::before {
+  content: "";
+
+  position: absolute;
+
+  z-index: 0;
+
+  right: 15px;
+
+  top: 34px;
+  bottom: 34px;
+
+  width: 1px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(225, 220, 201, 0.04),
+    rgba(203, 145, 69, 0.25),
+    rgba(203, 145, 69, 0.5),
+    rgba(225, 220, 201, 0.06)
+  );
+}
+
+/* =========================================================
+   EXPERIENCE ITEM
+   DEFAULT TRANSPARENT STATE
+========================================================= */
+
+.experience-item {
+  position: relative;
+
+  z-index: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    65px
+    145px
+    minmax(0, 1fr)
+    31px;
+
+  gap: clamp(14px, 2vw, 32px);
+
+  align-items: center;
+
+  min-height: 125px;
+
+  padding: 18px 22px 18px 22px;
+
+  overflow: hidden;
+
+  border: 0;
+
+  border-radius: 22px;
+
+  /*
+    Extremely transparent initially.
+    Hexagons stay clearly visible.
+  */
+
+  background: transparent;
+
+  transition:
+    border-color 0.45s ease,
+    box-shadow 0.45s ease,
+    background 0.45s ease,
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  isolation: isolate;
+}
+
+/* =========================================================
+   LIQUID GLASS LAYER
+========================================================= */
+
+.experience-item::before {
+  content: "";
+
+  position: absolute;
+
+  z-index: -2;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  /*
+    Very low opacity.
+
+    This is intentionally NOT a big
+    opaque glass panel.
+  */
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.026) 0%,
+    rgba(255, 255, 255, 0.006) 30%,
+    rgba(139, 98, 52, 0.025) 65%,
+    rgba(225, 220, 201, 0.012) 100%
+  );
+
+  backdrop-filter: blur(2px) saturate(115%);
+
+  -webkit-backdrop-filter: blur(2px) saturate(115%);
+
+  opacity: 0.2;
+
+  transition:
+    opacity 0.45s ease,
+    backdrop-filter 0.45s ease;
+}
+
+/* =========================================================
+   LIQUID REFRACTION / LIGHT
+========================================================= */
+
+.experience-item::after {
+  content: "";
+
+  position: absolute;
+
+  z-index: -1;
+
+  width: 42%;
+  height: 150%;
+
+  top: -50%;
+  left: -16%;
+
+  pointer-events: none;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    ellipse,
+    rgba(225, 220, 201, 0.07) 0%,
+    rgba(225, 220, 201, 0.025) 30%,
+    transparent 67%
+  );
+
+  filter: blur(16px);
+
+  opacity: 0;
+
+  transform: rotate(-18deg) translateX(-30px);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =========================================================
+   LIQUID GLASS HOVER
+========================================================= */
+
+.experience-item:hover {
+  /*
+    Just enough background to produce
+    glass — still extremely transparent.
+  */
+
+  background: rgba(225, 220, 201, 0.018);
+
+  border-color: rgba(225, 220, 201, 0.19);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(139, 98, 52, 0.08),
+    0 15px 50px rgba(0, 0, 0, 0.18),
+    0 0 30px rgba(139, 98, 52, 0.045);
+
+  transform: none;
+}
+
+/* blur increases ONLY while hovered */
+
+.experience-item:hover::before {
+  opacity: 1;
+
+  backdrop-filter: blur(7px) saturate(140%) brightness(1.02);
+
+  -webkit-backdrop-filter: blur(7px) saturate(140%) brightness(1.02);
+}
+
+/* buttery moving reflection */
+
+.experience-item:hover::after {
+  opacity: 1;
+
+  transform: rotate(-18deg) translateX(100px);
+}
+
+/* =========================================================
+   TOP LIQUID GLASS EDGE
+
+   Adds Apple-like glass highlight.
+========================================================= */
+
+.experience-main::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 1px;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.11),
+    rgba(225, 220, 201, 0.04),
+    transparent
+  );
+
+  opacity: 0;
+
+  transition: opacity 0.4s ease;
+}
+
+.experience-item:hover .experience-main::before {
+  opacity: 1;
+}
+
+/* =========================================================
+   INDEX
+========================================================= */
+
+.experience-index {
+  color: rgba(225, 220, 201, 0.18);
+
+  font-size: 24px;
+  font-weight: 400;
+
+  letter-spacing: -0.04em;
+
+  transition:
+    color 0.35s ease,
+    text-shadow 0.35s ease;
+}
+
+.experience-item:hover .experience-index {
+  color: #a97942;
+
+  text-shadow: 0 0 18px rgba(169, 121, 66, 0.22);
+}
+
+/* =========================================================
+   PERIOD
+========================================================= */
+
+.experience-period {
+  color: rgba(225, 220, 201, 0.52);
+
+  font-size: 13px;
+  font-weight: 400;
+
+  line-height: 1.5;
+
+  letter-spacing: 0.035em;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.experience-main {
+  position: relative;
+
+  z-index: 2;
+}
+
+/* TYPE */
+
+.experience-type {
+  color: #9a6e39;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: 0.21em;
+}
+
+/* ROLE */
+
+.experience-main h3 {
+  margin: 5px 0 0;
+
+  color: var(--cream);
+
+  font-size: clamp(20px, 2.1vw, 30px);
+
+  font-weight: 500;
+
+  line-height: 0.95;
+
+  letter-spacing: -0.05em;
+
+  transition: text-shadow 0.35s ease;
+}
+
+.experience-item:hover .experience-main h3 {
+  text-shadow: 0 0 20px rgba(225, 220, 201, 0.08);
+}
+
+/* COMPANY */
+
+.experience-main h4 {
+  margin: 5px 0 0;
+
+  color: rgba(196, 139, 68, 0.86);
+
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* DESCRIPTION */
+
+.experience-main p {
+  max-width: 670px;
+
+  margin-top: 8px;
+
+  color: rgba(225, 220, 201, 0.58);
+
+  font-size: 14px;
+  font-weight: 300;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   TIMELINE DOT
+========================================================= */
+
+.experience-dot {
+  position: relative;
+
+  z-index: 3;
+
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(225, 220, 201, 0.11);
+
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  backdrop-filter: blur(5px);
+
+  -webkit-backdrop-filter: blur(5px);
+
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+.experience-dot span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #a97942;
+
+  box-shadow: 0 0 8px rgba(169, 121, 66, 0.65);
+
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* DOT HOVER */
+
+.experience-item:hover .experience-dot {
+  border-color: rgba(225, 220, 201, 0.34);
+
+  box-shadow: 0 0 18px rgba(169, 121, 66, 0.17);
+
+  transform: scale(1.08);
+}
+
+.experience-item:hover .experience-dot span {
+  background: #e1dcc9;
+
+  box-shadow:
+    0 0 8px rgba(225, 220, 201, 0.9),
+    0 0 20px rgba(169, 121, 66, 0.75);
+}
+
+/* =========================================================
+   GLASS SHIMMER
+
+   Extremely subtle moving light on hover.
+========================================================= */
+
+@keyframes experienceGlassShimmer {
+  from {
+    background-position: -200% 0;
+  }
+
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/* =========================================================
+   LARGE SCREEN
+========================================================= */
+
+@media (min-width: 1500px) {
+  .experience-layout {
+    grid-template-columns:
+      240px
+      minmax(0, 1fr);
+  }
+
+  .experience-item {
+    grid-template-columns:
+      70px
+      165px
+      minmax(0, 1fr)
+      31px;
+
+    padding: 34px 28px;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .experience-layout {
+    grid-template-columns:
+      150px
+      minmax(0, 1fr);
+
+    gap: 42px;
+  }
+
+  .experience-side {
+    padding-left: 12px;
+  }
+
+  .experience-side > strong {
+    font-size: 45px;
+  }
+
+  .experience-item {
+    grid-template-columns:
+      48px
+      110px
+      minmax(0, 1fr)
+      31px;
+
+    gap: 19px;
+
+    min-height: 185px;
+
+    padding: 27px 18px;
+  }
+
+  .experience-main h3 {
+    font-size: clamp(27px, 3.4vw, 42px);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+  .experience-section {
+    padding: 105px 20px 120px;
+  }
+
+  /* HEADER */
+
+  .experience-header {
+    margin-bottom: 65px;
+  }
+
+  .experience-header h2 {
+    font-size: clamp(50px, 14vw, 74px);
+  }
+
+  .experience-header p {
+    font-size: 15px;
+  }
+
+  /* REMOVE SEPARATE SIDE */
+
+  .experience-layout {
+    display: block;
+  }
+
+  .experience-side {
+    position: relative;
+
+    top: auto;
+
+    display: flex;
+    align-items: flex-end;
+
+    gap: 20px;
+
+    margin-bottom: 50px;
+
+    padding-left: 0;
+  }
+
+  .experience-side-line {
+    height: 70px;
+
+    margin-bottom: 0;
+  }
+
+  .experience-side > span {
+    display: none;
+  }
+
+  .experience-side > strong {
+    margin: 0;
+
+    color: rgba(225, 220, 201, 0.58);
+
+    font-size: 35px;
+
+    line-height: 0.9;
+  }
+
+  /* TIMELINE */
+
+  .experience-list {
+    gap: 13px;
+  }
+
+  .experience-list::before {
+    display: none;
+  }
+
+  /* MOBILE GLASS CARDS */
+
+  .experience-item {
+    display: grid;
+
+    grid-template-columns:
+      40px
+      minmax(0, 1fr);
+
+    min-height: auto;
+
+    gap: 7px 15px;
+
+    padding: 24px 20px;
+
+    border-radius: 17px;
+
+    /*
+      Mobile keeps a tiny bit of glass
+      even when not hovering because
+      hover doesn't exist reliably.
+    */
+
+    background: rgba(225, 220, 201, 0.012);
+
+    backdrop-filter: blur(2px);
+
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .experience-glow {
+    --border-radius: 17px;
+  }
+
+  .experience-glow:hover {
+    transform: none;
+  }
+
+  .experience-item::before {
+    opacity: 0.35;
+  }
+
+  /* INDEX */
+
+  .experience-index {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+
+    font-size: 24px;
+  }
+
+  /* PERIOD */
+
+  .experience-period {
+    grid-column: 2;
+
+    font-size: 12px;
+  }
+
+  /* CONTENT */
+
+  .experience-main {
+    grid-column: 2;
+  }
+
+  .experience-main h3 {
+    font-size: clamp(29px, 9vw, 43px);
+  }
+
+  .experience-main h4 {
+    font-size: 14px;
+  }
+
+  .experience-main p {
+    font-size: 13px;
+
+    line-height: 1.65;
+  }
+
+  /* REMOVE DOT */
+
+  .experience-dot {
+    display: none;
+  }
+
+  /* NO MOVEMENT ON TOUCH */
+
+  .experience-item:hover {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+  .experience-header h2 {
+    font-size: 50px;
+  }
+
+  .experience-side > strong {
+    font-size: 24px;
+  }
+
+  .experience-item {
+    padding: 21px 16px;
+  }
+
+  .experience-main h3 {
+    font-size: 29px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .experience-glow,
+  .experience-item,
+  .experience-item::before,
+  .experience-item::after,
+  .experience-dot,
+  .experience-index {
+    transition: none;
+  }
+}

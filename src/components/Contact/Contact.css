@@ -1,0 +1,214 @@
+.contact-section {
+  position: relative;
+  z-index: 2;
+  padding: clamp(110px, 11vw, 170px) clamp(20px, 5vw, 90px) 110px;
+}
+
+.contact-inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.72fr);
+  align-items: end;
+  gap: clamp(55px, 8vw, 130px);
+}
+
+.contact-kicker {
+  margin: 0;
+  color: rgba(225, 220, 201, 0.62);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.23em;
+}
+
+.contact-heading h2 {
+  margin: 18px 0 0;
+  color: var(--cream);
+  font-size: clamp(54px, 6.5vw, 100px);
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+}
+
+.contact-heading h2 strong {
+  color: #8b6234;
+  font-weight: 500;
+}
+
+.contact-text {
+  max-width: 610px;
+  margin: 27px 0 0;
+  color: rgba(225, 220, 201, 0.62);
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-glow {
+  position: relative;
+  min-width: 0;
+  min-height: 76px;
+  background: rgba(225, 220, 201, 0.012);
+  backdrop-filter: blur(3px) saturate(112%);
+  -webkit-backdrop-filter: blur(3px) saturate(112%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    backdrop-filter 0.35s ease;
+}
+
+.contact-glow > .border-glow-inner {
+  height: 100%;
+}
+
+.contact-link {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 76px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+  padding: 13px 17px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: rgba(225, 220, 201, 0.68);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    backdrop-filter 0.35s ease;
+}
+
+.contact-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 15%,
+    rgba(225, 220, 201, 0.065) 48%,
+    transparent 72%
+  );
+  opacity: 0;
+  transform: translateX(-55%);
+  transition: opacity 0.35s ease, transform 0.6s ease;
+}
+
+.contact-glow:hover,
+.contact-glow:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(225, 220, 201, 0.1);
+  background: rgba(225, 220, 201, 0.022);
+  backdrop-filter: blur(7px) saturate(135%);
+  -webkit-backdrop-filter: blur(7px) saturate(135%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 12px 38px rgba(0, 0, 0, 0.18);
+  color: var(--cream);
+}
+
+.contact-glow:hover .contact-link::before,
+.contact-glow:focus-within .contact-link::before {
+  opacity: 1;
+  transform: translateX(55%);
+}
+
+.contact-link-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(225, 220, 201, 0.1);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.12);
+  color: #a97942;
+}
+
+.contact-link-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-link-copy small {
+  color: rgba(225, 220, 201, 0.56);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.contact-link-copy strong {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .contact-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-links {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding-bottom: 85px;
+  }
+
+  .contact-heading h2 {
+    font-size: clamp(46px, 14vw, 58px);
+  }
+
+  .contact-text {
+    font-size: 15px;
+  }
+
+  .contact-link {
+    grid-template-columns: 34px minmax(0, 1fr) 16px;
+    gap: 11px;
+    padding-inline: 13px;
+  }
+
+  .contact-link-icon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (hover: none) {
+  .contact-glow {
+    backdrop-filter: blur(3px) saturate(112%);
+    -webkit-backdrop-filter: blur(3px) saturate(112%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-glow,
+  .contact-link,
+  .contact-link::before {
+    transition: none;
+  }
+}
