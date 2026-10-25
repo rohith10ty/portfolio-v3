@@ -21,11 +21,9 @@ const skills = [
 ];
 
 const FRAME_COUNT = 95;
-const mobileFramesQuery = "(max-width: 767px) and (orientation: portrait)";
-const sequentialQuery =
-  "(max-width: 767px), (pointer: coarse) and (max-width: 1023px), (pointer: coarse) and (orientation: portrait)";
-const simultaneousQuery =
-  "(min-width: 768px) and (pointer: fine), (min-width: 1024px) and (orientation: landscape)";
+const mobileFramesQuery = "(max-width: 767px)";
+const sequentialQuery = "(max-width: 767px)";
+const simultaneousQuery = "(min-width: 768px)";
 
 const frameUrl = (index, mobile) =>
   `/portrait-frames/${mobile ? "mobile" : "desktop"}/frame_${String(index).padStart(4, "0")}.webp`;
@@ -190,16 +188,21 @@ function AboutSkills() {
     const renderSkills = (progress) => {
       const normalized = clamp(progress);
       const position = normalized * (skills.length - 1);
-      const spacing = window.innerHeight < 760 ? 52 : 64;
+      const isMobile = window.innerWidth < 768;
+      const spacing = window.innerHeight < 760 ? (isMobile ? 44 : 52) : (isMobile ? 48 : 64);
 
       itemRefs.current.forEach((item, index) => {
         if (!item) return;
         const offset = index - position;
         const distance = Math.min(Math.abs(offset), 4);
-        const direction = Math.sign(offset);
+
+        // On mobile, keep items neatly indented without pushing them into negative X
+        const xShift = isMobile
+          ? Math.pow(distance, 1.2) * 5
+          : Math.pow(distance, 1.45) * 14 * Math.sign(offset);
 
         gsap.set(item, {
-          x: Math.pow(distance, 1.45) * 14 * direction,
+          x: xShift,
           y: offset * spacing,
           scale: Math.max(0.74, 1 - distance * 0.075),
           opacity: Math.max(0.07, 1 - distance * 0.24),
@@ -240,9 +243,18 @@ function AboutSkills() {
               autoAlpha: 1,
             });
             gsap.set(wheel, {
-              xPercent: -40,
+              xPercent: -50,
               yPercent: -50,
               autoAlpha: 0,
+            });
+          } else {
+            gsap.set(portrait, {
+              clearProps: "transform",
+              autoAlpha: 1,
+            });
+            gsap.set(wheel, {
+              clearProps: "transform",
+              autoAlpha: 1,
             });
           }
 
@@ -271,12 +283,12 @@ function AboutSkills() {
               renderPortrait(portraitProgress);
               renderSkills(skillsProgress);
               gsap.set(portrait, {
-                xPercent: -50 - transitionProgress * 10,
+                xPercent: -50 - transitionProgress * 8,
                 yPercent: -50,
                 autoAlpha: 1 - transitionProgress,
               });
               gsap.set(wheel, {
-                xPercent: -40 + transitionProgress * 10,
+                xPercent: -50,
                 yPercent: -50,
                 autoAlpha: transitionProgress,
               });
@@ -305,11 +317,11 @@ function AboutSkills() {
       className="relative z-20 h-[600svh] text-[#e1dcc9]"
     >
       <div className="sticky top-0 isolate h-[100svh] w-full overflow-hidden">
-        <header className="absolute left-1/2 top-[4.5svh] z-10 w-[min(92vw,650px)] -translate-x-1/2 text-center max-md:top-6 max-md:w-[90vw]">
+        <header className="absolute left-1/2 top-[4.5svh] z-10 w-[min(92vw,650px)] -translate-x-1/2 text-center max-md:top-[72px] max-md:w-[90vw]">
           <span className="text-[11px] font-semibold tracking-[0.35em] text-[#8d877d]">
             ABOUT / SKILLS
           </span>
-          <h2 className="mt-3 text-[clamp(34px,3.5vw,62px)] font-semibold leading-[0.94] tracking-[-0.055em] max-md:text-[34px]">
+          <h2 className="mt-3 text-[clamp(32px,3.5vw,62px)] font-semibold leading-[0.94] tracking-[-0.055em] max-md:text-[28px] max-md:leading-tight">
             Building with
             <br />
             <strong className="font-semibold text-[#9a6a35]">
@@ -325,7 +337,7 @@ function AboutSkills() {
         <div
           ref={wheelRef}
           id="skills"
-          className="absolute left-[5vw] top-[26svh] h-[min(56vh,500px)] w-[min(34vw,560px)] max-md:left-1/2 max-md:top-[55%] max-md:h-[55vh] max-md:w-[88vw] max-md:-translate-x-[40%] max-md:-translate-y-1/2"
+          className="absolute left-1/2 top-[55%] h-[52vh] w-[min(90vw,360px)] md:left-[clamp(24px,4vw,60px)] md:top-[26svh] md:h-[min(56vh,500px)] md:w-[clamp(320px,38vw,560px)]"
         >
           <div className="absolute left-0 top-0 flex flex-col items-start text-[11px] font-semibold tracking-[0.25em] text-[#8d877d]">
             <span className="whitespace-nowrap">SELECTED TOOLKIT</span>
@@ -342,7 +354,7 @@ function AboutSkills() {
                 ref={(node) => {
                   itemRefs.current[index] = node;
                 }}
-                className="absolute left-[5%] top-1/2 flex w-[88%] origin-left items-baseline gap-4 will-change-transform"
+                className="absolute left-[20px] top-1/2 flex w-[calc(100%-24px)] origin-left items-baseline gap-4 will-change-transform"
               >
                 <span
                   className={`min-w-6 text-[10px] ${
@@ -354,7 +366,7 @@ function AboutSkills() {
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <strong
-                  className={`whitespace-nowrap text-[clamp(30px,3.1vw,52px)] font-medium leading-none tracking-[-0.055em] max-md:text-[clamp(32px,10vw,48px)] ${
+                  className={`whitespace-nowrap text-[clamp(28px,3vw,50px)] font-medium leading-none tracking-[-0.055em] max-md:text-[clamp(24px,7vw,34px)] ${
                     index === activeSkill
                       ? "text-[#e1dcc9] drop-shadow-[0_0_18px_rgba(154,106,53,0.2)]"
                       : "text-[#e1dcc947]"
@@ -378,7 +390,7 @@ function AboutSkills() {
 
         <div
           ref={portraitRef}
-          className="absolute right-[clamp(4vw,6vw,8vw)] top-[26svh] z-20 w-[clamp(230px,17vw,315px)] max-md:left-1/2 max-md:right-auto max-md:top-[55%] max-md:w-[min(70vw,300px)] max-md:-translate-x-1/2 max-md:-translate-y-1/2"
+          className="absolute left-1/2 top-[55%] z-20 w-[min(74vw,310px)] md:left-auto md:right-[clamp(24px,4vw,60px)] md:top-[26svh] md:w-[clamp(240px,22vw,315px)]"
         >
           <CometCard rotateDepth={6} translateDepth={5}>
             <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_38px_3px_38px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_28px_3px_28px]">

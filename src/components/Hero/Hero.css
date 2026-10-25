@@ -15,8 +15,8 @@
 .hero-pinned-wrapper {
   position: relative;
   width: 100vw;
-  height: 100vh;
-  min-height: 100svh;
+  height: 100dvh;
+  min-height: 100dvh;
   overflow: hidden;
   background: transparent;
   isolation: isolate;
@@ -33,8 +33,8 @@
   position: absolute;
   top: 0;
   width: 50vw;
-  height: 100vh;
-  min-height: 100svh;
+  height: 100dvh;
+  min-height: 100dvh;
   background-color: #000000;
   overflow: hidden;
   display: flex;
@@ -245,32 +245,34 @@
 /* Scroll Explorer Indicator */
 .hero-scroll-indicator {
   position: absolute;
-  z-index: 16;
+  z-index: 25;
   left: 50%;
-  bottom: 20px;
+  bottom: max(32px, calc(env(safe-area-inset-bottom, 20px) + 14px));
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   transform: translateX(-50%);
-  color: rgba(225, 220, 201, 0.28);
+  color: rgba(225, 220, 201, 0.72);
   pointer-events: auto;
   will-change: transform, opacity;
 }
 
 .hero-scroll-indicator span {
   font-family: "Outfit", sans-serif;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.24em;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.85);
 }
 
 .hero-scroll-indicator i {
   position: relative;
-  width: 1px;
-  height: 28px;
+  width: 1.5px;
+  height: 32px;
   overflow: hidden;
-  background: rgba(225, 220, 201, 0.12);
+  background: rgba(225, 220, 201, 0.28);
+  border-radius: 1px;
 }
 
 .hero-scroll-indicator i::after {
@@ -280,7 +282,7 @@
   top: -100%;
   width: 100%;
   height: 65%;
-  background: #e1dcc9;
+  background: #f0cd9b;
   animation: heroScrollLine 1.8s ease-in-out infinite;
 }
 
@@ -359,11 +361,11 @@
   }
 
   .hero-scroll-indicator {
-    bottom: 16px;
+    bottom: max(22px, calc(env(safe-area-inset-bottom, 16px) + 8px));
   }
 
   .hero-scroll-indicator i {
-    height: 22px;
+    height: 24px;
   }
 }
 

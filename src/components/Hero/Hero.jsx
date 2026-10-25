@@ -25,14 +25,22 @@ function Hero() {
         { y: "0%" },
       );
 
-      gsap.set(
-        [
-          ".hero-role-wrapper",
-          ".hero-support-block",
-          ".hero-scroll-indicator",
-        ],
-        { opacity: 1, y: 0 },
-      );
+      gsap.set(".hero-role-wrapper", {
+        opacity: 1,
+        xPercent: -50,
+        y: 0,
+      });
+
+      gsap.set(".hero-scroll-indicator", {
+        opacity: 1,
+        xPercent: -50,
+        y: 0,
+      });
+
+      gsap.set(".hero-support-block", {
+        opacity: 1,
+        y: 0,
+      });
 
       gsap.set([".hero-panel-left", ".hero-panel-right"], {
         xPercent: 0,
@@ -77,6 +85,7 @@ function Hero() {
         {
           opacity: 0,
           y: 20,
+          xPercent: -50,
           duration: 0.4,
         },
         0,
@@ -95,6 +104,7 @@ function Hero() {
           {
             opacity: 0,
             y: 15,
+            xPercent: -50,
             duration: 0.3,
           },
           0,
