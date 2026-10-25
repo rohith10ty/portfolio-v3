@@ -55,10 +55,10 @@ export function MacbookPro({ url, src, className, children, ...props }) {
       )}
       {...props}
     >
-      {/* Proper Black Bordered Curved Display Frame (No MacBook base/hinge) */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[24px] sm:rounded-[28px] border-[3px] border-[#0a0a0a] bg-[#0c0c0e] p-[7px] sm:p-[9px] shadow-[0_25px_65px_rgba(0,0,0,0.92),0_0_35px_rgba(139,98,52,0.14),inset_0_1px_1px_rgba(255,255,255,0.08)]">
+      {/* Refined Slim Bronze-Bordered Curved Display Frame */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px] sm:rounded-[22px] border-[1.5px] border-[rgba(225,188,120,0.35)] bg-[#0c0c0e] p-[3px] sm:p-[4px] shadow-[0_20px_50px_rgba(0,0,0,0.88),0_0_24px_rgba(216,160,94,0.16)]">
         {/* Inner Screen Bezel */}
-        <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[16px] sm:rounded-[20px] bg-[#050505]">
+        <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[14px] sm:rounded-[18px] bg-[#050505]">
           {/* Screen Content */}
           <div
             ref={screenRef}

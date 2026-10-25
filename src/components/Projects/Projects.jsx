@@ -407,12 +407,47 @@ const flattenTreeToMap = (tree) => {
 function Projects() {
   const stageRef = useRef(null);
   const treeWrapperRef = useRef(null);
+  const treeCardRef = useRef(null);
+  const treeScrollRef = useRef(null);
 
   const [treeElements, setTreeElements] = useState(INITIAL_PROJECTS_TREE);
   const [repoCount, setRepoCount] = useState(30);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isLiveSync, setIsLiveSync] = useState(false);
   const [previewMode, setPreviewMode] = useState("laptop"); // "laptop" (default) | "mobile"
+
+  // Intercept wheel events inside the file tree window to guarantee:
+  // 1. The user can smoothly scroll through all repositories inside the tree
+  // 2. The outer page and GSAP stage NEVER move while cursor is inside the tree
+  useEffect(() => {
+    const card = treeCardRef.current;
+    const scrollEl = treeScrollRef.current;
+    if (!card || !scrollEl) return;
+
+    const onWheel = (e) => {
+      // Stop wheel event from bubbling to window or Lenis
+      e.stopPropagation();
+      e.preventDefault();
+
+      // Scroll the internal tree smoothly
+      scrollEl.scrollTop += e.deltaY;
+      if (e.deltaX) {
+        scrollEl.scrollLeft += e.deltaX;
+      }
+    };
+
+    const onTouchMove = (e) => {
+      e.stopPropagation();
+    };
+
+    card.addEventListener("wheel", onWheel, { passive: false });
+    card.addEventListener("touchmove", onTouchMove, { passive: true });
+
+    return () => {
+      card.removeEventListener("wheel", onWheel);
+      card.removeEventListener("touchmove", onTouchMove);
+    };
+  }, []);
 
   // Fetch real-time GitHub repositories from GitHub public API
   useEffect(() => {
@@ -576,7 +611,11 @@ function Projects() {
                   : "w-full max-w-[480px] mx-auto"
               }`}
             >
-              <div className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl">
+              <div
+                ref={treeCardRef}
+                data-lenis-prevent="true"
+                className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl"
+              >
                 {/* Window Bar */}
                 <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-4 py-2.5">
                   <div className="flex items-center gap-2">
@@ -606,8 +645,11 @@ function Projects() {
                   </div>
                 </div>
 
-                {/* Scrollable File Tree: Restored to full size */}
+                {/* Scrollable File Tree: Restored to full size with complete wheel trapping */}
                 <div
+                  ref={treeScrollRef}
+                  data-lenis-prevent="true"
+                  style={{ overscrollBehavior: "contain" }}
                   className="custom-scrollbar h-[360px] md:h-[380px] max-h-[420px] overflow-y-auto overscroll-contain p-3.5"
                 >
                   <Tree
@@ -632,8 +674,21 @@ function Projects() {
               <div
                 className="relative lg:col-span-8 flex flex-col items-center justify-center w-full transition-opacity duration-500 ease-out animate-in fade-in"
               >
-                {/* Device Selector Tabs: Laptop (Default) / Mobile */}
-                <div className="mb-4 inline-flex items-center rounded-xl border border-[rgba(225,188,120,0.22)] bg-[#17100a]/92 p-1 shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                {/* Display Frame: EITHER Laptop OR iPhone (Separate, Never together) */}
+                <div className="relative flex items-center justify-center w-full min-h-[250px] sm:min-h-[290px]">
+                  {previewMode === "laptop" ? (
+                    <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px] animate-in fade-in duration-300">
+                      <MacbookPro url={activeProject.homepage} className="max-w-full" />
+                    </div>
+                  ) : (
+                    <div className="relative flex items-center justify-center w-[160px] sm:w-[185px] md:w-[200px] animate-in fade-in duration-300">
+                      <Iphone url={activeProject.homepage} className="w-full" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Device Selector Tabs: Placed BELOW the mockup so it NEVER overlaps with navbar dock */}
+                <div className="mt-4 inline-flex items-center rounded-xl border border-[rgba(225,188,120,0.22)] bg-[#17100a]/92 p-1 shadow-[0_8px_20px_rgba(0,0,0,0.5)] backdrop-blur-md">
                   <button
                     type="button"
                     onClick={() => setPreviewMode("laptop")}
@@ -661,21 +716,8 @@ function Projects() {
                   </button>
                 </div>
 
-                {/* Display Frame: EITHER Laptop OR iPhone (Separate, Never together) */}
-                <div className="relative flex items-center justify-center w-full min-h-[250px] sm:min-h-[290px]">
-                  {previewMode === "laptop" ? (
-                    <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px] animate-in fade-in duration-300">
-                      <MacbookPro url={activeProject.homepage} className="max-w-full" />
-                    </div>
-                  ) : (
-                    <div className="relative flex items-center justify-center w-[160px] sm:w-[185px] md:w-[200px] animate-in fade-in duration-300">
-                      <Iphone url={activeProject.homepage} className="w-full" />
-                    </div>
-                  )}
-                </div>
-
                 {/* Code and Live Preview Buttons Just Below the Active Device */}
-                <div className="mt-4 flex items-center justify-center gap-3 w-full">
+                <div className="mt-3 flex items-center justify-center gap-3 w-full">
                   {activeProject.github && (
                     <a
                       href={activeProject.github}

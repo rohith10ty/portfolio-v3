@@ -61,12 +61,12 @@ export function Iphone16Pro({
       )}
       {...props}
     >
-      {/* Modern iPhone Outer Chassis */}
-      <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[24px] border-[2px] border-[rgba(225,220,201,0.2)] bg-[#0d0d0d] p-[4px] shadow-[0_20px_50px_rgba(0,0,0,0.88),0_0_30px_rgba(139,98,52,0.14)]">
+      {/* Classic iPhone Minimal Outer Chassis (Neutral Titanium, Reduced Border Size) */}
+      <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[20px] border-[1.5px] border-[#252528] bg-[#0c0c0d] p-[2.5px] sm:p-[3px] shadow-[0_20px_45px_rgba(0,0,0,0.85)]">
         {/* Screen Display Bezel */}
         <div
           ref={screenRef}
-          className="relative flex h-full w-full flex-col overflow-hidden rounded-[18px] bg-[#050505]"
+          className="relative flex h-full w-full flex-col overflow-hidden rounded-[16px] bg-[#050505]"
         >
           {url && !iframeError ? (
             <div className="relative h-full w-full overflow-hidden bg-white">
@@ -121,9 +121,6 @@ export function Iphone16Pro({
 
           {/* Screen Gloss Glare */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.015] to-white/[0.04]" />
-
-          {/* Bottom Home Indicator Bar */}
-          <div className="pointer-events-none absolute bottom-1.5 left-1/2 h-[3.5px] w-[80px] -translate-x-1/2 rounded-full bg-white/35 z-30" />
         </div>
       </div>
     </div>
