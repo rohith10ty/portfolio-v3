@@ -675,40 +675,51 @@ function Projects() {
                 className="relative md:col-span-7 lg:col-span-8 flex flex-col items-center justify-center w-full transition-opacity duration-500 ease-out animate-in fade-in"
               >
                 {previewMode === "laptop" ? (
-                  /* LAPTOP VIEW: Wide display frame with options below */
+                  /* LAPTOP VIEW: Wide display frame with 4 separate same-sized options below */
                   <div className="relative flex flex-col items-center justify-center w-full animate-in fade-in duration-300">
                     <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px]">
                       <MacbookPro url={activeProject.homepage} className="max-w-full" />
                     </div>
 
-                    {/* Laptop View Controls: Options below the laptop */}
+                    {/* Laptop View Controls: 4 separate standalone buttons with exact same size */}
                     <div className="mt-4 flex flex-wrap items-center justify-center gap-3 w-full">
-                      {/* Device Selector Tabs */}
-                      <div className="inline-flex items-center rounded-xl border border-[rgba(225,188,120,0.22)] bg-[#17100a]/92 p-1 shadow-[0_8px_20px_rgba(0,0,0,0.5)] backdrop-blur-md">
-                        <button
-                          type="button"
-                          onClick={() => setPreviewMode("laptop")}
-                          className="flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[11px] font-semibold bg-[#d8a05e] text-[#120c07] shadow-[0_0_15px_rgba(216,160,94,0.35)] cursor-pointer"
-                        >
-                          <Laptop className="h-3.5 w-3.5" />
-                          <span>Laptop View</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setPreviewMode("mobile")}
-                          className="flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[11px] font-medium text-[#e1dcc9]/70 hover:text-white hover:bg-[rgba(216,160,94,0.1)] transition-all cursor-pointer"
-                        >
-                          <Smartphone className="h-3.5 w-3.5" />
-                          <span>iPhone View</span>
-                        </button>
-                      </div>
+                      {/* 1. Laptop View Button */}
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode("laptop")}
+                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                          previewMode === "laptop"
+                            ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
+                            : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
+                        }`}
+                        title="Switch to Laptop View"
+                      >
+                        <Laptop className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <span>Laptop View</span>
+                      </button>
 
+                      {/* 2. iPhone View Button */}
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode("mobile")}
+                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                          previewMode === "mobile"
+                            ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
+                            : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
+                        }`}
+                        title="Switch to iPhone View"
+                      >
+                        <Smartphone className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <span>iPhone View</span>
+                      </button>
+
+                      {/* 3. Code Button */}
                       {activeProject.github && (
                         <a
                           href={activeProject.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex items-center gap-2 rounded-xl border border-[rgba(225,188,120,0.25)] bg-[#140e09]/92 px-4 py-2 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
+                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 px-4 py-2.5 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
                           title="View GitHub Repository Source Code"
                         >
                           <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
@@ -716,12 +727,13 @@ function Projects() {
                         </a>
                       )}
 
+                      {/* 4. Live Preview Button */}
                       {activeProject.homepage && (
                         <a
                           href={activeProject.homepage}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex items-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
+                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2.5 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
                           title="Open Live Preview in a New Tab"
                         >
                           <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -731,69 +743,72 @@ function Projects() {
                     </div>
                   </div>
                 ) : (
-                  /* MOBILE VIEW: iPhone centered with options on the RIGHT SIDE */
+                  /* MOBILE VIEW: iPhone centered with 4 separate same-sized options on the RIGHT SIDE */
                   <div className="relative flex flex-row items-center justify-center gap-5 sm:gap-7 md:gap-8 w-full animate-in fade-in duration-300">
-                    {/* Authentic Bronze iPhone Mockup */}
+                    {/* Authentic Normal Black iPhone Mockup */}
                     <div className="relative w-[150px] sm:w-[170px] md:w-[185px] xl:w-[200px] shrink-0">
                       <Iphone url={activeProject.homepage} className="w-full" />
                     </div>
 
-                    {/* Options on the RIGHT SIDE of the Mobile */}
-                    <div className="flex flex-col items-start gap-3 shrink-0">
-                      {/* Device Selector Tabs */}
-                      <div className="flex flex-col rounded-xl border border-[rgba(225,188,120,0.22)] bg-[#17100a]/92 p-1.5 shadow-[0_8px_20px_rgba(0,0,0,0.5)] backdrop-blur-md">
-                        <span className="px-2.5 pt-1 pb-1.5 font-mono text-[9px] uppercase tracking-wider text-[#e1dcc9]/50">
-                          Preview Mode
-                        </span>
-                        <div className="flex flex-col gap-1">
-                          <button
-                            type="button"
-                            onClick={() => setPreviewMode("laptop")}
-                            className="flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[11px] font-medium text-[#e1dcc9]/70 hover:text-white hover:bg-[rgba(216,160,94,0.1)] transition-all cursor-pointer"
-                          >
-                            <Laptop className="h-3.5 w-3.5" />
-                            <span>Laptop View</span>
-                          </button>
+                    {/* Options on the RIGHT SIDE: 4 separate standalone buttons with exact same size */}
+                    <div className="flex flex-col items-start gap-2.5 shrink-0">
+                      {/* 1. Laptop View Button */}
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode("laptop")}
+                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                          previewMode === "laptop"
+                            ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
+                            : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
+                        }`}
+                        title="Switch to Laptop View"
+                      >
+                        <Laptop className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <span>Laptop View</span>
+                      </button>
 
-                          <button
-                            type="button"
-                            onClick={() => setPreviewMode("mobile")}
-                            className="flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[11px] font-semibold bg-[#d8a05e] text-[#120c07] shadow-[0_0_15px_rgba(216,160,94,0.35)] cursor-pointer"
-                          >
-                            <Smartphone className="h-3.5 w-3.5" />
-                            <span>iPhone View</span>
-                          </button>
-                        </div>
-                      </div>
+                      {/* 2. iPhone View Button */}
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode("mobile")}
+                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                          previewMode === "mobile"
+                            ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
+                            : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
+                        }`}
+                        title="Switch to iPhone View"
+                      >
+                        <Smartphone className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <span>iPhone View</span>
+                      </button>
 
-                      {/* Action Links */}
-                      <div className="flex flex-col gap-2 w-full">
-                        {activeProject.github && (
-                          <a
-                            href={activeProject.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center justify-center gap-2 rounded-xl border border-[rgba(225,188,120,0.25)] bg-[#140e09]/92 px-4 py-2 text-[11.5px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
-                            title="View GitHub Repository Source Code"
-                          >
-                            <GitHubIcon className="h-3.5 w-3.5 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
-                            <span>Code</span>
-                          </a>
-                        )}
+                      {/* 3. Code Button */}
+                      {activeProject.github && (
+                        <a
+                          href={activeProject.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 px-4 py-2.5 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
+                          title="View GitHub Repository Source Code"
+                        >
+                          <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                          <span>Code</span>
+                        </a>
+                      )}
 
-                        {activeProject.homepage && (
-                          <a
-                            href={activeProject.homepage}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center justify-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2 text-[11.5px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
-                            title="Open Live Preview in a New Tab"
-                          >
-                            <ExternalLink className="h-3.5 w-3.5 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                            <span>Live Preview</span>
-                          </a>
-                        )}
-                      </div>
+                      {/* 4. Live Preview Button */}
+                      {activeProject.homepage && (
+                        <a
+                          href={activeProject.homepage}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2.5 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
+                          title="Open Live Preview in a New Tab"
+                        >
+                          <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <span>Live Preview</span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 )}
