@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Quote } from "lucide-react";
 
 import profileImage from "../../assets/rohith-profile.PNG";
 import { CometCard } from "../ui/CometCard";
@@ -32,6 +33,7 @@ function AboutSkills() {
   const sectionRef = useRef(null);
   const wheelRef = useRef(null);
   const portraitRef = useRef(null);
+  const messageBoxRef = useRef(null);
   const canvasRef = useRef(null);
   const itemRefs = useRef([]);
   const drawRef = useRef(() => {});
@@ -165,7 +167,8 @@ function AboutSkills() {
     const section = sectionRef.current;
     const wheel = wheelRef.current;
     const portrait = portraitRef.current;
-    if (!section || !wheel || !portrait) return undefined;
+    const messageBox = messageBoxRef.current;
+    if (!section || !wheel || !portrait || !messageBox) return undefined;
 
     const clamp = gsap.utils.clamp(0, 1);
     const media = gsap.matchMedia();
@@ -229,10 +232,8 @@ function AboutSkills() {
         { sequential: sequentialQuery, simultaneous: simultaneousQuery },
         ({ conditions }) => {
           const sequential = Boolean(conditions.sequential);
-          const portraitEnd = 0.45;
-          const transitionEnd = 0.55;
 
-          gsap.set([portrait, wheel], {
+          gsap.set([portrait, wheel, messageBox], {
             clearProps: "transform,opacity,visibility",
           });
 
@@ -242,13 +243,23 @@ function AboutSkills() {
               yPercent: -50,
               autoAlpha: 1,
             });
+            gsap.set(messageBox, {
+              xPercent: -50,
+              yPercent: -50,
+              autoAlpha: 0,
+            });
             gsap.set(wheel, {
               xPercent: -50,
               yPercent: -50,
               autoAlpha: 0,
             });
           } else {
+            // Desktop & iPad: center photo card, side elements pinned and visible
             gsap.set(portrait, {
+              xPercent: -50,
+              autoAlpha: 1,
+            });
+            gsap.set(messageBox, {
               clearProps: "transform",
               autoAlpha: 1,
             });
@@ -272,26 +283,59 @@ function AboutSkills() {
                 return;
               }
 
-              const portraitProgress = clamp(progress / portraitEnd);
-              const transitionProgress = clamp(
-                (progress - portraitEnd) / (transitionEnd - portraitEnd),
-              );
-              const skillsProgress = clamp(
-                (progress - transitionEnd) / (1 - transitionEnd),
-              );
+              // Mobile 3-Stage Storytelling Sequence:
+              // Stage 1: Rotating Portrait (0.00 -> 0.32)
+              // Trans 1: Portrait -> Message Box (0.32 -> 0.40)
+              // Stage 2: Message Box with philosophy (0.40 -> 0.65)
+              // Trans 2: Message Box -> Selected Toolkit (0.65 -> 0.72)
+              // Stage 3: Skills Wheel Scroll (0.72 -> 1.00)
 
+              const p1End = 0.32;
+              const t1End = 0.40;
+              const p2End = 0.65;
+              const t2End = 0.72;
+
+              const portraitProgress = clamp(progress / p1End);
               renderPortrait(portraitProgress);
-              renderSkills(skillsProgress);
-              gsap.set(portrait, {
-                xPercent: -50 - transitionProgress * 8,
-                yPercent: -50,
-                autoAlpha: 1 - transitionProgress,
-              });
-              gsap.set(wheel, {
-                xPercent: -50,
-                yPercent: -50,
-                autoAlpha: transitionProgress,
-              });
+
+              if (progress < t1End) {
+                const trans1 = clamp((progress - p1End) / (t1End - p1End));
+                gsap.set(portrait, {
+                  autoAlpha: 1 - trans1,
+                  xPercent: -50,
+                  yPercent: -50,
+                });
+                gsap.set(messageBox, {
+                  autoAlpha: trans1,
+                  xPercent: -50,
+                  yPercent: -50,
+                });
+                gsap.set(wheel, { autoAlpha: 0 });
+              } else if (progress < t2End) {
+                const trans2 = clamp((progress - p2End) / (t2End - p2End));
+                gsap.set(portrait, { autoAlpha: 0 });
+                gsap.set(messageBox, {
+                  autoAlpha: 1 - trans2,
+                  xPercent: -50,
+                  yPercent: -50,
+                });
+                gsap.set(wheel, {
+                  autoAlpha: trans2,
+                  xPercent: -50,
+                  yPercent: -50,
+                });
+                renderSkills(0);
+              } else {
+                const skillsProgress = clamp((progress - t2End) / (1 - t2End));
+                gsap.set(portrait, { autoAlpha: 0 });
+                gsap.set(messageBox, { autoAlpha: 0 });
+                gsap.set(wheel, {
+                  autoAlpha: 1,
+                  xPercent: -50,
+                  yPercent: -50,
+                });
+                renderSkills(skillsProgress);
+              }
             },
           });
 
@@ -317,27 +361,25 @@ function AboutSkills() {
       className="relative z-20 h-[600svh] text-[#e1dcc9]"
     >
       <div className="sticky top-0 isolate h-[100svh] w-full overflow-hidden">
-        <header className="absolute left-1/2 top-[4.5svh] z-10 w-[min(92vw,650px)] -translate-x-1/2 text-center max-md:top-[72px] max-md:w-[90vw]">
+        {/* Compact Centered Header */}
+        <header className="absolute left-1/2 top-[3.8svh] z-10 w-[min(92vw,650px)] -translate-x-1/2 text-center max-md:top-[56px] max-md:w-[90vw]">
           <span className="text-[11px] font-semibold tracking-[0.35em] text-[#8d877d]">
             ABOUT / SKILLS
           </span>
-          <h2 className="mt-3 text-[clamp(32px,3.5vw,62px)] font-semibold leading-[0.94] tracking-[-0.055em] max-md:text-[28px] max-md:leading-tight">
+          <h2 className="mt-2 text-[clamp(26px,2.8vw,50px)] font-semibold leading-[0.96] tracking-[-0.055em] max-md:text-[22px] max-md:leading-tight">
             Building with
             <br />
             <strong className="font-semibold text-[#9a6a35]">
               clarity &amp; intent.
             </strong>
           </h2>
-          <p className="mx-auto mt-4 max-w-[610px] text-[clamp(13px,1.1vw,18px)] leading-relaxed text-[#9d978d] max-md:hidden">
-            I enjoy creating complete web experiences — from the structure
-            behind the scenes to the interface people actually interact with.
-          </p>
         </header>
 
+        {/* 1. LEFT COLUMN: Selected Toolkit & Skills Wheel */}
         <div
           ref={wheelRef}
           id="skills"
-          className="absolute left-1/2 top-[55%] h-[52vh] w-[min(90vw,360px)] md:left-[clamp(24px,4vw,60px)] md:top-[26svh] md:h-[min(56vh,500px)] md:w-[clamp(320px,38vw,560px)]"
+          className="absolute left-1/2 top-[56%] z-20 h-[52vh] w-[min(90vw,340px)] md:left-[clamp(20px,3.8vw,70px)] md:top-[24svh] md:h-[min(56vh,500px)] md:w-[clamp(240px,22vw,340px)]"
         >
           <div className="absolute left-0 top-0 flex flex-col items-start text-[11px] font-semibold tracking-[0.25em] text-[#8d877d]">
             <span className="whitespace-nowrap">SELECTED TOOLKIT</span>
@@ -366,7 +408,7 @@ function AboutSkills() {
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <strong
-                  className={`whitespace-nowrap text-[clamp(28px,3vw,50px)] font-medium leading-none tracking-[-0.055em] max-md:text-[clamp(24px,7vw,34px)] ${
+                  className={`whitespace-nowrap text-[clamp(24px,2.4vw,44px)] font-medium leading-none tracking-[-0.055em] max-md:text-[clamp(22px,6.8vw,32px)] ${
                     index === activeSkill
                       ? "text-[#e1dcc9] drop-shadow-[0_0_18px_rgba(154,106,53,0.2)]"
                       : "text-[#e1dcc947]"
@@ -388,12 +430,13 @@ function AboutSkills() {
           </div>
         </div>
 
+        {/* 2. CENTER COLUMN: Photo Card with Centered Role (Laptop & iPad Centered) */}
         <div
           ref={portraitRef}
-          className="absolute left-1/2 top-[55%] z-20 w-[min(74vw,310px)] md:left-auto md:right-[clamp(24px,4vw,60px)] md:top-[26svh] md:w-[clamp(240px,22vw,315px)]"
+          className="absolute left-1/2 top-[56%] z-20 w-[min(65vw,225px)] md:top-[24svh] md:w-[clamp(215px,17vw,280px)]"
         >
           <CometCard rotateDepth={6} translateDepth={5}>
-            <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_38px_3px_38px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_28px_3px_28px]">
+            <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_36px_3px_36px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_24px_3px_24px]">
               <span className="absolute left-5 top-5 z-30 text-[11px] tracking-[0.2em] text-[#9a6a354d]">
                 01
               </span>
@@ -412,31 +455,64 @@ function AboutSkills() {
               />
 
               <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(to_top,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.08)_37%,transparent_66%)]" />
-              <div className="absolute bottom-7 left-7 z-30 right-6">
-                <strong className="block text-[clamp(25px,2vw,34px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
+              <div className="absolute bottom-5 left-5 right-5 z-30 md:bottom-6 md:left-6 md:right-6">
+                <strong className="block text-[clamp(20px,1.75vw,28px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
                   Rohith Naidu
                 </strong>
               </div>
             </div>
           </CometCard>
 
-          <div className="mt-3 grid grid-cols-2 gap-3 max-[380px]:gap-2">
-            <div className="min-w-0 rounded-[3px_14px_3px_14px] border border-[#9a6a3538] bg-[#1c120bed] px-4 py-3 shadow-[inset_0_0_20px_rgba(154,106,53,0.06)] max-md:px-3">
-              <span className="block text-[9px] font-semibold tracking-[0.2em] text-[#8d877d]">
+          {/* Centered ROLE Badge below photo (APPROACH removed) */}
+          <div className="mt-3 flex justify-center">
+            <div className="inline-flex flex-col items-center justify-center rounded-[3px_14px_3px_14px] border border-[#9a6a3538] bg-[#1c120bed] px-5 py-2 shadow-[inset_0_0_20px_rgba(154,106,53,0.06)] backdrop-blur-sm">
+              <span className="block text-[9px] font-semibold tracking-[0.22em] text-[#8d877d]">
                 ROLE
               </span>
-              <strong className="mt-1 block text-[clamp(10px,0.7vw,12px)] font-medium leading-snug text-[#ddd6c6]">
+              <strong className="mt-0.5 block text-[clamp(11px,0.8vw,13px)] font-medium leading-snug text-[#ddd6c6]">
                 MERN Stack Developer
               </strong>
             </div>
+          </div>
+        </div>
 
-            <div className="min-w-0 rounded-[3px_14px_3px_14px] border border-[#9a6a3538] bg-[#1c120bed] px-4 py-3 shadow-[inset_0_0_20px_rgba(154,106,53,0.06)] max-md:px-3">
-              <span className="block text-[9px] font-semibold tracking-[0.2em] text-[#8d877d]">
-                APPROACH
+        {/* 3. RIGHT COLUMN: Message Box with Icon & Philosophy */}
+        <div
+          ref={messageBoxRef}
+          className="absolute left-1/2 top-[56%] z-20 w-[min(88vw,330px)] md:left-auto md:right-[clamp(20px,3.8vw,70px)] md:top-[24svh] md:w-[clamp(240px,22vw,340px)]"
+        >
+          <div className="relative rounded-[3px_24px_3px_24px] border border-[#9a6a3538] bg-[#17110df0] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45),inset_0_0_30px_rgba(154,106,53,0.06)] backdrop-blur-md md:p-6">
+            {/* Top Row: Icon Badge & Label */}
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#9a6a354d] bg-[#2a1a10] text-[#c99a5e] shadow-[0_0_15px_rgba(154,106,53,0.22)]">
+                <Quote className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="block text-[9.5px] font-semibold tracking-[0.28em] text-[#8d877d]">
+                  PHILOSOPHY
+                </span>
+                <span className="block truncate text-[11px] font-medium text-[#c99a5e]">
+                  Full-Stack Craft
+                </span>
+              </div>
+            </div>
+
+            {/* Decorative Gold Accent Divider */}
+            <div className="my-3.5 h-px w-full bg-gradient-to-r from-[#9a6a354d] via-[#9a6a351a] to-transparent md:my-4" />
+
+            {/* Message Body */}
+            <p className="text-[clamp(12.5px,0.98vw,15px)] font-light leading-relaxed tracking-wide text-[#ddd6c6]">
+              “I enjoy creating complete web experiences — from the structure behind the scenes to the interface people actually interact with.”
+            </p>
+
+            {/* Bottom Metadata */}
+            <div className="mt-4 flex items-center justify-between border-t border-[#e1dcc90f] pt-3 text-[10.5px] text-[#8d877d] md:mt-5">
+              <span className="font-mono text-[9.5px] tracking-wider text-[#9a6a35]">
+                01 // INTENT
               </span>
-              <strong className="mt-1 block text-[clamp(10px,0.7vw,12px)] font-medium leading-snug text-[#ddd6c6]">
-                Design → Build → Refine
-              </strong>
+              <span className="tracking-wide text-[#b0a99d]">
+                Rohith Naidu
+              </span>
             </div>
           </div>
         </div>
