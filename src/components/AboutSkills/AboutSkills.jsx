@@ -254,16 +254,8 @@ function AboutSkills() {
               autoAlpha: 0,
             });
           } else {
-            // Desktop & iPad: center photo card, side elements pinned and visible
-            gsap.set(portrait, {
-              xPercent: -50,
-              autoAlpha: 1,
-            });
-            gsap.set(messageBox, {
-              clearProps: "transform",
-              autoAlpha: 1,
-            });
-            gsap.set(wheel, {
+            // Desktop & iPad: flexbox handles exact centering of all 3 columns
+            gsap.set([portrait, wheel, messageBox], {
               clearProps: "transform",
               autoAlpha: 1,
             });
@@ -362,7 +354,7 @@ function AboutSkills() {
     >
       <div className="sticky top-0 isolate h-[100svh] w-full overflow-hidden">
         {/* Compact Centered Header */}
-        <header className="absolute left-1/2 top-[3.8svh] z-10 w-[min(92vw,650px)] -translate-x-1/2 text-center max-md:top-[56px] max-md:w-[90vw]">
+        <header className="absolute left-1/2 top-[3.5svh] z-10 w-[min(92vw,650px)] -translate-x-1/2 text-center max-md:top-[56px] max-md:w-[90vw]">
           <span className="text-[11px] font-semibold tracking-[0.35em] text-[#8d877d]">
             ABOUT / SKILLS
           </span>
@@ -375,145 +367,158 @@ function AboutSkills() {
           </h2>
         </header>
 
-        {/* 1. LEFT COLUMN: Selected Toolkit & Skills Wheel */}
-        <div
-          ref={wheelRef}
-          id="skills"
-          className="absolute left-1/2 top-[56%] z-20 h-[52vh] w-[min(90vw,340px)] md:left-[clamp(20px,3.8vw,70px)] md:top-[24svh] md:h-[min(56vh,500px)] md:w-[clamp(240px,22vw,340px)]"
-        >
-          <div className="absolute left-0 top-0 flex flex-col items-start text-[11px] font-semibold tracking-[0.25em] text-[#8d877d]">
-            <span className="whitespace-nowrap">SELECTED TOOLKIT</span>
-            <strong className="mt-2 font-semibold tracking-normal text-[#b0a99d]">
-              {String(activeSkill + 1).padStart(2, "0")}/
-              {String(skills.length).padStart(2, "0")}
-            </strong>
-          </div>
+        {/* Responsive Stage for Desktop & iPad (Centered 3-Column Composition) */}
+        <div className="absolute inset-x-0 bottom-0 top-[12svh] flex items-center justify-center pointer-events-none max-md:block">
+          <div className="w-full max-w-[1520px] h-full flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-md:contents">
 
-          <div className="absolute inset-x-0 bottom-4 top-16 overflow-hidden">
-            {skills.map((skill, index) => (
+            {/* 1. LEFT COLUMN: Selected Toolkit (Centered in Left Side) */}
+            <div className="flex-1 flex justify-center items-center pointer-events-auto max-md:contents">
               <div
-                key={skill}
-                ref={(node) => {
-                  itemRefs.current[index] = node;
-                }}
-                className="absolute left-[20px] top-1/2 flex w-[calc(100%-24px)] origin-left items-baseline gap-4 will-change-transform"
+                ref={wheelRef}
+                id="skills"
+                className="relative h-[min(56vh,480px)] w-full max-w-[320px] lg:max-w-[360px] max-md:absolute max-md:left-1/2 max-md:top-[56%] max-md:h-[52vh] max-md:w-[min(90vw,340px)]"
               >
-                <span
-                  className={`min-w-6 text-[10px] ${
-                    index === activeSkill
-                      ? "text-[#a97942]"
-                      : "text-[#e1dcc938]"
-                  }`}
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <strong
-                  className={`whitespace-nowrap text-[clamp(24px,2.4vw,44px)] font-medium leading-none tracking-[-0.055em] max-md:text-[clamp(22px,6.8vw,32px)] ${
-                    index === activeSkill
-                      ? "text-[#e1dcc9] drop-shadow-[0_0_18px_rgba(154,106,53,0.2)]"
-                      : "text-[#e1dcc947]"
-                  }`}
-                >
-                  {skill}
-                </strong>
-              </div>
-            ))}
-          </div>
+                <div className="absolute left-0 top-0 flex flex-col items-start text-[11px] font-semibold tracking-[0.25em] text-[#8d877d]">
+                  <span className="whitespace-nowrap">SELECTED TOOLKIT</span>
+                  <strong className="mt-2 font-semibold tracking-normal text-[#b0a99d]">
+                    {String(activeSkill + 1).padStart(2, "0")}/
+                    {String(skills.length).padStart(2, "0")}
+                  </strong>
+                </div>
 
-          <div className="absolute bottom-4 left-0 top-16 w-px overflow-hidden bg-[#e1dcc91a]">
-            <span
-              className="block w-full bg-[#9a6a35] transition-[height] duration-200"
-              style={{
-                height: `${((activeSkill + 1) / skills.length) * 100}%`,
-              }}
-            />
-          </div>
-        </div>
+                <div className="absolute inset-x-0 bottom-4 top-16 overflow-hidden">
+                  {skills.map((skill, index) => (
+                    <div
+                      key={skill}
+                      ref={(node) => {
+                        itemRefs.current[index] = node;
+                      }}
+                      className="absolute left-[20px] top-1/2 flex w-[calc(100%-24px)] origin-left items-baseline gap-4 will-change-transform"
+                    >
+                      <span
+                        className={`min-w-6 text-[10px] ${
+                          index === activeSkill
+                            ? "text-[#a97942]"
+                            : "text-[#e1dcc938]"
+                        }`}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <strong
+                        className={`whitespace-nowrap text-[clamp(24px,2.4vw,44px)] font-medium leading-none tracking-[-0.055em] max-md:text-[clamp(22px,6.8vw,32px)] ${
+                          index === activeSkill
+                            ? "text-[#e1dcc9] drop-shadow-[0_0_18px_rgba(154,106,53,0.2)]"
+                            : "text-[#e1dcc947]"
+                        }`}
+                      >
+                        {skill}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
 
-        {/* 2. CENTER COLUMN: Photo Card with Centered Role (Laptop & iPad Centered) */}
-        <div
-          ref={portraitRef}
-          className="absolute left-1/2 top-[56%] z-20 w-[min(65vw,225px)] md:top-[24svh] md:w-[clamp(215px,17vw,280px)]"
-        >
-          <CometCard rotateDepth={6} translateDepth={5}>
-            <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_36px_3px_36px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_24px_3px_24px]">
-              <span className="absolute left-5 top-5 z-30 text-[11px] tracking-[0.2em] text-[#9a6a354d]">
-                01
-              </span>
-
-              <img
-                src={profileImage}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <canvas
-                ref={canvasRef}
-                role="img"
-                aria-label="Rohith Naidu portrait rotating from side profile to front view"
-                className="absolute inset-0 z-10 h-full w-full opacity-0 transition-opacity duration-200"
-              />
-
-              <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(to_top,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.08)_37%,transparent_66%)]" />
-              <div className="absolute bottom-5 left-5 right-5 z-30 md:bottom-6 md:left-6 md:right-6">
-                <strong className="block text-[clamp(20px,1.75vw,28px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
-                  Rohith Naidu
-                </strong>
-              </div>
-            </div>
-          </CometCard>
-
-          {/* Centered ROLE Badge below photo (APPROACH removed) */}
-          <div className="mt-3 flex justify-center">
-            <div className="inline-flex flex-col items-center justify-center rounded-[3px_14px_3px_14px] border border-[#9a6a3538] bg-[#1c120bed] px-5 py-2 shadow-[inset_0_0_20px_rgba(154,106,53,0.06)] backdrop-blur-sm">
-              <span className="block text-[9px] font-semibold tracking-[0.22em] text-[#8d877d]">
-                ROLE
-              </span>
-              <strong className="mt-0.5 block text-[clamp(11px,0.8vw,13px)] font-medium leading-snug text-[#ddd6c6]">
-                MERN Stack Developer
-              </strong>
-            </div>
-          </div>
-        </div>
-
-        {/* 3. RIGHT COLUMN: Message Box with Icon & Philosophy */}
-        <div
-          ref={messageBoxRef}
-          className="absolute left-1/2 top-[56%] z-20 w-[min(88vw,330px)] md:left-auto md:right-[clamp(20px,3.8vw,70px)] md:top-[24svh] md:w-[clamp(240px,22vw,340px)]"
-        >
-          <div className="relative rounded-[3px_24px_3px_24px] border border-[#9a6a3538] bg-[#17110df0] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.45),inset_0_0_30px_rgba(154,106,53,0.06)] backdrop-blur-md md:p-6">
-            {/* Top Row: Icon Badge & Label */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#9a6a354d] bg-[#2a1a10] text-[#c99a5e] shadow-[0_0_15px_rgba(154,106,53,0.22)]">
-                <Quote className="h-4 w-4" />
-              </div>
-              <div className="min-w-0">
-                <span className="block text-[9.5px] font-semibold tracking-[0.28em] text-[#8d877d]">
-                  PHILOSOPHY
-                </span>
-                <span className="block truncate text-[11px] font-medium text-[#c99a5e]">
-                  Full-Stack Craft
-                </span>
+                <div className="absolute bottom-4 left-0 top-16 w-px overflow-hidden bg-[#e1dcc91a]">
+                  <span
+                    className="block w-full bg-[#9a6a35] transition-[height] duration-200"
+                    style={{
+                      height: `${((activeSkill + 1) / skills.length) * 100}%`,
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Decorative Gold Accent Divider */}
-            <div className="my-3.5 h-px w-full bg-gradient-to-r from-[#9a6a354d] via-[#9a6a351a] to-transparent md:my-4" />
+            {/* 2. CENTER COLUMN: Photo Card (Centered & Bigger) */}
+            <div className="shrink-0 flex justify-center items-center pointer-events-auto px-2 lg:px-8 max-md:contents">
+              <div
+                ref={portraitRef}
+                className="relative w-[clamp(250px,21vw,330px)] max-md:absolute max-md:left-1/2 max-md:top-[56%] max-md:w-[min(72vw,255px)]"
+              >
+                <CometCard rotateDepth={6} translateDepth={5}>
+                  <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_38px_3px_38px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_24px_3px_24px]">
+                    <span className="absolute left-5 top-5 z-30 text-[11px] tracking-[0.2em] text-[#9a6a354d]">
+                      01
+                    </span>
 
-            {/* Message Body */}
-            <p className="text-[clamp(12.5px,0.98vw,15px)] font-light leading-relaxed tracking-wide text-[#ddd6c6]">
-              “I enjoy creating complete web experiences — from the structure behind the scenes to the interface people actually interact with.”
-            </p>
+                    <img
+                      src={profileImage}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    <canvas
+                      ref={canvasRef}
+                      role="img"
+                      aria-label="Rohith Naidu portrait rotating from side profile to front view"
+                      className="absolute inset-0 z-10 h-full w-full opacity-0 transition-opacity duration-200"
+                    />
 
-            {/* Bottom Metadata */}
-            <div className="mt-4 flex items-center justify-between border-t border-[#e1dcc90f] pt-3 text-[10.5px] text-[#8d877d] md:mt-5">
-              <span className="font-mono text-[9.5px] tracking-wider text-[#9a6a35]">
-                01 // INTENT
-              </span>
-              <span className="tracking-wide text-[#b0a99d]">
-                Rohith Naidu
-              </span>
+                    <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(to_top,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.08)_37%,transparent_66%)]" />
+                    <div className="absolute bottom-5 left-5 right-5 z-30 md:bottom-7 md:left-7 md:right-7">
+                      <strong className="block text-[clamp(22px,1.9vw,32px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
+                        Rohith Naidu
+                      </strong>
+                    </div>
+                  </div>
+                </CometCard>
+
+                {/* Centered ROLE Badge below photo (APPROACH removed) */}
+                <div className="mt-3 flex justify-center">
+                  <div className="inline-flex flex-col items-center justify-center rounded-[3px_14px_3px_14px] border border-[#9a6a3538] bg-[#1c120bed] px-5 py-2.5 shadow-[inset_0_0_20px_rgba(154,106,53,0.06)] backdrop-blur-sm">
+                    <span className="block text-[9px] font-semibold tracking-[0.22em] text-[#8d877d]">
+                      ROLE
+                    </span>
+                    <strong className="mt-0.5 block text-[clamp(11px,0.8vw,13px)] font-medium leading-snug text-[#ddd6c6]">
+                      MERN Stack Developer
+                    </strong>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* 3. RIGHT COLUMN: Message Box (Centered in the Right Side) */}
+            <div className="flex-1 flex justify-center items-center pointer-events-auto max-md:contents">
+              <div
+                ref={messageBoxRef}
+                className="relative w-full max-w-[320px] lg:max-w-[370px] max-md:absolute max-md:left-1/2 max-md:top-[56%] max-md:w-[min(88vw,330px)]"
+              >
+                <div className="relative rounded-[3px_26px_3px_26px] border border-[#9a6a3538] bg-[#17110df0] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.45),inset_0_0_30px_rgba(154,106,53,0.06)] backdrop-blur-md max-md:p-5">
+                  {/* Top Row: Icon Badge & Label */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#9a6a354d] bg-[#2a1a10] text-[#c99a5e] shadow-[0_0_15px_rgba(154,106,53,0.22)]">
+                      <Quote className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[9.5px] font-semibold tracking-[0.28em] text-[#8d877d]">
+                        PHILOSOPHY
+                      </span>
+                      <span className="block truncate text-[11px] font-medium text-[#c99a5e]">
+                        Full-Stack Craft
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Decorative Gold Accent Divider */}
+                  <div className="my-4 h-px w-full bg-gradient-to-r from-[#9a6a354d] via-[#9a6a351a] to-transparent" />
+
+                  {/* Message Body */}
+                  <p className="text-[clamp(13px,1.02vw,15.5px)] font-light leading-relaxed tracking-wide text-[#ddd6c6]">
+                    “I enjoy creating complete web experiences — from the structure behind the scenes to the interface people actually interact with.”
+                  </p>
+
+                  {/* Bottom Metadata */}
+                  <div className="mt-5 flex items-center justify-between border-t border-[#e1dcc90f] pt-3 text-[10.5px] text-[#8d877d]">
+                    <span className="font-mono text-[9.5px] tracking-wider text-[#9a6a35]">
+                      01 // INTENT
+                    </span>
+                    <span className="tracking-wide text-[#b0a99d]">
+                      Rohith Naidu
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

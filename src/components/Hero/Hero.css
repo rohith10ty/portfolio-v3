@@ -130,8 +130,10 @@
 .hero-role-wrapper {
   position: absolute;
   top: calc(50% + clamp(42px, 6vh, 68px));
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -246,13 +248,15 @@
 .hero-scroll-indicator {
   position: absolute;
   z-index: 25;
-  left: 50%;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: fit-content;
   bottom: max(32px, calc(env(safe-area-inset-bottom, 20px) + 14px));
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  transform: translateX(-50%);
   color: rgba(225, 220, 201, 0.72);
   pointer-events: auto;
   will-change: transform, opacity;
@@ -296,10 +300,10 @@
 }
 
 /* =========================================
-   TABLET & MOBILE RESPONSIVENESS (<= 768px)
+   TABLET & MOBILE RESPONSIVENESS (<= 900px)
 ========================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .door-heading {
     font-size: clamp(1.8rem, 7vw, 3.2rem);
   }
@@ -332,11 +336,11 @@
 
   .hero-support-block {
     position: absolute;
-    right: 50%;
-    transform: translateX(50%);
+    left: 0;
+    right: 0;
+    margin-inline: auto;
     bottom: clamp(75px, 11vh, 105px);
-    width: 100%;
-    max-width: 320px;
+    width: min(88vw, 320px);
     text-align: center;
     align-items: center;
   }
