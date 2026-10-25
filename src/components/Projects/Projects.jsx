@@ -584,12 +584,12 @@ function Projects() {
       </div>
 
       {/* ========================================================
-          2. SHOWCASE STAGE: Tree comes from left, stays in center, goes to right
-          Responsive proportional scaler for compact mobile (iPhone SE & Samsung A55)
+          2. SHOWCASE STAGE: Tree comes from bottom, stays in center, goes to top
+          Responsive proportional scaler for iPad and mobile (iPhone SE & Samsung S26)
           ======================================================== */}
       <div
         ref={stageRef}
-        className="relative z-20 flex h-[100svh] w-full items-center justify-center overflow-hidden px-4 md:px-8 lg:px-12"
+        className="relative z-20 flex h-[100svh] w-full items-center justify-center overflow-hidden px-3 sm:px-4 md:px-4 lg:px-8 xl:px-12"
       >
         <div
           ref={treeWrapperRef}
@@ -599,16 +599,16 @@ function Projects() {
             <div
               className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
                 activeProject
-                  ? "flex flex-col md:flex-row items-center justify-center gap-6 md:gap-7 lg:gap-8 max-w-[1100px] mx-auto"
-                  : "flex flex-col items-center justify-center max-w-[480px] mx-auto"
+                  ? "flex flex-col md:flex-row items-center justify-center gap-2.5 sm:gap-3 md:gap-4 lg:gap-7 xl:gap-8 max-w-[1200px] mx-auto"
+                  : "flex flex-col items-center justify-center max-w-[340px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[480px] mx-auto"
               }`}
             >
               {/* 1. File Tree Window: Centered when no repo selected, sits right beside preview when active */}
               <div
                 className={`relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full ${
                   activeProject
-                    ? "max-w-[360px] lg:max-w-[380px] shrink-0"
-                    : "max-w-[480px] mx-auto"
+                    ? "max-w-[310px] sm:max-w-[330px] md:max-w-[280px] lg:max-w-[340px] xl:max-w-[380px] shrink-0"
+                    : "max-w-[340px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[480px] mx-auto"
                 }`}
               >
                 <div
@@ -617,40 +617,44 @@ function Projects() {
                   className="relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(225,188,120,0.24)] bg-[#120c07]/92 p-1 shadow-[0_25px_60px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(139,98,52,0.14)] backdrop-blur-2xl"
                 >
                   {/* Window Bar */}
-                  <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-4 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-[#e0564c]/85 shadow-[0_0_6px_rgba(224,86,76,0.3)]" />
-                      <div className="h-3 w-3 rounded-full bg-[#e5a038]/85 shadow-[0_0_6px_rgba(229,160,56,0.3)]" />
-                      <div className="h-3 w-3 rounded-full bg-[#52ba69]/85 shadow-[0_0_6px_rgba(82,186,105,0.3)]" />
+                  <div className="flex items-center justify-between border-b border-[rgba(225,188,120,0.12)] bg-[#1a120b]/85 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#e0564c]/85 shadow-[0_0_6px_rgba(224,86,76,0.3)]" />
+                      <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#e5a038]/85 shadow-[0_0_6px_rgba(229,160,56,0.3)]" />
+                      <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#52ba69]/85 shadow-[0_0_6px_rgba(82,186,105,0.3)]" />
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-wider text-[#e1dcc9]/60">
-                      <FolderGit2 className="h-3.5 w-3.5 text-[#d8a05e]" />
+                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono tracking-wider text-[#e1dcc9]/60">
+                      <FolderGit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#d8a05e]" />
                       <span>github: rohith10ty</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
                       {activeProject && (
                         <button
                           onClick={() => setSelectedProjectId(null)}
-                          className="rounded border border-[rgba(225,188,120,0.25)] bg-[rgba(216,160,94,0.1)] px-2 py-0.5 text-[10px] font-mono text-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white transition-colors cursor-pointer"
+                          className="rounded border border-[rgba(225,188,120,0.25)] bg-[rgba(216,160,94,0.1)] px-1.5 sm:px-2 py-0.5 text-[9.5px] sm:text-[10px] font-mono text-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white transition-colors cursor-pointer"
                           title="Close preview and center categories"
                         >
                           ✕ Close
                         </button>
                       )}
-                      <span className="text-[10px] font-mono text-[#e1dcc9]/40">
+                      <span className="text-[9.5px] sm:text-[10px] font-mono text-[#e1dcc9]/40">
                         {repoCount} repos
                       </span>
                     </div>
                   </div>
 
-                  {/* Scrollable File Tree: Restored to full size with complete wheel trapping */}
+                  {/* Scrollable File Tree: Adaptive height for compact mobile viewports */}
                   <div
                     ref={treeScrollRef}
                     data-lenis-prevent="true"
                     style={{ overscrollBehavior: "contain" }}
-                    className="custom-scrollbar h-[360px] md:h-[380px] max-h-[420px] overflow-y-auto overscroll-contain p-3.5"
+                    className={`custom-scrollbar overflow-y-auto overscroll-contain p-2.5 sm:p-3.5 transition-[height] duration-300 ${
+                      activeProject
+                        ? "h-[115px] sm:h-[135px] md:h-[320px] lg:h-[350px] xl:h-[370px]"
+                        : "h-[270px] sm:h-[310px] md:h-[350px] lg:h-[370px]"
+                    }`}
                   >
                     <Tree
                       elements={treeElements}
@@ -662,7 +666,7 @@ function Projects() {
 
                   {/* Helper hint banner when no project is selected */}
                   {!activeProject && (
-                    <div className="border-t border-[rgba(225,188,120,0.12)] bg-[#17100a]/80 px-4 py-2.5 text-center text-[11px] font-mono tracking-wide text-[#e1dcc9]/55">
+                    <div className="border-t border-[rgba(225,188,120,0.12)] bg-[#17100a]/80 px-3 py-2 text-center text-[10.5px] sm:text-[11px] font-mono tracking-wide text-[#e1dcc9]/55">
                       Click a category to open, then select any project to preview
                     </div>
                   )}
@@ -676,25 +680,25 @@ function Projects() {
                 >
                   {previewMode === "laptop" ? (
                     /* LAPTOP VIEW: Wide display frame with 4 separate same-sized options below */
-                    <div className="relative flex flex-col items-center justify-center w-full max-w-[460px] lg:max-w-[500px] xl:max-w-[530px] animate-in fade-in duration-300">
+                    <div className="relative flex flex-col items-center justify-center w-full max-w-[270px] sm:max-w-[310px] md:max-w-[380px] lg:max-w-[460px] xl:max-w-[500px] animate-in fade-in duration-300">
                       <div className="relative w-full">
                         <MacbookPro url={activeProject.homepage} className="max-w-full" />
                       </div>
 
                     {/* Laptop View Controls: 4 separate standalone buttons with exact same size */}
-                    <div className="mt-4 flex flex-wrap items-center justify-center gap-3 w-full">
+                    <div className="mt-2.5 sm:mt-3 md:mt-3 lg:mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 md:gap-2.5 lg:gap-3 w-full">
                       {/* 1. Laptop View Button */}
                       <button
                         type="button"
                         onClick={() => setPreviewMode("laptop")}
-                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                        className={`group flex w-[115px] sm:w-[125px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-2 md:py-2 lg:py-2.5 text-[10.5px] sm:text-[11px] md:text-[11px] lg:text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
                           previewMode === "laptop"
                             ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
                             : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
                         }`}
                         title="Switch to Laptop View"
                       >
-                        <Laptop className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <Laptop className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
                         <span>Laptop View</span>
                       </button>
 
@@ -702,14 +706,14 @@ function Projects() {
                       <button
                         type="button"
                         onClick={() => setPreviewMode("mobile")}
-                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                        className={`group flex w-[115px] sm:w-[125px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-2 md:py-2 lg:py-2.5 text-[10.5px] sm:text-[11px] md:text-[11px] lg:text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
                           previewMode === "mobile"
                             ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
                             : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
                         }`}
                         title="Switch to iPhone View"
                       >
-                        <Smartphone className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <Smartphone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
                         <span>iPhone View</span>
                       </button>
 
@@ -719,10 +723,10 @@ function Projects() {
                           href={activeProject.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 px-4 py-2.5 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
+                          className="group flex w-[115px] sm:w-[125px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-2 md:py-2 lg:py-2.5 text-[10.5px] sm:text-[11px] md:text-[11px] lg:text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
                           title="View GitHub Repository Source Code"
                         >
-                          <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                          <GitHubIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
                           <span>Code</span>
                         </a>
                       )}
@@ -733,10 +737,10 @@ function Projects() {
                           href={activeProject.homepage}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2.5 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
+                          className="group flex w-[115px] sm:w-[125px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-2 md:py-2 lg:py-2.5 text-[10.5px] sm:text-[11px] md:text-[11px] lg:text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
                           title="Open Live Preview in a New Tab"
                         >
-                          <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                           <span>Live Preview</span>
                         </a>
                       )}
@@ -744,26 +748,26 @@ function Projects() {
                   </div>
                 ) : (
                   /* MOBILE VIEW: iPhone centered with 4 separate same-sized options on the RIGHT SIDE */
-                  <div className="relative flex flex-row items-center justify-center gap-5 sm:gap-7 md:gap-8 w-full animate-in fade-in duration-300">
+                  <div className="relative flex flex-row items-center justify-center gap-3 sm:gap-4 md:gap-4 lg:gap-6 w-full animate-in fade-in duration-300">
                     {/* Authentic Normal Black iPhone Mockup */}
-                    <div className="relative w-[150px] sm:w-[170px] md:w-[185px] xl:w-[200px] shrink-0">
+                    <div className="relative w-[105px] sm:w-[120px] md:w-[135px] lg:w-[160px] xl:w-[180px] shrink-0">
                       <Iphone url={activeProject.homepage} className="w-full" />
                     </div>
 
                     {/* Options on the RIGHT SIDE: 4 separate standalone buttons with exact same size */}
-                    <div className="flex flex-col items-start gap-2.5 shrink-0">
+                    <div className="flex flex-col items-start gap-1.5 sm:gap-2 md:gap-2 lg:gap-2.5 shrink-0">
                       {/* 1. Laptop View Button */}
                       <button
                         type="button"
                         onClick={() => setPreviewMode("laptop")}
-                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                        className={`group flex w-[110px] sm:w-[120px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-1.5 md:py-2 lg:py-2.5 text-[10px] sm:text-[10.5px] md:text-[11px] lg:text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
                           previewMode === "laptop"
                             ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
                             : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
                         }`}
                         title="Switch to Laptop View"
                       >
-                        <Laptop className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <Laptop className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
                         <span>Laptop View</span>
                       </button>
 
@@ -771,14 +775,14 @@ function Projects() {
                       <button
                         type="button"
                         onClick={() => setPreviewMode("mobile")}
-                        className={`group flex w-[145px] items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                        className={`group flex w-[110px] sm:w-[120px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-1.5 md:py-2 lg:py-2.5 text-[10px] sm:text-[10.5px] md:text-[11px] lg:text-[12px] font-mono font-medium backdrop-blur-md transition-all duration-200 cursor-pointer ${
                           previewMode === "mobile"
                             ? "border-[#d8a05e] bg-[rgba(216,160,94,0.18)] text-[#f4efe0] shadow-[0_0_16px_rgba(216,160,94,0.28)] font-semibold"
                             : "border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 text-[#e1dcc9]/70 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_14px_rgba(216,160,94,0.2)]"
                         }`}
                         title="Switch to iPhone View"
                       >
-                        <Smartphone className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                        <Smartphone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
                         <span>iPhone View</span>
                       </button>
 
@@ -788,10 +792,10 @@ function Projects() {
                           href={activeProject.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 px-4 py-2.5 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
+                          className="group flex w-[110px] sm:w-[120px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-[rgba(225,188,120,0.2)] bg-[#140e09]/92 px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-1.5 md:py-2 lg:py-2.5 text-[10px] sm:text-[10.5px] md:text-[11px] lg:text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
                           title="View GitHub Repository Source Code"
                         >
-                          <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                          <GitHubIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
                           <span>Code</span>
                         </a>
                       )}
@@ -802,10 +806,10 @@ function Projects() {
                           href={activeProject.homepage}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex w-[145px] items-center justify-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2.5 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
+                          className="group flex w-[110px] sm:w-[120px] md:w-[125px] lg:w-[140px] xl:w-[145px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-2.5 sm:px-3 md:px-3 lg:px-4 py-1.5 sm:py-1.5 md:py-2 lg:py-2.5 text-[10px] sm:text-[10.5px] md:text-[11px] lg:text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
                           title="Open Live Preview in a New Tab"
                         >
-                          <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                           <span>Live Preview</span>
                         </a>
                       )}
