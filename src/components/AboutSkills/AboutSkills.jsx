@@ -4,7 +4,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Quote } from "lucide-react";
 
 import profileImage from "../../assets/rohith-profile.PNG";
-import { CometCard } from "../ui/CometCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -434,33 +433,31 @@ function AboutSkills() {
                 ref={portraitRef}
                 className="relative w-[clamp(250px,21vw,330px)] translate-y-3 lg:translate-y-6 max-md:translate-y-0 max-md:absolute max-md:left-1/2 max-md:top-[58%] max-md:w-[min(72vw,255px)]"
               >
-                <CometCard rotateDepth={6} translateDepth={5}>
-                  <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_38px_3px_38px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_24px_3px_24px]">
-                    <span className="absolute left-5 top-5 z-30 text-[11px] tracking-[0.2em] text-[#9a6a354d]">
-                      01
-                    </span>
+                <div className="relative aspect-[1080/1392] w-full overflow-hidden rounded-[3px_38px_3px_38px] border border-[#e1dcc91c] bg-[#f7f7f5] shadow-[0_24px_70px_rgba(0,0,0,0.34)] max-md:rounded-[3px_24px_3px_24px]">
+                  <span className="absolute left-5 top-5 z-30 text-[11px] tracking-[0.2em] text-[#9a6a354d]">
+                    01
+                  </span>
 
-                    <img
-                      src={profileImage}
-                      alt=""
-                      aria-hidden="true"
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                    <canvas
-                      ref={canvasRef}
-                      role="img"
-                      aria-label="Rohith Naidu portrait rotating from side profile to front view"
-                      className="absolute inset-0 z-10 h-full w-full opacity-0 transition-opacity duration-200"
-                    />
+                  <img
+                    src={profileImage}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <canvas
+                    ref={canvasRef}
+                    role="img"
+                    aria-label="Rohith Naidu portrait rotating from side profile to front view"
+                    className="absolute inset-0 z-10 h-full w-full opacity-0 transition-opacity duration-200"
+                  />
 
-                    <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(to_top,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.08)_37%,transparent_66%)]" />
-                    <div className="absolute bottom-5 left-5 right-5 z-30 md:bottom-7 md:left-7 md:right-7">
-                      <strong className="block text-[clamp(22px,1.9vw,32px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
-                        Rohith Naidu
-                      </strong>
-                    </div>
+                  <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(to_top,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.08)_37%,transparent_66%)]" />
+                  <div className="absolute bottom-5 left-5 right-5 z-30 md:bottom-7 md:left-7 md:right-7">
+                    <strong className="block text-[clamp(22px,1.9vw,32px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
+                      Rohith Naidu
+                    </strong>
                   </div>
-                </CometCard>
+                </div>
 
                 {/* Centered ROLE Badge below photo (Moved down with photo) */}
                 <div className="mt-3 flex justify-center">

@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Tree } from "../ui/file-tree";
 import { MacbookPro } from "../ui/macbook-pro";
 import { Iphone } from "../ui/iphone";
-import { FolderGit2, ExternalLink } from "lucide-react";
+import { FolderGit2, ExternalLink, Laptop, Smartphone } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -407,15 +407,12 @@ const flattenTreeToMap = (tree) => {
 function Projects() {
   const stageRef = useRef(null);
   const treeWrapperRef = useRef(null);
-  const treeScrollRef = useRef(null);
-  const progressRef = useRef(0);
-  const isCenteredRef = useRef(false);
-  const hasStartedMovingRightRef = useRef(false);
 
   const [treeElements, setTreeElements] = useState(INITIAL_PROJECTS_TREE);
   const [repoCount, setRepoCount] = useState(30);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isLiveSync, setIsLiveSync] = useState(false);
+  const [previewMode, setPreviewMode] = useState("laptop"); // "laptop" (default) | "mobile"
 
   // Fetch real-time GitHub repositories from GitHub public API
   useEffect(() => {
@@ -455,21 +452,22 @@ function Projects() {
     ).matches;
 
     if (reducedMotion) {
-      gsap.set(treeWrapper, { x: 0, opacity: 1 });
+      gsap.set(treeWrapper, { y: 0, opacity: 1 });
       return undefined;
     }
 
     const ctx = gsap.context(() => {
-      const getOffscreenLeft = () => -(window.innerWidth + 400);
-      const getOffscreenRight = () => window.innerWidth + 400;
+      const getOffscreenTop = () => -(window.innerHeight + 350);
+      const getOffscreenBottom = () => window.innerHeight + 350;
 
-      // Initial State: Tree is placed 100% off-screen to the left
+      // Initial State: Tree is placed off-screen at the TOP
       gsap.set(treeWrapper, {
-        x: getOffscreenLeft,
+        y: getOffscreenTop,
+        x: 0,
         opacity: 0,
       });
 
-      // Timeline: Left -> Center (stay for a couple of scrolls) -> Right
+      // Timeline: Top -> Center (stay for scrolls) -> Bottom
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: stage,
@@ -477,25 +475,19 @@ function Projects() {
           end: "+=1800",
           pin: stage,
           pinSpacing: true,
-          scrub: 0.15,
+          scrub: 0.18,
           anticipatePin: 1,
           fastScrollEnd: true,
           preventOverlaps: true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            progressRef.current = self.progress;
-            // Tree enters 0 -> 0.25, rests in center 0.25 -> 0.72, exits 0.72 -> 1.0
-            isCenteredRef.current = self.progress >= 0.22 && self.progress <= 0.72;
-            hasStartedMovingRightRef.current = self.progress > 0.72;
-          },
         },
       });
 
-      // STAGE 1: Smoothly enter from the left to the center
+      // STAGE 1: Smoothly enter from TOP into the center
       tl.to(
         treeWrapper,
         {
-          x: 0,
+          y: 0,
           opacity: 1,
           duration: 0.6,
           ease: "power1.out",
@@ -503,14 +495,14 @@ function Projects() {
         0
       );
 
-      // STAGE 2: Rest in the center for a couple of scrolls (holds for ~900px)
+      // STAGE 2: Rest in the center
       tl.to({}, { duration: 1.2 });
 
-      // STAGE 3: Smoothly exit to the right side
+      // STAGE 3: Smoothly exit to the BOTTOM
       tl.to(
         treeWrapper,
         {
-          x: getOffscreenRight,
+          y: getOffscreenBottom,
           opacity: 0,
           duration: 0.6,
           ease: "power1.in",
@@ -521,37 +513,6 @@ function Projects() {
 
     return () => ctx.revert();
   }, []);
-
-  // Smart hover & scroll handling for the File Tree:
-  // 1. When centered: user can scroll tree items without moving the tree horizontally.
-  // 2. If it already started moving to the right (or entering from left): scrolling continues moving it smoothly to the right!
-  const handleTreeWheel = (e) => {
-    // If it already started moving to the right (or entering from left):
-    if (hasStartedMovingRightRef.current || progressRef.current < 0.22) {
-      // Do not stop propagation! Allow the wheel event to bubble to Lenis/window so the tree continues moving.
-      return;
-    }
-
-    // If it is centered:
-    if (isCenteredRef.current) {
-      const container = treeScrollRef.current;
-      if (!container) return;
-
-      const isScrollingDown = e.deltaY > 0;
-      const isScrollingUp = e.deltaY < 0;
-
-      const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 6;
-      const atTop = container.scrollTop <= 6;
-
-      if ((isScrollingDown && !atBottom) || (isScrollingUp && !atTop)) {
-        // Scroll the file tree internally, keep the tree centered, do NOT move horizontally
-        e.stopPropagation();
-      } else if (isScrollingDown && atBottom) {
-        // Reached the end of the tree list and scrolling down further:
-        // Allow wheel event to bubble so page scroll continues and starts moving the tree to the right!
-      }
-    }
-  };
 
   return (
     <section
@@ -647,8 +608,6 @@ function Projects() {
 
                 {/* Scrollable File Tree: Restored to full size */}
                 <div
-                  ref={treeScrollRef}
-                  onWheel={handleTreeWheel}
                   className="custom-scrollbar h-[360px] md:h-[380px] max-h-[420px] overflow-y-auto overscroll-contain p-3.5"
                 >
                   <Tree
@@ -671,54 +630,77 @@ function Projects() {
             {/* 2. Devices Container: Appears smoothly on screen ONLY when a project is selected */}
             {activeProject && (
               <div
-                className="relative lg:col-span-8 flex flex-col lg:flex-row items-center justify-center lg:justify-end gap-6 xl:gap-8 w-full transition-opacity duration-500 ease-out animate-in fade-in"
+                className="relative lg:col-span-8 flex flex-col items-center justify-center w-full transition-opacity duration-500 ease-out animate-in fade-in"
               >
-                {/* Desktop Center Column: iPhone Mockup in the center (visible on lg+) */}
-                <div className="relative hidden lg:flex items-center justify-center shrink-0">
-                  <div className="w-[135px] sm:w-[150px] md:w-[160px] xl:w-[175px]">
-                    <Iphone url={activeProject.homepage} />
-                  </div>
+                {/* Device Selector Tabs: Laptop (Default) / Mobile */}
+                <div className="mb-4 inline-flex items-center rounded-xl border border-[rgba(225,188,120,0.22)] bg-[#17100a]/92 p-1 shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewMode("laptop")}
+                    className={`flex items-center gap-2 rounded-lg px-3.5 py-1.5 font-mono text-[11px] font-medium transition-all duration-200 cursor-pointer ${
+                      previewMode === "laptop"
+                        ? "bg-[#d8a05e] text-[#120c07] font-semibold shadow-[0_0_15px_rgba(216,160,94,0.35)]"
+                        : "text-[#e1dcc9]/70 hover:text-white hover:bg-[rgba(216,160,94,0.1)]"
+                    }`}
+                  >
+                    <Laptop className="h-3.5 w-3.5" />
+                    <span>Laptop View</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPreviewMode("mobile")}
+                    className={`flex items-center gap-2 rounded-lg px-3.5 py-1.5 font-mono text-[11px] font-medium transition-all duration-200 cursor-pointer ${
+                      previewMode === "mobile"
+                        ? "bg-[#d8a05e] text-[#120c07] font-semibold shadow-[0_0_15px_rgba(216,160,94,0.35)]"
+                        : "text-[#e1dcc9]/70 hover:text-white hover:bg-[rgba(216,160,94,0.1)]"
+                    }`}
+                  >
+                    <Smartphone className="h-3.5 w-3.5" />
+                    <span>iPhone View</span>
+                  </button>
                 </div>
 
-                {/* Desktop Screen Mockup & Action Buttons Just Below */}
-                <div className="relative flex flex-col items-center justify-center w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px]">
-                  <div className="relative w-full">
-                    <MacbookPro url={activeProject.homepage} className="max-w-full" />
-
-                    {/* Mobile-only iPhone overlay: sits attached to front-left of screen on mobile (< lg) */}
-                    <div className="absolute -bottom-4 -left-3 sm:-left-5 z-30 w-[105px] sm:w-[130px] lg:hidden drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)]">
-                      <Iphone url={activeProject.homepage} />
+                {/* Display Frame: EITHER Laptop OR iPhone (Separate, Never together) */}
+                <div className="relative flex items-center justify-center w-full min-h-[250px] sm:min-h-[290px]">
+                  {previewMode === "laptop" ? (
+                    <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[540px] animate-in fade-in duration-300">
+                      <MacbookPro url={activeProject.homepage} className="max-w-full" />
                     </div>
-                  </div>
+                  ) : (
+                    <div className="relative flex items-center justify-center w-[160px] sm:w-[185px] md:w-[200px] animate-in fade-in duration-300">
+                      <Iphone url={activeProject.homepage} className="w-full" />
+                    </div>
+                  )}
+                </div>
 
-                  {/* Code and Live Preview Buttons Just Below the Desktop Screen */}
-                  <div className="mt-4 flex items-center justify-center gap-3 w-full">
-                    {activeProject.github && (
-                      <a
-                        href={activeProject.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center gap-2 rounded-xl border border-[rgba(225,188,120,0.25)] bg-[#140e09]/92 px-4 py-2 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
-                        title="View GitHub Repository Source Code"
-                      >
-                        <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
-                        <span>Code</span>
-                      </a>
-                    )}
+                {/* Code and Live Preview Buttons Just Below the Active Device */}
+                <div className="mt-4 flex items-center justify-center gap-3 w-full">
+                  {activeProject.github && (
+                    <a
+                      href={activeProject.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-2 rounded-xl border border-[rgba(225,188,120,0.25)] bg-[#140e09]/92 px-4 py-2 text-[12px] font-mono font-medium text-[#e1dcc9] shadow-[0_8px_20px_rgba(0,0,0,0.55)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/20 hover:text-white hover:shadow-[0_0_16px_rgba(216,160,94,0.25)] hover:-translate-y-0.5 cursor-pointer"
+                      title="View GitHub Repository Source Code"
+                    >
+                      <GitHubIcon className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:scale-110" />
+                      <span>Code</span>
+                    </a>
+                  )}
 
-                    {activeProject.homepage && (
-                      <a
-                        href={activeProject.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
-                        title="Open Live Preview in a New Tab"
-                      >
-                        <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                        <span>Live Preview</span>
-                      </a>
-                    )}
-                  </div>
+                  {activeProject.homepage && (
+                    <a
+                      href={activeProject.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-2 rounded-xl border border-[#d8a05e]/45 bg-[rgba(216,160,94,0.14)] px-4 py-2 text-[12px] font-mono font-medium text-[#f4efe0] shadow-[0_8px_20px_rgba(0,0,0,0.55),0_0_12px_rgba(216,160,94,0.12)] backdrop-blur-md transition-all duration-200 hover:border-[#d8a05e] hover:bg-[#d8a05e]/30 hover:text-white hover:shadow-[0_0_20px_rgba(216,160,94,0.35)] hover:-translate-y-0.5 cursor-pointer"
+                      title="Open Live Preview in a New Tab"
+                    >
+                      <ExternalLink className="h-4 w-4 text-[#d8a05e] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      <span>Live Preview</span>
+                    </a>
+                  )}
                 </div>
               </div>
             )}
