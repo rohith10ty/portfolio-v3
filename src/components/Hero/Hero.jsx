@@ -58,23 +58,27 @@ function Hero() {
         },
       );
 
-      // Perfectly center the complete name "ROHITH NAIDU" over the photo at 50vw
-      const leftHeading = container.querySelector(".hero-panel-left .door-heading");
-      const rightHeading = container.querySelector(".hero-panel-right .door-heading");
-      const wL = leftHeading ? leftHeading.offsetWidth : 160;
-      const wR = rightHeading ? rightHeading.offsetWidth : 136;
-      const wordGap = 16; // clean 16px space between words
-      const centerOffset = (wL - wR) / 2; // offset to center whole phrase at 50vw
-      const initX_L = -wordGap / 2 + centerOffset;
-      const initX_R = wordGap / 2 + centerOffset;
+      // Dynamic getter for exact distance for R and N to meet seamlessly at the center seam (50vw)
+      const getDistR = () => {
+        const wordOhith = container.querySelector(".hero-panel-left .word-ohith");
+        const isMobile = window.innerWidth <= 768;
+        const seamGap = isMobile ? 8 : 14;
+        const rsbNudge = isMobile ? 4 : 7; // perfectly aligns R's visible right leg flush to door opening slit
+        return (wordOhith ? wordOhith.offsetWidth : 160) + seamGap + rsbNudge;
+      };
+
+      const getDistN = () => {
+        const isMobile = window.innerWidth <= 768;
+        return isMobile ? -8 : -14;
+      };
 
       gsap.set(".hero-panel-left .panel-word", {
-        x: initX_L,
+        x: 0,
         y: 0,
       });
 
       gsap.set(".hero-panel-right .panel-word", {
-        x: initX_R,
+        x: 0,
         y: 0,
       });
 
@@ -103,7 +107,7 @@ function Hero() {
             ".hero-panel-left .word-ohith",
             ".hero-panel-right .word-aidu",
           ],
-          { clearProps: "width" },
+          { clearProps: "visibility" },
         );
       });
 
@@ -151,7 +155,7 @@ function Hero() {
         0.2,
       );
 
-      // 3. Words collapse to 0 width so R and N touch seamlessly in the center to form the united "RN" monogram
+      // 3. R and N translate to the door seam to unite seamlessly as "RN" monogram
       // AND smoothly fade the grid background to pure solid black!
       tl.to(
         [
@@ -159,35 +163,33 @@ function Hero() {
           ".hero-panel-right .word-aidu",
         ],
         {
-          width: 0,
           opacity: 0,
-          duration: 1.0,
+          duration: 0.7,
         },
-        0.6,
+        0.5,
       )
+        .set(
+          [
+            ".hero-panel-left .word-ohith",
+            ".hero-panel-right .word-aidu",
+          ],
+          { visibility: "hidden" },
+          1.3,
+        )
         .to(
           ".hero-panel-left .char-r",
           {
-            marginRight: 0,
+            x: () => getDistR(),
+            scale: 1.35,
+            color: "#f0cd9b",
             duration: 1.0,
           },
           0.6,
         )
         .to(
-          [".hero-panel-left .panel-word", ".hero-panel-right .panel-word"],
+          ".hero-panel-right .char-n",
           {
-            x: 0,
-            y: 0,
-            duration: 1.0,
-          },
-          0.6,
-        )
-        .to(
-          [
-            ".hero-panel-left .char-r",
-            ".hero-panel-right .char-n",
-          ],
-          {
+            x: () => getDistN(),
             scale: 1.35,
             color: "#f0cd9b",
             duration: 1.0,
@@ -289,10 +291,7 @@ function Hero() {
 
           <div className="panel-word left-word">
             <h1 className="door-heading">
-              <span className="char initial char-r">
-                <span>R</span>
-              </span>
-              <span className="rest word-ohith"><span className="char"><span>O</span></span><span className="char"><span>H</span></span><span className="char"><span>I</span></span><span className="char"><span>T</span></span><span className="char"><span>H</span></span></span>
+              <span className="char initial char-r"><span>R</span></span><span className="rest word-ohith"><span className="char"><span>O</span></span><span className="char"><span>H</span></span><span className="char"><span>I</span></span><span className="char"><span>T</span></span><span className="char"><span>H</span></span></span>
             </h1>
           </div>
         </div>
@@ -312,10 +311,7 @@ function Hero() {
 
           <div className="panel-word right-word">
             <h1 className="door-heading">
-              <span className="char initial char-n">
-                <span>N</span>
-              </span>
-              <span className="rest word-aidu"><span className="char"><span>A</span></span><span className="char"><span>I</span></span><span className="char"><span>D</span></span><span className="char"><span>U</span></span></span>
+              <span className="char initial char-n"><span>N</span></span><span className="rest word-aidu"><span className="char"><span>A</span></span><span className="char"><span>I</span></span><span className="char"><span>D</span></span><span className="char"><span>U</span></span></span>
             </h1>
           </div>
         </div>

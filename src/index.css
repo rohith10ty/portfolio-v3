@@ -1,11 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap");
 
 @font-face {
-  font-family: "Blanka";
-  src: url("/fonts/Blanka-Regular.woff") format("woff");
+  font-family: "BlankaClean";
+  src: url("/fonts/BlankaClean.woff?v=5.0") format("woff");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Blanka";
+  src: url("/fonts/BlankaClean.woff?v=5.0") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
 }
 
 @import "tailwindcss";

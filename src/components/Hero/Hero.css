@@ -68,11 +68,11 @@
 }
 
 .hero-panel-left .panel-word {
-  right: 0;
+  right: 14px;
 }
 
 .hero-panel-right .panel-word {
-  left: 0;
+  left: 14px;
 }
 
 /* =========================================
@@ -101,10 +101,10 @@
 .door-heading {
   display: inline-flex;
   align-items: baseline;
-  font-family: "Blanka", sans-serif;
-  font-size: clamp(2.3rem, 3.8vw, 3.8rem);
+  font-family: "BlankaClean", "Blanka", sans-serif;
+  font-size: clamp(2.0rem, 3.2vw, 3.0rem);
   font-weight: 400;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   line-height: 1.15;
   white-space: nowrap;
   margin: 0;
@@ -127,7 +127,7 @@
   display: inline-block;
   overflow: visible;
   line-height: 1.15;
-  margin-right: clamp(4px, 0.45vw, 8px);
+  margin-right: 0;
 }
 
 .char:last-child {
@@ -152,13 +152,13 @@
 }
 
 .char-r {
-  margin-right: clamp(4px, 0.45vw, 8px);
+  margin-right: 0;
   transform-origin: right center;
   will-change: transform, color, opacity, margin-right;
 }
 
 .char-n {
-  margin-right: clamp(4px, 0.45vw, 8px);
+  margin-right: 0;
   transform-origin: left center;
   will-change: transform, color, opacity;
 }
@@ -371,16 +371,28 @@
   }
 
   .door-heading {
-    font-size: clamp(1.3rem, 4.8vw, 2.0rem);
+    font-size: clamp(1.15rem, 4.0vw, 1.6rem);
     letter-spacing: 0.02em;
   }
 
   .char {
-    margin-right: clamp(4px, 1.2vw, 7px);
+    margin: 0;
   }
 
   .char-r {
-    margin-right: clamp(4px, 1.2vw, 7px);
+    margin: 0;
+  }
+
+  .char-n {
+    margin: 0;
+  }
+
+  .hero-panel-left .panel-word {
+    right: 8px;
+  }
+
+  .hero-panel-right .panel-word {
+    left: 8px;
   }
 
   .hero-panel-left {
