@@ -17,9 +17,13 @@ function Hero() {
     if (!container || !wrapper) return undefined;
 
     const ctx = gsap.context(() => {
-      // Set initial states
-      gsap.set(document.documentElement, {
-        "--hero-door-open": 0,
+      // Set initial states synchronously
+      gsap.set(wrapper, {
+        autoAlpha: 1,
+      });
+
+      gsap.set(".hero-ascii-wrapper", {
+        opacity: 1,
       });
 
       gsap.set(
@@ -27,7 +31,7 @@ function Hero() {
           ".hero-panel-left .char span",
           ".hero-panel-right .char span",
         ],
-        { y: "0%" },
+        { y: "0%", opacity: 1 },
       );
 
       gsap.set(
@@ -55,12 +59,12 @@ function Hero() {
       );
 
       gsap.set(".hero-panel-left .panel-word", {
-        x: -8,
+        x: -16,
         y: 0,
       });
 
       gsap.set(".hero-panel-right .panel-word", {
-        x: 8,
+        x: 16,
         y: 0,
       });
 
@@ -82,7 +86,18 @@ function Hero() {
         defaults: { ease: "power1.inOut" },
       });
 
-      // 1. As scroll starts: Role badge, bottom slogan, and scroll indicator fade out (ASCII portrait stays visible on black screen!)
+      // Clear inline width before ScrollTrigger refresh so responsive resize recalculates natural width
+      ScrollTrigger.addEventListener("refreshInit", () => {
+        gsap.set(
+          [
+            ".hero-panel-left .word-ohith",
+            ".hero-panel-right .word-aidu",
+          ],
+          { clearProps: "width" },
+        );
+      });
+
+      // 1. As scroll starts: Role badge, bottom slogan, and scroll indicator fade out
       tl.to(
         ".hero-role-wrapper",
         {
@@ -111,14 +126,15 @@ function Hero() {
           0,
         );
 
-      // 2. Letters dissolve: "OHITH" & "AIDU" slide down and collapse smoothly
+      // 2. Letters dissolve: "OHITH" & "AIDU" slide down and fade out smoothly
       tl.to(
         [
           ".hero-panel-left .word-ohith .char span",
           ".hero-panel-right .word-aidu .char span",
         ],
         {
-          y: "105%",
+          y: "110%",
+          opacity: 0,
           duration: 0.8,
           stagger: 0.03,
         },
@@ -139,6 +155,14 @@ function Hero() {
         },
         0.6,
       )
+        .to(
+          ".hero-panel-left .char-r",
+          {
+            marginRight: 0,
+            duration: 1.0,
+          },
+          0.6,
+        )
         .to(
           [".hero-panel-left .panel-word", ".hero-panel-right .panel-word"],
           {
@@ -172,17 +196,8 @@ function Hero() {
 
       // 4. Hold the complete united "RN" monogram in the center with pure black background (1.6 -> 2.0)
 
-      // 5. Slower Swoosh Opening with breathing margin offset for R and N, and ASCII numbers dragging outward!
+      // 5. Doors Swoosh Open: ASCII portrait smoothly cross-fades directly into the real About photo!
       tl.to(
-        document.documentElement,
-        {
-          "--hero-door-open": 1,
-          duration: 1.8,
-          ease: "power2.inOut",
-        },
-        2.0,
-      )
-        .to(
         ".hero-panel-left",
         {
           xPercent: -100,
@@ -197,6 +212,15 @@ function Hero() {
             xPercent: 100,
             duration: 1.8,
             ease: "power2.inOut",
+          },
+          2.0,
+        )
+        .to(
+          ".hero-ascii-wrapper",
+          {
+            opacity: 0,
+            duration: 1.2,
+            ease: "power1.inOut",
           },
           2.0,
         )
@@ -234,6 +258,11 @@ function Hero() {
         );
     }, container);
 
+    // Refresh ScrollTrigger as soon as fonts are loaded so natural widths are exact
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh();
+    });
+
     return () => ctx.revert();
   }, []);
 
@@ -241,9 +270,12 @@ function Hero() {
     <div id="home" ref={containerRef} className="hero-scroll-container">
       <div ref={wrapperRef} className="hero-pinned-wrapper">
         {/* ========================================================
-            FULL-SCREEN INTERACTIVE ASCII PORTRAIT (NO CARD BOX, DRAG EFFECT)
+            INTERACTIVE ASCII PORTRAIT (Exact Position as About Photo)
+            Smoothly cross-fades into the real photo on door opening
             ======================================================== */}
-        <AsciiPortrait imageSrc="/rohith-ascii-portrait.png" />
+        <div className="hero-ascii-wrapper">
+          <AsciiPortrait imageSrc="/rohith-ascii-portrait.png" />
+        </div>
 
         {/* ========================================================
             LEFT DOOR PANEL (Carries letter "R" + Left Grid)

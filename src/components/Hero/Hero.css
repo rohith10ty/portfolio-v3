@@ -62,7 +62,7 @@
 
 .panel-word {
   position: absolute;
-  top: clamp(160px, 20.5vh, 205px);
+  top: clamp(120px, 16vh, 165px);
   z-index: 2;
   pointer-events: none;
 }
@@ -76,10 +76,10 @@
 }
 
 /* =========================================
-   CENTER ASCII PORTRAIT (Component #130)
+   CENTER ASCII PORTRAIT (Exact Match to About Section Photo)
 ========================================= */
 
-.hero-portrait-wrapper {
+.hero-ascii-wrapper {
   position: absolute;
   top: 57vh;
   left: 50%;
@@ -91,7 +91,8 @@
   box-shadow: none;
   overflow: visible;
   z-index: 20;
-  pointer-events: none;
+  pointer-events: auto;
+  will-change: opacity;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,15 +102,16 @@
   display: inline-flex;
   align-items: baseline;
   font-family: "Blanka", sans-serif;
-  font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+  font-size: clamp(3.4rem, 5.8vw, 5.8rem);
   font-weight: 400;
-  letter-spacing: 0.18em;
-  line-height: 1;
+  letter-spacing: normal;
+  line-height: 1.15;
   white-space: nowrap;
   margin: 0;
   color: var(--cream, #e1dcc9);
   position: relative;
   z-index: 2;
+  text-shadow: 0 0 35px rgba(225, 220, 201, 0.22);
 }
 
 .rest {
@@ -123,15 +125,20 @@
 .char {
   position: relative;
   display: inline-block;
-  overflow: hidden;
-  line-height: 1.1;
+  overflow: visible;
+  line-height: 1.15;
+  margin-right: clamp(6px, 0.6vw, 10px);
+}
+
+.char:last-child {
+  margin-right: 0;
 }
 
 .char span {
   position: relative;
   display: inline-block;
   transform: translateY(0%);
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 .initial {
@@ -141,6 +148,16 @@
   letter-spacing: 0;
   margin: 0;
   padding: 0;
+  will-change: transform, color, opacity;
+}
+
+.char-r {
+  margin-right: clamp(6px, 0.6vw, 10px);
+  will-change: transform, color, opacity, margin-right;
+}
+
+.char-n {
+  margin-right: 0;
   will-change: transform, color, opacity;
 }
 
@@ -278,18 +295,18 @@
   text-align: left;
 }
 
-/* Scroll Explorer Indicator */
+/* Scroll Explorer Indicator (Moved to Left Side) */
 .hero-scroll-indicator {
   position: absolute;
   z-index: 25;
-  left: 0;
-  right: 0;
-  margin-inline: auto;
+  left: clamp(35px, 6vw, 110px);
+  right: auto;
+  margin-inline: 0;
   width: fit-content;
-  bottom: max(32px, calc(env(safe-area-inset-bottom, 20px) + 14px));
+  bottom: clamp(65px, 9.5vh, 120px);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   color: rgba(225, 220, 201, 0.72);
   pointer-events: auto;
@@ -311,6 +328,7 @@
   overflow: hidden;
   background: rgba(225, 220, 201, 0.28);
   border-radius: 1px;
+  margin-left: 2px;
 }
 
 .hero-scroll-indicator i::after {
@@ -338,7 +356,7 @@
 ========================================= */
 
 @media (max-width: 900px) {
-  .hero-portrait-wrapper {
+  .hero-ascii-wrapper {
     top: 58vh;
     width: min(72vw, 255px);
     background: transparent;
@@ -347,12 +365,20 @@
   }
 
   .panel-word {
-    top: clamp(120px, 17vh, 150px);
+    top: clamp(80px, 13vh, 110px);
   }
 
   .door-heading {
-    font-size: clamp(1.2rem, 3.8vw, 1.7rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(2.2rem, 7.8vw, 3.2rem);
+    letter-spacing: normal;
+  }
+
+  .char {
+    margin-right: clamp(4px, 1.2vw, 7px);
+  }
+
+  .char-r {
+    margin-right: clamp(4px, 1.2vw, 7px);
   }
 
   .hero-panel-left {
@@ -405,7 +431,11 @@
   }
 
   .hero-scroll-indicator {
+    left: 24px;
+    right: auto;
+    margin-inline: 0;
     bottom: max(22px, calc(env(safe-area-inset-bottom, 16px) + 8px));
+    align-items: flex-start;
   }
 
   .hero-scroll-indicator i {
