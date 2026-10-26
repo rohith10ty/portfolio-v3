@@ -535,25 +535,15 @@ function Projects() {
         });
       };
 
-      const titleBoxes = createBoxes(titleEl, "#E1DCC9");
-      const descBoxes = createBoxes(descEl, "#C5BFA9");
-      const allBoxes = [...titleBoxes, ...descBoxes];
+      const allBoxes = createBoxes(titleEl, "#E1DCC9");
 
       const updateBoxSizes = () => {
         const titleWords = titleEl.querySelectorAll(".fall-word-wrapper");
         titleWords.forEach((word, i) => {
-          if (titleBoxes[i]) {
+          if (allBoxes[i]) {
             const r = word.getBoundingClientRect();
-            titleBoxes[i].style.width = `${r.width * 1.08}px`;
-            titleBoxes[i].style.height = `${r.height * 0.96}px`;
-          }
-        });
-        const descWords = descEl.querySelectorAll(".fall-word-wrapper");
-        descWords.forEach((word, i) => {
-          if (descBoxes[i]) {
-            const r = word.getBoundingClientRect();
-            descBoxes[i].style.width = `${r.width * 1.08}px`;
-            descBoxes[i].style.height = `${r.height * 0.96}px`;
+            allBoxes[i].style.width = `${r.width * 1.08}px`;
+            allBoxes[i].style.height = `${r.height * 0.96}px`;
           }
         });
       };
@@ -716,19 +706,8 @@ function Projects() {
             ref={descRef}
             className="mx-auto max-w-[600px] text-[clamp(14px,1.15vw,18px)] font-normal leading-relaxed text-[#E1DCC9]/65 select-none"
           >
-            {[
-              "Explore", "my", "GitHub", "projects", "directly", "through", "the",
-              "interactive", "file", "tree.", "Select", "any", "project", "to",
-              "preview", "across", "desktop", "and", "mobile", "devices."
-            ].map((word, idx) => (
-              <span
-                key={idx}
-                data-box-color="#C5BFA9"
-                className="fall-word-wrapper inline-block relative mx-[0.12em]"
-              >
-                {word}
-              </span>
-            ))}
+            Explore my GitHub projects directly through the interactive file tree.
+            Select any project to preview across desktop and mobile devices.
           </p>
         </div>
 
