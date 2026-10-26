@@ -405,6 +405,11 @@ const flattenTreeToMap = (tree) => {
 };
 
 function Projects() {
+  const headerPinRef = useRef(null);
+  const headerContentRef = useRef(null);
+  const titleRef = useRef(null);
+  const descRef = useRef(null);
+
   const stageRef = useRef(null);
   const treeWrapperRef = useRef(null);
   const treeCardRef = useRef(null);
@@ -476,6 +481,123 @@ function Projects() {
 
   const projectsMap = useMemo(() => flattenTreeToMap(treeElements), [treeElements]);
   const activeProject = selectedProjectId ? projectsMap[selectedProjectId] : null;
+
+  // =========================================================
+  // FALL COLOR-BLOCK TEXT REVEAL ANIMATION (Audix #125)
+  // Stops in center -> Tiles drop down -> Text reveals -> Exits to top
+  // =========================================================
+  useLayoutEffect(() => {
+    const headerPin = headerPinRef.current;
+    const headerContent = headerContentRef.current;
+    const titleEl = titleRef.current;
+    const descEl = descRef.current;
+    if (!headerPin || !headerContent || !titleEl || !descEl) return undefined;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (reducedMotion) return undefined;
+
+    const ctx = gsap.context(() => {
+      // Create color boxes covering each word
+      const createBoxes = (container, color) => {
+        const words = container.querySelectorAll(".fall-word-wrapper");
+        return Array.from(words).map((word) => {
+          const rect = word.getBoundingClientRect();
+          const box = document.createElement("div");
+          box.className = "fall-color-box";
+          box.style.position = "absolute";
+          box.style.top = "0";
+          box.style.left = "50%";
+          box.style.transform = "translateX(-50%)";
+          box.style.zIndex = "10";
+          box.style.width = `${rect.width * 1.08}px`;
+          box.style.height = `${rect.height * 0.96}px`;
+          box.style.backgroundColor = color;
+          box.style.borderRadius = "4px";
+          box.style.pointerEvents = "none";
+          box.style.willChange = "transform";
+          box.style.boxShadow = "0 4px 14px rgba(0, 0, 0, 0.4)";
+          word.appendChild(box);
+          return box;
+        });
+      };
+
+      const titleBoxes = createBoxes(titleEl, "#E1DCC9");
+      const descBoxes = createBoxes(descEl, "#C5BFA9");
+      const allBoxes = [...titleBoxes, ...descBoxes];
+
+      const updateBoxSizes = () => {
+        const titleWords = titleEl.querySelectorAll(".fall-word-wrapper");
+        titleWords.forEach((word, i) => {
+          if (titleBoxes[i]) {
+            const r = word.getBoundingClientRect();
+            titleBoxes[i].style.width = `${r.width * 1.08}px`;
+            titleBoxes[i].style.height = `${r.height * 0.96}px`;
+          }
+        });
+        const descWords = descEl.querySelectorAll(".fall-word-wrapper");
+        descWords.forEach((word, i) => {
+          if (descBoxes[i]) {
+            const r = word.getBoundingClientRect();
+            descBoxes[i].style.width = `${r.width * 1.08}px`;
+            descBoxes[i].style.height = `${r.height * 0.96}px`;
+          }
+        });
+      };
+      window.addEventListener("resize", updateBoxSizes);
+
+      // Pinned Timeline: Stops in center, tiles fall down, holds, then exits to top
+      const headerTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: headerPin,
+          start: "top top",
+          end: "+=1500",
+          pin: headerPin,
+          pinSpacing: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          fastScrollEnd: true,
+          preventOverlaps: true,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // STAGE 1: Color blocks drop down with physics (gravity, spin, horizontal drift)
+      headerTl.to(allBoxes, {
+        y: () => window.innerHeight * 1.35,
+        x: () => gsap.utils.random(-140, 140),
+        rotation: () => gsap.utils.random(-360, 360),
+        ease: "power2.in",
+        stagger: {
+          amount: 0.65,
+          from: "random",
+        },
+        duration: 1.0,
+      });
+
+      // STAGE 2: Rest in center so revealed text can be read
+      headerTl.to({}, { duration: 0.4 });
+
+      // STAGE 3: Text smoothly moves up and exits into the top viewport
+      headerTl.to(
+        headerContent,
+        {
+          y: () => -window.innerHeight * 0.75,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power1.in",
+        }
+      );
+    }, headerPin);
+
+    return () => {
+      ctx.revert();
+      const existingBoxes = headerPin.querySelectorAll(".fall-color-box");
+      existingBoxes.forEach((b) => b.remove());
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const stage = stageRef.current;
@@ -555,31 +677,59 @@ function Projects() {
       className="relative z-[2] w-full"
     >
       {/* ========================================================
-          1. CENTERED HEADER (Middle Content)
-          Natural flow: Centered in its own section. When scrolling,
-          it smoothly scrolls up and into the top viewport with no effects.
+          1. CENTERED PINNED HEADER (Fall Color Block Text Reveal)
+          Pins in center -> Tiles drop down -> Text reveals -> Exits to top
           ======================================================== */}
-      <div className="relative flex h-[100svh] w-full flex-col items-center justify-center text-center px-5 max-w-[820px] mx-auto">
-        <span className="text-[11px] font-semibold tracking-[0.28em] text-[#E1DCC9]/60 md:text-[12.5px] uppercase">
-          PROJECTS / 03
-        </span>
+      <div
+        ref={headerPinRef}
+        className="projects-header-pin relative z-10 flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden"
+      >
+        <div
+          ref={headerContentRef}
+          className="relative flex flex-col items-center justify-center text-center px-5 max-w-[840px] mx-auto will-change-transform"
+        >
+          <span className="text-[11px] font-semibold tracking-[0.28em] text-[#E1DCC9]/60 md:text-[12.5px] uppercase mb-4">
+            PROJECTS / 03
+          </span>
 
-        <h2 className="mt-4 text-[clamp(44px,7.5vw,84px)] font-semibold leading-[0.9] tracking-[-0.055em] text-[#E1DCC9]">
-          Selected work,
-          <br />
-          <strong className="font-semibold text-[#9a6a35]">
-            crafted for real use.
-          </strong>
-        </h2>
+          <h2
+            ref={titleRef}
+            className="text-[clamp(44px,7.5vw,84px)] font-semibold leading-[0.9] tracking-[-0.055em] text-[#E1DCC9] mb-6 select-none"
+          >
+            {[
+              { text: "Selected", brAfter: false },
+              { text: "work,", brAfter: true },
+              { text: "crafted", brAfter: false },
+              { text: "for", brAfter: false },
+              { text: "real", brAfter: false },
+              { text: "use.", brAfter: false },
+            ].map((item, idx) => (
+              <React.Fragment key={idx}>
+                <span className="fall-word-wrapper inline-block relative mx-[0.14em]">
+                  {item.text}
+                </span>
+                {item.brAfter && <br />}
+              </React.Fragment>
+            ))}
+          </h2>
 
-        <p className="mx-auto mt-6 max-w-[580px] text-[clamp(14px,1.15vw,18px)] font-normal leading-relaxed text-[#E1DCC9]/65">
-          Explore my GitHub projects directly through the interactive file tree.
-          Select any project to preview across desktop and mobile devices.
-        </p>
-
-        <div className="mt-8 flex items-center gap-2 text-[12px] font-mono text-[#9a6a35]/80">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#9a6a35] animate-ping" />
-          <span>Scroll to explore project workspace</span>
+          <p
+            ref={descRef}
+            className="mx-auto max-w-[600px] text-[clamp(14px,1.15vw,18px)] font-normal leading-relaxed text-[#E1DCC9]/75 select-none"
+          >
+            {[
+              "Explore", "my", "GitHub", "projects", "directly", "through", "the",
+              "interactive", "file", "tree.", "Select", "any", "project", "to",
+              "preview", "across", "desktop", "and", "mobile", "devices."
+            ].map((word, idx) => (
+              <span
+                key={idx}
+                className="fall-word-wrapper inline-block relative mx-[0.12em]"
+              >
+                {word}
+              </span>
+            ))}
+          </p>
         </div>
       </div>
 
