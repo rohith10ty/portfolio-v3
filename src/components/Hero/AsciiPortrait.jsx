@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 
 /**
  * InteractiveAsciiPortrait
- * High-fidelity interactive ASCII portrait engine with real-time spring-physics
- * and luxury gold/cream theme mapping.
+ * High-fidelity interactive ASCII portrait engine with real-time spring-physics,
+ * dynamic door opening drag effect, and luxury gold/cream theme mapping.
  */
 export function AsciiPortrait({
   imageSrc = "/rohith-ascii-portrait.png",
@@ -11,12 +11,10 @@ export function AsciiPortrait({
   style = {},
 }) {
   const canvasRef = useRef(null);
-  const containerRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
@@ -40,19 +38,34 @@ export function AsciiPortrait({
     let mouseY = -9999;
     let isMoving = false;
     let idleTimer = null;
+    let currentW = window.innerWidth;
+    let currentH = window.innerHeight;
+    let targetW = 300;
+    let targetH = 388;
+    let centerX = currentW / 2;
+    let centerY = currentH * 0.57;
 
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = imageSrc;
 
     function resizeAndSample() {
-      if (!canvas || !container) return;
-      const rect = container.getBoundingClientRect();
+      if (!canvas) return;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      const w = Math.round(rect.width);
-      const h = Math.round(rect.height);
-      if (w <= 0 || h <= 0) return;
+      currentW = w;
+      currentH = h;
+      centerX = w / 2;
+
+      const isMobile = w < 768;
+      centerY = isMobile ? h * 0.58 : h * 0.57;
+
+      targetW = isMobile
+        ? Math.min(255, w * 0.72)
+        : Math.min(330, Math.max(250, w * 0.21));
+      targetH = targetW * (1392 / 1080);
 
       canvas.width = w * dpr;
       canvas.height = h * dpr;
@@ -60,8 +73,8 @@ export function AsciiPortrait({
 
       if (!img.complete || img.naturalWidth === 0) return;
 
-      const sampleCols = Math.round(w / CELL_STEP);
-      const sampleRows = Math.round(h / CELL_STEP);
+      const sampleCols = Math.round(targetW / CELL_STEP);
+      const sampleRows = Math.round(targetH / CELL_STEP);
 
       const sampleCanvas = document.createElement("canvas");
       sampleCanvas.width = sampleCols;
@@ -69,25 +82,12 @@ export function AsciiPortrait({
       const sCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
       if (!sCtx) return;
 
-      // Draw image scaled to sample grid keeping aspect ratio
-      const imgAspect = img.naturalWidth / img.naturalHeight;
-      const targetAspect = w / h;
-      let drawW = sampleCols;
-      let drawH = sampleRows;
-      let offX = 0;
-      let offY = 0;
-
-      if (imgAspect > targetAspect) {
-        drawH = sampleCols / imgAspect;
-        offY = (sampleRows - drawH) / 2;
-      } else {
-        drawW = sampleRows * imgAspect;
-        offX = (sampleCols - drawW) / 2;
-      }
-
-      sCtx.drawImage(img, offX, offY, drawW, drawH);
+      sCtx.drawImage(img, 0, 0, sampleCols, sampleRows);
       const imgData = sCtx.getImageData(0, 0, sampleCols, sampleRows);
       const data = imgData.data;
+
+      const startX = (w - targetW) / 2;
+      const startY = centerY - targetH / 2;
 
       particles = [];
       for (let r = 0; r < sampleRows; r++) {
@@ -131,8 +131,8 @@ export function AsciiPortrait({
               colorStr = `rgba(246, 240, 228, ${(alphaNorm * 0.98).toFixed(2)})`;
             }
 
-            const baseX = c * CELL_STEP + CELL_SIZE / 2;
-            const baseY = r * CELL_STEP + CELL_SIZE / 2;
+            const baseX = startX + c * CELL_STEP + CELL_SIZE / 2;
+            const baseY = startY + r * CELL_STEP + CELL_SIZE / 2;
 
             particles.push({
               baseX,
@@ -159,34 +159,78 @@ export function AsciiPortrait({
 
     function updatePhysics() {
       const len = particles.length;
+      if (len === 0) return;
+
+      // Read door opening progress (0 = closed, 1 = fully open)
+      const doorOpen =
+        parseFloat(
+          document.documentElement.style.getPropertyValue("--hero-door-open")
+        ) || 0;
+
+      const maxDrag = currentW * 0.62 + 80;
+
       for (let i = 0; i < len; i++) {
         const p = particles[i];
 
-        if (isMoving) {
-          const dx = p.x - mouseX;
-          const dy = p.y - mouseY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+        if (doorOpen > 0.001) {
+          // DRAG EFFECT: As the doors open, ASCII numbers drag outward left and right
+          const isLeft = p.baseX < centerX;
+          const dir = isLeft ? -1 : 1;
+          const centerDist = Math.abs(p.baseX - centerX);
+          const normDist = Math.min(1, centerDist / (targetW / 2));
 
-          if (dist < PUSH_RADIUS && dist > 0) {
-            const force = Math.pow(1 - dist / PUSH_RADIUS, 2) * PUSH_FORCE;
-            p.vx += (dx / dist) * force;
-            p.vy += (dy / dist) * force;
+          // Center particles pull first with an elastic tearing wave
+          const wave = 1.0 + (1 - normDist) * 0.45 + Math.sin(p.baseY * 0.035) * 0.12;
+          const dragTargetX = p.baseX + dir * Math.pow(doorOpen, 1.1) * maxDrag * wave;
+
+          const ax = (dragTargetX - p.x) * 0.14;
+          p.vx = (p.vx + ax) * 0.74;
+          p.x += p.vx;
+
+          // Subtle organic vertical flare as particles part
+          const targetY = p.baseY + (p.baseY - centerY) * doorOpen * 0.18;
+          const ay = (targetY - p.y) * 0.08;
+          p.vy = (p.vy + ay) * 0.74;
+          p.y += p.vy;
+        } else {
+          // Normal idle/hover state
+          if (isMoving) {
+            const dx = p.x - mouseX;
+            const dy = p.y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < PUSH_RADIUS && dist > 0) {
+              const force = Math.pow(1 - dist / PUSH_RADIUS, 2) * PUSH_FORCE;
+              p.vx += (dx / dist) * force;
+              p.vy += (dy / dist) * force;
+            }
           }
-        }
 
-        const ax = (p.baseX - p.x) * SPRING;
-        const ay = (p.baseY - p.y) * SPRING;
-        p.vx = (p.vx + ax) * DAMPING;
-        p.vy = (p.vy + ay) * DAMPING;
-        p.x += p.vx;
-        p.y += p.vy;
+          const ax = (p.baseX - p.x) * SPRING;
+          const ay = (p.baseY - p.y) * SPRING;
+          p.vx = (p.vx + ax) * DAMPING;
+          p.vy = (p.vy + ay) * DAMPING;
+          p.x += p.vx;
+          p.y += p.vy;
+        }
       }
     }
 
     function render() {
-      if (!canvas || !container) return;
-      const rect = container.getBoundingClientRect();
-      ctx.clearRect(0, 0, rect.width, rect.height);
+      if (!canvas) return;
+      ctx.clearRect(0, 0, currentW, currentH);
+
+      const doorOpen =
+        parseFloat(
+          document.documentElement.style.getPropertyValue("--hero-door-open")
+        ) || 0;
+
+      // Smooth fade out at the very end of door opening
+      if (doorOpen > 0.65) {
+        ctx.globalAlpha = Math.max(0, 1 - (doorOpen - 0.65) / 0.35);
+      } else {
+        ctx.globalAlpha = 1;
+      }
 
       ctx.font = `bold ${CELL_SIZE + 1.2}px monospace`;
       ctx.textBaseline = "middle";
@@ -224,10 +268,8 @@ export function AsciiPortrait({
     }, 55);
 
     function setPointer(clientX, clientY) {
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
-      mouseX = clientX - rect.left;
-      mouseY = clientY - rect.top;
+      mouseX = clientX;
+      mouseY = clientY;
       isMoving = true;
 
       clearTimeout(idleTimer);
@@ -264,13 +306,12 @@ export function AsciiPortrait({
 
   return (
     <div
-      ref={containerRef}
-      className={`relative select-none ${className}`}
+      className={`fixed inset-0 w-full h-full pointer-events-none select-none z-20 ${className}`}
       style={style}
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full block pointer-events-auto cursor-crosshair"
+        className="w-full h-full block pointer-events-none"
       />
     </div>
   );

@@ -62,7 +62,7 @@
 
 .panel-word {
   position: absolute;
-  top: calc(50% + clamp(125px, 15.5vh, 160px));
+  top: clamp(160px, 20.5vh, 205px);
   z-index: 2;
   pointer-events: none;
 }
@@ -81,32 +81,20 @@
 
 .hero-portrait-wrapper {
   position: absolute;
-  top: calc(50% - clamp(60px, 8vh, 88px));
+  top: 57vh;
   left: 50%;
   transform: translate(-50%, -50%);
   width: clamp(250px, 21vw, 330px);
   aspect-ratio: 1080 / 1392;
-  border-radius: 3px 38px 3px 38px;
-  border: 1px solid rgba(225, 220, 201, 0.16);
-  background: radial-gradient(circle at center, rgba(30, 20, 12, 0.45) 0%, rgba(10, 8, 6, 0.65) 100%);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(216, 160, 94, 0.08);
-  overflow: hidden;
-  z-index: 25;
-  pointer-events: auto;
-  will-change: transform, opacity;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+  z-index: 20;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.hero-portrait-glow {
-  position: absolute;
-  inset: -24px;
-  z-index: -1;
-  border-radius: 9999px;
-  background: radial-gradient(circle at center, rgba(216, 160, 94, 0.18) 0%, rgba(216, 160, 94, 0.04) 50%, transparent 72%);
-  filter: blur(24px);
-  pointer-events: none;
 }
 
 .door-heading {
@@ -175,7 +163,7 @@
 /* Geometric Rhombus Role Badge */
 .hero-role-wrapper {
   position: absolute;
-  top: calc(50% + clamp(180px, 22.5vh, 225px));
+  top: calc(57vh + clamp(205px, 23.5vh, 245px));
   left: 0;
   right: 0;
   margin-inline: auto;
@@ -351,13 +339,15 @@
 
 @media (max-width: 900px) {
   .hero-portrait-wrapper {
-    width: min(68vw, 250px);
-    top: calc(50% - clamp(50px, 7vh, 70px));
-    border-radius: 3px 28px 3px 28px;
+    top: 58vh;
+    width: min(72vw, 255px);
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   .panel-word {
-    top: calc(50% + clamp(105px, 14vh, 135px));
+    top: clamp(120px, 17vh, 150px);
   }
 
   .door-heading {
@@ -374,7 +364,7 @@
   }
 
   .hero-role-wrapper {
-    top: calc(50% + clamp(148px, 19.5vh, 180px));
+    top: calc(58vh + clamp(170px, 25vh, 195px));
   }
 
   .hero-role-wrapper::before,
@@ -429,13 +419,15 @@
 
 @media (max-width: 420px) {
   .hero-portrait-wrapper {
-    width: min(64vw, 210px);
-    top: calc(50% - 55px);
-    border-radius: 3px 24px 3px 24px;
+    top: 58vh;
+    width: min(72vw, 255px);
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   .panel-word {
-    top: calc(50% + 94px);
+    top: clamp(110px, 17vh, 135px);
   }
 
   .door-heading {
@@ -444,7 +436,7 @@
   }
 
   .hero-role-wrapper {
-    top: calc(50% + 140px);
+    top: calc(58vh + 175px);
   }
 
   .hero-role-rhombus {
