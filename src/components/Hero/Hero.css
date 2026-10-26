@@ -101,11 +101,10 @@
 .door-heading {
   display: inline-flex;
   align-items: baseline;
-  font-family: "Outfit", sans-serif;
-  font-size: clamp(3.0rem, 4.8vw, 4.8rem);
-  font-weight: 800;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
+  font-family: "Blanka", sans-serif;
+  font-size: clamp(3.0rem, 5.0vw, 5.0rem);
+  font-weight: 400;
+  letter-spacing: clamp(0.06em, 0.8vw, 0.12em);
   line-height: 1.15;
   white-space: nowrap;
   margin: 0;
@@ -372,8 +371,8 @@
   }
 
   .door-heading {
-    font-size: clamp(1.8rem, 6.8vw, 2.6rem);
-    letter-spacing: 0.08em;
+    font-size: clamp(1.3rem, 5.0vw, 2.2rem);
+    letter-spacing: clamp(0.04em, 0.8vw, 0.07em);
   }
 
   .char {
@@ -464,8 +463,8 @@
   }
 
   .door-heading {
-    font-size: clamp(1.05rem, 4.4vw, 1.25rem);
-    letter-spacing: 0.12em;
+    font-size: clamp(1.1rem, 4.2vw, 1.35rem);
+    letter-spacing: 0.04em;
   }
 
   .hero-role-wrapper {
