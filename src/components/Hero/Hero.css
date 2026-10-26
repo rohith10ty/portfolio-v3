@@ -62,7 +62,7 @@
 
 .panel-word {
   position: absolute;
-  top: clamp(120px, 16vh, 165px);
+  top: calc(57vh - clamp(230px, 19vw, 285px));
   z-index: 2;
   pointer-events: none;
 }
@@ -101,17 +101,18 @@
 .door-heading {
   display: inline-flex;
   align-items: baseline;
-  font-family: "Blanka", sans-serif;
-  font-size: clamp(3.4rem, 5.8vw, 5.8rem);
-  font-weight: 400;
-  letter-spacing: normal;
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(3.0rem, 4.8vw, 4.8rem);
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
   line-height: 1.15;
   white-space: nowrap;
   margin: 0;
   color: var(--cream, #e1dcc9);
   position: relative;
   z-index: 2;
-  text-shadow: 0 0 35px rgba(225, 220, 201, 0.22);
+  text-shadow: 0 0 35px rgba(225, 220, 201, 0.28);
 }
 
 .rest {
@@ -153,11 +154,13 @@
 
 .char-r {
   margin-right: clamp(6px, 0.6vw, 10px);
+  transform-origin: right center;
   will-change: transform, color, opacity, margin-right;
 }
 
 .char-n {
   margin-right: 0;
+  transform-origin: left center;
   will-change: transform, color, opacity;
 }
 
@@ -365,12 +368,12 @@
   }
 
   .panel-word {
-    top: clamp(80px, 13vh, 110px);
+    top: calc(58vh - clamp(180px, 42vw, 215px));
   }
 
   .door-heading {
-    font-size: clamp(2.2rem, 7.8vw, 3.2rem);
-    letter-spacing: normal;
+    font-size: clamp(1.8rem, 6.8vw, 2.6rem);
+    letter-spacing: 0.08em;
   }
 
   .char {
