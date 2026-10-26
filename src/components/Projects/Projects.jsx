@@ -674,7 +674,7 @@ function Projects() {
           className="absolute inset-0 flex flex-col items-center justify-center text-center px-5 max-w-[840px] mx-auto will-change-transform z-10"
         >
           <span className="text-[11px] font-semibold tracking-[0.28em] text-[#E1DCC9]/60 md:text-[12.5px] uppercase mb-4">
-            PROJECTS / 03
+            PROJECTS
           </span>
 
           <h2

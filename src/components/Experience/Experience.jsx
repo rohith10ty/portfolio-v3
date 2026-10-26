@@ -1,5 +1,10 @@
+import React, { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BorderGlow from "../BorderGlow/BorderGlow";
 import "./Experience.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const experience = [
   {
@@ -45,15 +50,123 @@ const experience = [
 ];
 
 function Experience() {
+  const titleRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const titleEl = titleRef.current;
+    if (!titleEl) return;
+
+    let updateBoxSizes = () => {};
+    let allBoxes = [];
+
+    const ctx = gsap.context(() => {
+      // Create color boxes covering each word
+      const createBoxes = (container, defaultColor) => {
+        const words = container.querySelectorAll(".fall-word-wrapper");
+        return Array.from(words).map((word) => {
+          const rect = word.getBoundingClientRect();
+          const color = word.getAttribute("data-box-color") || defaultColor;
+          const box = document.createElement("div");
+          box.className = "fall-color-box";
+          box.style.position = "absolute";
+          box.style.top = "0";
+          box.style.left = "50%";
+          box.style.transform = "translateX(-50%)";
+          box.style.zIndex = "10";
+          box.style.width = `${rect.width * 1.08}px`;
+          box.style.height = `${rect.height * 0.96}px`;
+          box.style.backgroundColor = color;
+          box.style.borderRadius = "4px";
+          box.style.pointerEvents = "none";
+          box.style.willChange = "transform, opacity";
+          box.style.boxShadow = "0 4px 14px rgba(0, 0, 0, 0.4)";
+          word.appendChild(box);
+          return box;
+        });
+      };
+
+      allBoxes = createBoxes(titleEl, "#E1DCC9");
+
+      updateBoxSizes = () => {
+        const words = titleEl.querySelectorAll(".fall-word-wrapper");
+        words.forEach((word, i) => {
+          if (allBoxes[i]) {
+            const r = word.getBoundingClientRect();
+            allBoxes[i].style.width = `${r.width * 1.08}px`;
+            allBoxes[i].style.height = `${r.height * 0.96}px`;
+          }
+        });
+      };
+      window.addEventListener("resize", updateBoxSizes);
+
+      // Initial state: tiles fully visible covering words
+      gsap.set(allBoxes, {
+        opacity: 1,
+        visibility: "visible",
+        display: "block",
+        x: 0,
+        y: 0,
+        rotation: 0,
+      });
+
+      // Falling timeline on scroll
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: titleEl,
+          start: "top 80%",
+          end: "top 35%",
+          scrub: 0.6,
+          fastScrollEnd: true,
+          preventOverlaps: true,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Tiles drop down with physics and fade to 0
+      tl.to(allBoxes, {
+        y: () => window.innerHeight * 1.4,
+        x: () => gsap.utils.random(-150, 150),
+        rotation: () => gsap.utils.random(-360, 360),
+        opacity: 0,
+        ease: "power2.in",
+        stagger: {
+          amount: 0.4,
+          from: "random",
+        },
+        duration: 0.8,
+      });
+    }, titleEl);
+
+    return () => {
+      window.removeEventListener("resize", updateBoxSizes);
+      ctx.revert();
+      allBoxes.forEach((b) => b.remove());
+    };
+  }, []);
+
   return (
     <section id="experience" className="experience-section">
       <div className="experience-header">
-        <span>EXPERIENCE / 04</span>
+        <span>EXPERIENCE</span>
 
-        <h2>
-          Different paths,
-          <br />
-          <strong>one direction.</strong>
+        <h2 ref={titleRef} className="select-none">
+          {[
+            { text: "Different", brAfter: false, color: "#E1DCC9" },
+            { text: "paths,", brAfter: true, color: "#E1DCC9" },
+            { text: "one", brAfter: false, color: "#9a6a35" },
+            { text: "direction.", brAfter: false, color: "#9a6a35" },
+          ].map((item, idx) => (
+            <React.Fragment key={idx}>
+              <span
+                data-box-color={item.color}
+                style={{ color: item.color }}
+                className="fall-word-wrapper inline-block relative mx-[0.14em]"
+              >
+                {item.text}
+              </span>
+              {item.brAfter && <br />}
+            </React.Fragment>
+          ))}
         </h2>
 
         <p>

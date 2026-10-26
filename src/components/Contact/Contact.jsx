@@ -45,7 +45,7 @@ function Contact() {
     <section id="contact" className="contact-section">
       <div className="contact-inner">
         <div className="contact-heading">
-          <p className="contact-kicker">CONTACT / 05</p>
+          <p className="contact-kicker">CONTACT</p>
 
           <h2>
             Let's build something
