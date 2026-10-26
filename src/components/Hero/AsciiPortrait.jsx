@@ -24,14 +24,24 @@ export function AsciiPortrait({
     let animId;
     let scrambleInterval;
 
-    const CELL_SIZE = 4.6;
-    const CELL_GAP = 1.0;
-    const CELL_STEP = CELL_SIZE + CELL_GAP;
+    function getCellMetrics() {
+      const isMobile = window.innerWidth <= 768;
+      const cellSize = isMobile ? 5.8 : 7.2;
+      const cellGap = isMobile ? 0.9 : 1.1;
+      return {
+        cellSize,
+        cellGap,
+        cellStep: cellSize + cellGap,
+        fontSize: Math.round(cellSize + 3.0),
+      };
+    }
+
     const ASCII_CHARS = ".:+*#%@0369";
     const DARK_CHARS = ["#", "%", "*", "+", "=", "@"];
 
-    const PUSH_RADIUS = 75;
-    const PUSH_FORCE = 42;
+    const isMobile = window.innerWidth <= 768;
+    const PUSH_RADIUS = isMobile ? 70 : 88;
+    const PUSH_FORCE = isMobile ? 40 : 50;
     const SPRING = 0.038;
     const DAMPING = 0.66;
 
@@ -60,8 +70,9 @@ export function AsciiPortrait({
 
       if (!img.complete || img.naturalWidth === 0) return;
 
-      const sampleCols = Math.round(w / CELL_STEP);
-      const sampleRows = Math.round(h / CELL_STEP);
+      const { cellSize, cellStep } = getCellMetrics();
+      const sampleCols = Math.round(w / cellStep);
+      const sampleRows = Math.round(h / cellStep);
 
       const sampleCanvas = document.createElement("canvas");
       sampleCanvas.width = sampleCols;
@@ -131,8 +142,8 @@ export function AsciiPortrait({
               colorStr = `rgba(246, 240, 228, ${(alphaNorm * 0.98).toFixed(2)})`;
             }
 
-            const baseX = c * CELL_STEP + CELL_SIZE / 2;
-            const baseY = r * CELL_STEP + CELL_SIZE / 2;
+            const baseX = c * cellStep + cellSize / 2;
+            const baseY = r * cellStep + cellSize / 2;
 
             particles.push({
               baseX,
@@ -188,7 +199,8 @@ export function AsciiPortrait({
       const rect = container.getBoundingClientRect();
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      ctx.font = `bold ${CELL_SIZE + 1.2}px monospace`;
+      const { fontSize } = getCellMetrics();
+      ctx.font = `bold ${fontSize}px "DM Mono", monospace`;
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
 
