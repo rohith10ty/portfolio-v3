@@ -1,0 +1,279 @@
+import React, { useEffect, useRef } from "react";
+
+/**
+ * InteractiveAsciiPortrait
+ * High-fidelity interactive ASCII portrait engine with real-time spring-physics
+ * and luxury gold/cream theme mapping.
+ */
+export function AsciiPortrait({
+  imageSrc = "/rohith-ascii-portrait.png",
+  className = "",
+  style = {},
+}) {
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    let animId;
+    let scrambleInterval;
+
+    const CELL_SIZE = 4.6;
+    const CELL_GAP = 1.0;
+    const CELL_STEP = CELL_SIZE + CELL_GAP;
+    const ASCII_CHARS = ".:+*#%@0369";
+    const DARK_CHARS = ["#", "%", "*", "+", "=", "@"];
+
+    const PUSH_RADIUS = 75;
+    const PUSH_FORCE = 42;
+    const SPRING = 0.038;
+    const DAMPING = 0.66;
+
+    let particles = [];
+    let mouseX = -9999;
+    let mouseY = -9999;
+    let isMoving = false;
+    let idleTimer = null;
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = imageSrc;
+
+    function resizeAndSample() {
+      if (!canvas || !container) return;
+      const rect = container.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      const w = Math.round(rect.width);
+      const h = Math.round(rect.height);
+      if (w <= 0 || h <= 0) return;
+
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (!img.complete || img.naturalWidth === 0) return;
+
+      const sampleCols = Math.round(w / CELL_STEP);
+      const sampleRows = Math.round(h / CELL_STEP);
+
+      const sampleCanvas = document.createElement("canvas");
+      sampleCanvas.width = sampleCols;
+      sampleCanvas.height = sampleRows;
+      const sCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
+      if (!sCtx) return;
+
+      // Draw image scaled to sample grid keeping aspect ratio
+      const imgAspect = img.naturalWidth / img.naturalHeight;
+      const targetAspect = w / h;
+      let drawW = sampleCols;
+      let drawH = sampleRows;
+      let offX = 0;
+      let offY = 0;
+
+      if (imgAspect > targetAspect) {
+        drawH = sampleCols / imgAspect;
+        offY = (sampleRows - drawH) / 2;
+      } else {
+        drawW = sampleRows * imgAspect;
+        offX = (sampleCols - drawW) / 2;
+      }
+
+      sCtx.drawImage(img, offX, offY, drawW, drawH);
+      const imgData = sCtx.getImageData(0, 0, sampleCols, sampleRows);
+      const data = imgData.data;
+
+      particles = [];
+      for (let r = 0; r < sampleRows; r++) {
+        for (let c = 0; c < sampleCols; c++) {
+          const idx = (r * sampleCols + c) * 4;
+          const a = data[idx + 3];
+
+          if (a > 28) {
+            const red = data[idx];
+            const green = data[idx + 1];
+            const blue = data[idx + 2];
+            const lum = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+            const alphaNorm = a / 255;
+
+            let char;
+            let colorStr;
+
+            if (lum < 0.24) {
+              char = DARK_CHARS[(c + r) % DARK_CHARS.length];
+              colorStr = `rgba(135, 102, 72, ${(alphaNorm * 0.72).toFixed(2)})`;
+            } else if (lum < 0.48) {
+              const charIdx = Math.min(
+                ASCII_CHARS.length - 1,
+                Math.floor(lum * ASCII_CHARS.length)
+              );
+              char = ASCII_CHARS[charIdx];
+              colorStr = `rgba(195, 148, 92, ${(alphaNorm * 0.85).toFixed(2)})`;
+            } else if (lum < 0.72) {
+              const charIdx = Math.min(
+                ASCII_CHARS.length - 1,
+                Math.floor(lum * ASCII_CHARS.length)
+              );
+              char = ASCII_CHARS[charIdx];
+              colorStr = `rgba(228, 192, 130, ${(alphaNorm * 0.92).toFixed(2)})`;
+            } else {
+              const charIdx = Math.min(
+                ASCII_CHARS.length - 1,
+                Math.floor(lum * ASCII_CHARS.length)
+              );
+              char = ASCII_CHARS[charIdx];
+              colorStr = `rgba(246, 240, 228, ${(alphaNorm * 0.98).toFixed(2)})`;
+            }
+
+            const baseX = c * CELL_STEP + CELL_SIZE / 2;
+            const baseY = r * CELL_STEP + CELL_SIZE / 2;
+
+            particles.push({
+              baseX,
+              baseY,
+              x: baseX,
+              y: baseY,
+              char,
+              color: colorStr,
+              lum,
+              vx: 0,
+              vy: 0,
+            });
+          }
+        }
+      }
+    }
+
+    img.onload = () => resizeAndSample();
+    if (img.complete && img.naturalWidth > 0) {
+      resizeAndSample();
+    }
+
+    window.addEventListener("resize", resizeAndSample);
+
+    function updatePhysics() {
+      const len = particles.length;
+      for (let i = 0; i < len; i++) {
+        const p = particles[i];
+
+        if (isMoving) {
+          const dx = p.x - mouseX;
+          const dy = p.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < PUSH_RADIUS && dist > 0) {
+            const force = Math.pow(1 - dist / PUSH_RADIUS, 2) * PUSH_FORCE;
+            p.vx += (dx / dist) * force;
+            p.vy += (dy / dist) * force;
+          }
+        }
+
+        const ax = (p.baseX - p.x) * SPRING;
+        const ay = (p.baseY - p.y) * SPRING;
+        p.vx = (p.vx + ax) * DAMPING;
+        p.vy = (p.vy + ay) * DAMPING;
+        p.x += p.vx;
+        p.y += p.vy;
+      }
+    }
+
+    function render() {
+      if (!canvas || !container) return;
+      const rect = container.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      ctx.font = `bold ${CELL_SIZE + 1.2}px monospace`;
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+
+      const len = particles.length;
+      for (let i = 0; i < len; i++) {
+        const p = particles[i];
+        ctx.fillStyle = p.color;
+        ctx.fillText(p.char, p.x, p.y);
+      }
+    }
+
+    function loop() {
+      updatePhysics();
+      render();
+      animId = requestAnimationFrame(loop);
+    }
+    loop();
+
+    // Subtle alive shimmer across 12% of particles every 55ms
+    scrambleInterval = setInterval(() => {
+      const len = particles.length;
+      if (len === 0) return;
+      const scrambleCount = Math.floor(len * 0.12);
+      for (let i = 0; i < scrambleCount; i++) {
+        const randIdx = Math.floor(Math.random() * len);
+        const p = particles[randIdx];
+        if (p.lum < 0.24) {
+          p.char = DARK_CHARS[Math.floor(Math.random() * DARK_CHARS.length)];
+        } else {
+          p.char = ASCII_CHARS[Math.floor(Math.random() * ASCII_CHARS.length)];
+        }
+      }
+    }, 55);
+
+    function setPointer(clientX, clientY) {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      mouseX = clientX - rect.left;
+      mouseY = clientY - rect.top;
+      isMoving = true;
+
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        isMoving = false;
+      }, 70);
+    }
+
+    const handlePointerMove = (e) => setPointer(e.clientX, e.clientY);
+    const handleTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        setPointer(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+    const handlePointerLeave = () => {
+      mouseX = -9999;
+      mouseY = -9999;
+      isMoving = false;
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("mouseleave", handlePointerLeave);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      clearInterval(scrambleInterval);
+      window.removeEventListener("resize", resizeAndSample);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("mouseleave", handlePointerLeave);
+    };
+  }, [imageSrc]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`relative select-none ${className}`}
+      style={style}
+    >
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full block pointer-events-auto cursor-crosshair"
+      />
+    </div>
+  );
+}
+
+export default AsciiPortrait;

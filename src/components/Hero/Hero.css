@@ -51,28 +51,71 @@
 .hero-panel-left {
   left: 0;
   justify-content: flex-end;
-  padding-right: 0.16em;
+  padding-right: 0;
 }
 
 .hero-panel-right {
   left: 50vw;
   justify-content: flex-start;
-  padding-left: 0.16em;
+  padding-left: 0;
 }
 
 .panel-word {
-  position: relative;
+  position: absolute;
+  top: calc(50% + clamp(125px, 15.5vh, 160px));
   z-index: 2;
+  pointer-events: none;
+}
+
+.hero-panel-left .panel-word {
+  right: 0;
+}
+
+.hero-panel-right .panel-word {
+  left: 0;
+}
+
+/* =========================================
+   CENTER ASCII PORTRAIT (Component #130)
+========================================= */
+
+.hero-portrait-wrapper {
+  position: absolute;
+  top: calc(50% - clamp(60px, 8vh, 88px));
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(250px, 21vw, 330px);
+  aspect-ratio: 1080 / 1392;
+  border-radius: 3px 38px 3px 38px;
+  border: 1px solid rgba(225, 220, 201, 0.16);
+  background: radial-gradient(circle at center, rgba(30, 20, 12, 0.45) 0%, rgba(10, 8, 6, 0.65) 100%);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(216, 160, 94, 0.08);
+  overflow: hidden;
+  z-index: 25;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-portrait-glow {
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  border-radius: 9999px;
+  background: radial-gradient(circle at center, rgba(216, 160, 94, 0.18) 0%, rgba(216, 160, 94, 0.04) 50%, transparent 72%);
+  filter: blur(24px);
   pointer-events: none;
 }
 
 .door-heading {
   display: inline-flex;
   align-items: baseline;
-  font-family: "Outfit", sans-serif;
-  font-size: clamp(2.4rem, 6.5vw, 5.8rem);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: "Blanka", sans-serif;
+  font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
   line-height: 1;
   white-space: nowrap;
   margin: 0;
@@ -107,6 +150,9 @@
   position: relative;
   display: inline-block;
   font-weight: 800;
+  letter-spacing: 0;
+  margin: 0;
+  padding: 0;
   will-change: transform, color, opacity;
 }
 
@@ -129,7 +175,7 @@
 /* Geometric Rhombus Role Badge */
 .hero-role-wrapper {
   position: absolute;
-  top: calc(50% + clamp(42px, 6vh, 68px));
+  top: calc(50% + clamp(180px, 22.5vh, 225px));
   left: 0;
   right: 0;
   margin-inline: auto;
@@ -304,20 +350,31 @@
 ========================================= */
 
 @media (max-width: 900px) {
+  .hero-portrait-wrapper {
+    width: min(68vw, 250px);
+    top: calc(50% - clamp(50px, 7vh, 70px));
+    border-radius: 3px 28px 3px 28px;
+  }
+
+  .panel-word {
+    top: calc(50% + clamp(105px, 14vh, 135px));
+  }
+
   .door-heading {
-    font-size: clamp(1.8rem, 7vw, 3.2rem);
+    font-size: clamp(1.2rem, 3.8vw, 1.7rem);
+    letter-spacing: 0.14em;
   }
 
   .hero-panel-left {
-    padding-right: 0.12em;
+    padding-right: 0;
   }
 
   .hero-panel-right {
-    padding-left: 0.12em;
+    padding-left: 0;
   }
 
   .hero-role-wrapper {
-    top: calc(50% + clamp(32px, 5vh, 50px));
+    top: calc(50% + clamp(148px, 19.5vh, 180px));
   }
 
   .hero-role-wrapper::before,
@@ -335,14 +392,7 @@
   }
 
   .hero-support-block {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin-inline: auto;
-    bottom: clamp(75px, 11vh, 105px);
-    width: min(88vw, 320px);
-    text-align: center;
-    align-items: center;
+    display: none;
   }
 
   .hero-support-eyebrow {
@@ -378,8 +428,23 @@
 ========================================= */
 
 @media (max-width: 420px) {
+  .hero-portrait-wrapper {
+    width: min(64vw, 210px);
+    top: calc(50% - 55px);
+    border-radius: 3px 24px 3px 24px;
+  }
+
+  .panel-word {
+    top: calc(50% + 94px);
+  }
+
   .door-heading {
-    font-size: clamp(1.5rem, 6.8vw, 2.4rem);
+    font-size: clamp(1.05rem, 4.4vw, 1.25rem);
+    letter-spacing: 0.12em;
+  }
+
+  .hero-role-wrapper {
+    top: calc(50% + 140px);
   }
 
   .hero-role-rhombus {

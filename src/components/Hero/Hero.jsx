@@ -1,3 +1,4 @@
+import { AsciiPortrait } from "./AsciiPortrait";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -17,6 +18,12 @@ function Hero() {
 
     const ctx = gsap.context(() => {
       // Set initial states
+      gsap.set(".hero-portrait-wrapper", {
+        opacity: 1,
+        scale: 1,
+        pointerEvents: "auto",
+      });
+
       gsap.set(
         [
           ".hero-panel-left .char span",
@@ -49,8 +56,14 @@ function Hero() {
         },
       );
 
-      gsap.set([".hero-panel-left .panel-word", ".hero-panel-right .panel-word"], {
-        x: "0.26em",
+      gsap.set(".hero-panel-left .panel-word", {
+        x: -12,
+        y: 0,
+      });
+
+      gsap.set(".hero-panel-right .panel-word", {
+        x: 12,
+        y: 0,
       });
 
       gsap.set(".hero-grid-sublayer", {
@@ -71,8 +84,19 @@ function Hero() {
         defaults: { ease: "power1.inOut" },
       });
 
-      // 1. As scroll starts: Role badge, bottom slogan, and scroll indicator fade out
+      // 1. As scroll starts: Portrait fades out, role badge, bottom slogan, and scroll indicator fade out
       tl.to(
+        ".hero-portrait-wrapper",
+        {
+          opacity: 0,
+          scale: 0.88,
+          pointerEvents: "none",
+          duration: 0.45,
+          ease: "power1.inOut",
+        },
+        0,
+      )
+        .to(
         ".hero-role-wrapper",
         {
           opacity: 0,
@@ -132,6 +156,7 @@ function Hero() {
           [".hero-panel-left .panel-word", ".hero-panel-right .panel-word"],
           {
             x: 0,
+            y: -75,
             duration: 1.0,
           },
           0.6,
@@ -183,8 +208,8 @@ function Hero() {
         .to(
           ".hero-panel-left .char-r",
           {
-            x: -48,
-            scale: 1.18,
+            x: -36,
+            scale: 1.15,
             opacity: 0.85,
             duration: 1.8,
             ease: "power2.inOut",
@@ -195,8 +220,8 @@ function Hero() {
         .to(
           ".hero-panel-right .char-n",
           {
-            x: 48,
-            scale: 1.18,
+            x: 36,
+            scale: 1.15,
             opacity: 0.85,
             duration: 1.8,
             ease: "power2.inOut",
@@ -219,6 +244,17 @@ function Hero() {
   return (
     <div id="home" ref={containerRef} className="hero-scroll-container">
       <div ref={wrapperRef} className="hero-pinned-wrapper">
+        {/* ========================================================
+            CENTER INTERACTIVE ASCII PORTRAIT (Audix Component #130)
+            ======================================================== */}
+        <div className="hero-portrait-wrapper">
+          <div className="hero-portrait-glow" />
+          <AsciiPortrait
+            imageSrc="/rohith-ascii-portrait.png"
+            className="w-full h-full"
+          />
+        </div>
+
         {/* ========================================================
             LEFT DOOR PANEL (Carries letter "R" + Left Grid)
             ======================================================== */}
