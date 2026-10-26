@@ -50,31 +50,34 @@ const experience = [
 ];
 
 function Experience() {
+  const sectionRef = useRef(null);
+  const pinContainerRef = useRef(null);
+  const headerContentRef = useRef(null);
   const titleRef = useRef(null);
+  const descRef = useRef(null);
 
   useLayoutEffect(() => {
+    const pinContainer = pinContainerRef.current;
+    const headerContent = headerContentRef.current;
     const titleEl = titleRef.current;
-    if (!titleEl) return;
+    if (!pinContainer || !headerContent || !titleEl) return;
 
-    let updateBoxSizes = () => {};
     let allBoxes = [];
 
     const ctx = gsap.context(() => {
-      // Create color boxes covering each word
+      // Create color boxes covering each word with full overlap
       const createBoxes = (container, defaultColor) => {
         const words = container.querySelectorAll(".fall-word-wrapper");
         return Array.from(words).map((word) => {
-          const rect = word.getBoundingClientRect();
           const color = word.getAttribute("data-box-color") || defaultColor;
           const box = document.createElement("div");
           box.className = "fall-color-box";
           box.style.position = "absolute";
-          box.style.top = "0";
-          box.style.left = "50%";
-          box.style.transform = "translateX(-50%)";
+          box.style.top = "-4%";
+          box.style.bottom = "-4%";
+          box.style.left = "-6%";
+          box.style.right = "-6%";
           box.style.zIndex = "10";
-          box.style.width = `${rect.width * 1.08}px`;
-          box.style.height = `${rect.height * 0.96}px`;
           box.style.backgroundColor = color;
           box.style.borderRadius = "4px";
           box.style.pointerEvents = "none";
@@ -87,19 +90,11 @@ function Experience() {
 
       allBoxes = createBoxes(titleEl, "#E1DCC9");
 
-      updateBoxSizes = () => {
-        const words = titleEl.querySelectorAll(".fall-word-wrapper");
-        words.forEach((word, i) => {
-          if (allBoxes[i]) {
-            const r = word.getBoundingClientRect();
-            allBoxes[i].style.width = `${r.width * 1.08}px`;
-            allBoxes[i].style.height = `${r.height * 0.96}px`;
-          }
-        });
-      };
-      window.addEventListener("resize", updateBoxSizes);
+      const getOffscreenTop = () => -(window.innerHeight + 250);
 
-      // Initial state: tiles fully visible covering words
+      // Initial state:
+      // Header is centered, tiles are fully visible covering words
+      gsap.set(headerContent, { y: 0, opacity: 1, pointerEvents: "auto" });
       gsap.set(allBoxes, {
         opacity: 1,
         visibility: "visible",
@@ -109,72 +104,108 @@ function Experience() {
         rotation: 0,
       });
 
-      // Falling timeline on scroll
-      const tl = gsap.timeline({
+      // Master Unified Timeline (pinned in viewport center)
+      const masterTl = gsap.timeline({
         scrollTrigger: {
-          trigger: titleEl,
-          start: "top 80%",
-          end: "top 35%",
+          trigger: pinContainer,
+          start: "top top",
+          end: "+=2000",
+          pin: pinContainer,
+          pinSpacing: true,
           scrub: 0.6,
+          anticipatePin: 1,
           fastScrollEnd: true,
           preventOverlaps: true,
           invalidateOnRefresh: true,
         },
       });
 
-      // Tiles drop down with physics and fade to 0
-      tl.to(allBoxes, {
-        y: () => window.innerHeight * 1.4,
+      // 1. Tiles drop down with physics and fade to 0
+      masterTl.to(allBoxes, {
+        y: () => window.innerHeight * 1.6,
         x: () => gsap.utils.random(-150, 150),
         rotation: () => gsap.utils.random(-360, 360),
         opacity: 0,
         ease: "power2.in",
         stagger: {
-          amount: 0.4,
+          amount: 0.45,
           from: "random",
         },
-        duration: 0.8,
+        duration: 0.85,
       });
-    }, titleEl);
+
+      // 2. Short hold so revealed text can be read in the center
+      masterTl.to({}, { duration: 0.35 });
+
+      // 3. Header text ascends cleanly into the top viewport
+      masterTl.to(headerContent, {
+        y: getOffscreenTop,
+        opacity: 0,
+        ease: "power2.inOut",
+        duration: 0.7,
+      });
+    }, pinContainer);
 
     return () => {
-      window.removeEventListener("resize", updateBoxSizes);
       ctx.revert();
-      allBoxes.forEach((b) => b.remove());
+      const existingBoxes = pinContainer.querySelectorAll(".fall-color-box");
+      existingBoxes.forEach((b) => b.remove());
     };
   }, []);
 
   return (
-    <section id="experience" className="experience-section">
-      <div className="experience-header">
-        <span>EXPERIENCE</span>
+    <section
+      id="experience"
+      ref={sectionRef}
+      className="experience-section relative z-[2] w-full"
+    >
+      {/* Pinned Experience Intro Header (Centered in Viewport) */}
+      <div
+        ref={pinContainerRef}
+        className="relative h-screen w-full overflow-hidden flex items-center justify-center pointer-events-auto"
+      >
+        <div
+          ref={headerContentRef}
+          className="absolute inset-0 flex flex-col items-center justify-center text-center px-5 max-w-[840px] mx-auto will-change-transform z-10"
+        >
+          <span className="text-[11px] font-semibold tracking-[0.28em] text-[#E1DCC9]/60 md:text-[12.5px] uppercase mb-4">
+            EXPERIENCE
+          </span>
 
-        <h2 ref={titleRef} className="select-none">
-          {[
-            { text: "Different", brAfter: false, color: "#E1DCC9" },
-            { text: "paths,", brAfter: true, color: "#E1DCC9" },
-            { text: "one", brAfter: false, color: "#9a6a35" },
-            { text: "direction.", brAfter: false, color: "#9a6a35" },
-          ].map((item, idx) => (
-            <React.Fragment key={idx}>
-              <span
-                data-box-color={item.color}
-                style={{ color: item.color }}
-                className="fall-word-wrapper inline-block relative mx-[0.14em]"
-              >
-                {item.text}
-              </span>
-              {item.brAfter && <br />}
-            </React.Fragment>
-          ))}
-        </h2>
+          <h2
+            ref={titleRef}
+            className="text-[clamp(44px,7.5vw,84px)] font-semibold leading-[0.9] tracking-[-0.055em] mb-6 select-none"
+          >
+            {[
+              { text: "Different", brAfter: false, color: "#E1DCC9" },
+              { text: "paths,", brAfter: true, color: "#E1DCC9" },
+              { text: "one", brAfter: false, color: "#9a6a35" },
+              { text: "direction.", brAfter: false, color: "#9a6a35" },
+            ].map((item, idx) => (
+              <React.Fragment key={idx}>
+                <span
+                  data-box-color={item.color}
+                  style={{ color: item.color }}
+                  className="fall-word-wrapper inline-block relative mx-[0.14em]"
+                >
+                  {item.text}
+                </span>
+                {item.brAfter && <br />}
+              </React.Fragment>
+            ))}
+          </h2>
 
-        <p>
-          A journey through engineering, technology, operations and software
-          development — each stage shaping how I approach problem solving today.
-        </p>
+          <p
+            ref={descRef}
+            className="mx-auto max-w-[600px] text-[clamp(14px,1.15vw,18px)] font-normal leading-relaxed text-[#E1DCC9]/65 select-none"
+          >
+            A journey through engineering, technology, operations and software
+            development — each stage shaping how I approach problem solving today.
+          </p>
+        </div>
       </div>
 
+      {/* Main Experience Layout (Timeline & Cards) */}
       <div className="experience-layout">
         <div className="experience-side">
           <div className="experience-side-line" />

@@ -519,12 +519,11 @@ function Projects() {
           const box = document.createElement("div");
           box.className = "fall-color-box";
           box.style.position = "absolute";
-          box.style.top = "0";
-          box.style.left = "50%";
-          box.style.transform = "translateX(-50%)";
+          box.style.top = "-4%";
+          box.style.bottom = "-4%";
+          box.style.left = "-6%";
+          box.style.right = "-6%";
           box.style.zIndex = "10";
-          box.style.width = `${rect.width * 1.08}px`;
-          box.style.height = `${rect.height * 0.96}px`;
           box.style.backgroundColor = color;
           box.style.borderRadius = "4px";
           box.style.pointerEvents = "none";
@@ -537,17 +536,7 @@ function Projects() {
 
       const allBoxes = createBoxes(titleEl, "#E1DCC9");
 
-      const updateBoxSizes = () => {
-        const titleWords = titleEl.querySelectorAll(".fall-word-wrapper");
-        titleWords.forEach((word, i) => {
-          if (allBoxes[i]) {
-            const r = word.getBoundingClientRect();
-            allBoxes[i].style.width = `${r.width * 1.08}px`;
-            allBoxes[i].style.height = `${r.height * 0.96}px`;
-          }
-        });
-      };
-      window.addEventListener("resize", updateBoxSizes);
+
 
       const getOffscreenTop = () => -(window.innerHeight + 250);
 

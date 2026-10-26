@@ -8,8 +8,7 @@
 
   width: 100%;
 
-  padding: 145px clamp(35px, 5vw, 90px) 170px;
-
+  padding: 0;
 }
 
 /* =========================================================
@@ -80,6 +79,8 @@
   gap: clamp(55px, 7vw, 115px);
 
   align-items: start;
+
+  padding: 60px clamp(35px, 5vw, 90px) 170px;
 }
 
 /* =========================================================
@@ -706,7 +707,11 @@
 
 @media (max-width: 760px) {
   .experience-section {
-    padding: 105px 20px 120px;
+    padding: 0;
+  }
+
+  .experience-layout {
+    padding: 40px 20px 120px;
   }
 
   /* HEADER */
