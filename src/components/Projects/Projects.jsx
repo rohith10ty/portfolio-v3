@@ -483,21 +483,31 @@ function Projects() {
   const activeProject = selectedProjectId ? projectsMap[selectedProjectId] : null;
 
   // =========================================================
-  // FALL COLOR-BLOCK TEXT REVEAL ANIMATION (Audix #125)
-  // Stops in center -> Tiles drop down -> Text reveals -> Exits to top
+  // UNIFIED PROJECTS TIMELINE:
+  // 1. Text reveals with Audix #125 falling color blocks (Bronze & Cream)
+  // 2. Text smoothly ascends into the top viewport
+  // 3. Tree immediately descends from top viewport into center
+  // 4. Tree rests in center for full user exploration
+  // 5. Tree ascends into top viewport to transition to Experience
   // =========================================================
   useLayoutEffect(() => {
-    const headerPin = headerPinRef.current;
+    const pinContainer = headerPinRef.current;
     const headerContent = headerContentRef.current;
     const titleEl = titleRef.current;
     const descEl = descRef.current;
-    if (!headerPin || !headerContent || !titleEl || !descEl) return undefined;
+    const treeWrapper = treeWrapperRef.current;
+    if (!pinContainer || !headerContent || !titleEl || !descEl || !treeWrapper)
+      return undefined;
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (reducedMotion) return undefined;
+    if (reducedMotion) {
+      gsap.set(headerContent, { opacity: 1, y: 0 });
+      gsap.set(treeWrapper, { opacity: 1, y: 0 });
+      return undefined;
+    }
 
     const ctx = gsap.context(() => {
       // Create color boxes covering each word
@@ -518,7 +528,7 @@ function Projects() {
           box.style.backgroundColor = color;
           box.style.borderRadius = "4px";
           box.style.pointerEvents = "none";
-          box.style.willChange = "transform";
+          box.style.willChange = "transform, opacity";
           box.style.boxShadow = "0 4px 14px rgba(0, 0, 0, 0.4)";
           word.appendChild(box);
           return box;
@@ -549,13 +559,24 @@ function Projects() {
       };
       window.addEventListener("resize", updateBoxSizes);
 
-      // Pinned Timeline: Stops in center, tiles fall down, holds, then exits to top
-      const headerTl = gsap.timeline({
+      const getOffscreenTop = () => -(window.innerHeight + 250);
+
+      // Initial States:
+      // Header is centered, tree starts offscreen in the TOP viewport
+      gsap.set(headerContent, { y: 0, opacity: 1, pointerEvents: "auto" });
+      gsap.set(treeWrapper, {
+        y: getOffscreenTop,
+        opacity: 0,
+        pointerEvents: "none",
+      });
+
+      // Master Unified Timeline (pinned for smooth exploration)
+      const masterTl = gsap.timeline({
         scrollTrigger: {
-          trigger: headerPin,
+          trigger: pinContainer,
           start: "top top",
-          end: "+=1500",
-          pin: headerPin,
+          end: "+=2800",
+          pin: pinContainer,
           pinSpacing: true,
           scrub: 0.6,
           anticipatePin: 1,
@@ -565,111 +586,74 @@ function Projects() {
         },
       });
 
-      // STAGE 1: Color blocks drop down with physics (gravity, spin, horizontal drift)
-      headerTl.to(allBoxes, {
-        y: () => window.innerHeight * 1.35,
-        x: () => gsap.utils.random(-140, 140),
+      // 1. Tiles drop down with physics and fade completely to 0
+      masterTl.to(allBoxes, {
+        y: () => window.innerHeight * 1.6,
+        x: () => gsap.utils.random(-150, 150),
         rotation: () => gsap.utils.random(-360, 360),
+        opacity: 0,
         ease: "power2.in",
         stagger: {
-          amount: 0.65,
+          amount: 0.5,
           from: "random",
         },
-        duration: 1.0,
+        duration: 0.9,
       });
 
-      // STAGE 2: Rest in center so revealed text can be read
-      headerTl.to({}, { duration: 0.4 });
+      // Keep boxes completely hidden so they never reappear
+      masterTl.set(allBoxes, { autoAlpha: 0, display: "none" }, 0.95);
 
-      // STAGE 3: Text smoothly moves up and exits into the top viewport
-      headerTl.to(
+      // 2. Pause to comfortably read revealed text
+      masterTl.to({}, { duration: 0.35 });
+
+      // 3. Text smoothly ascends into the TOP viewport and clears completely
+      masterTl.to(
         headerContent,
         {
-          y: () => -window.innerHeight * 0.75,
+          y: () => -window.innerHeight * 0.9,
           opacity: 0,
-          duration: 0.8,
+          pointerEvents: "none",
+          duration: 0.75,
           ease: "power1.in",
-        }
-      );
-    }, headerPin);
-
-    return () => {
-      ctx.revert();
-      const existingBoxes = headerPin.querySelectorAll(".fall-color-box");
-      existingBoxes.forEach((b) => b.remove());
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    const stage = stageRef.current;
-    const treeWrapper = treeWrapperRef.current;
-    if (!stage || !treeWrapper) return undefined;
-
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (reducedMotion) {
-      gsap.set(treeWrapper, { y: 0, opacity: 1 });
-      return undefined;
-    }
-
-    const ctx = gsap.context(() => {
-      const getOffscreenTop = () => -(window.innerHeight + 350);
-      const getOffscreenBottom = () => window.innerHeight + 350;
-
-      // Initial State: Tree enters from the BOTTOM
-      gsap.set(treeWrapper, {
-        y: getOffscreenBottom,
-        x: 0,
-        opacity: 0,
-      });
-
-      // Timeline: Bottom -> Center (stay for scrolls) -> Top
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: stage,
-          start: "top top",
-          end: "+=1800",
-          pin: stage,
-          pinSpacing: true,
-          scrub: 0.18,
-          anticipatePin: 1,
-          fastScrollEnd: true,
-          preventOverlaps: true,
-          invalidateOnRefresh: true,
         },
-      });
+        1.25
+      );
 
-      // STAGE 1: Smoothly enter from BOTTOM into the center
-      tl.to(
+      // 4. ONCE text has fully gone into top viewport (at 2.0s), tree descends from TOP viewport into center
+      masterTl.to(
         treeWrapper,
         {
           y: 0,
           opacity: 1,
-          duration: 0.6,
-          ease: "power1.out",
+          pointerEvents: "auto",
+          duration: 0.8,
+          ease: "power2.out",
         },
-        0
+        2.05
       );
 
-      // STAGE 2: Rest in the center
-      tl.to({}, { duration: 1.2 });
+      // 5. Rest in center for user interaction (file tree, laptop/iPhone switcher)
+      masterTl.to({}, { duration: 1.1 });
 
-      // STAGE 3: Smoothly exit into the TOP
-      tl.to(
+      // 6. Tree glides UP into top viewport to smoothly hand off to Experience
+      masterTl.to(
         treeWrapper,
         {
           y: getOffscreenTop,
           opacity: 0,
-          duration: 0.6,
+          pointerEvents: "none",
+          duration: 0.75,
           ease: "power1.in",
         },
-        1.8
+        3.95
       );
-    }, stage);
+    }, pinContainer);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      const existingBoxes = pinContainer.querySelectorAll(".fall-color-box");
+      existingBoxes.forEach((b) => b.remove());
+    };
   }, []);
 
   return (
@@ -678,16 +662,21 @@ function Projects() {
       className="relative z-[2] w-full"
     >
       {/* ========================================================
-          1. CENTERED PINNED HEADER (Fall Color Block Text Reveal)
-          Pins in center -> Tiles drop down -> Text reveals -> Exits to top
+          UNIFIED PROJECTS STAGE:
+          1. Centered header with Audix #125 Fall Reveal (Cream & Bronze tiles)
+          2. Header smoothly exits into top viewport
+          3. Interactive File Tree simultaneously enters from top viewport
+          4. Tree rests in center for full user exploration
+          5. Tree smoothly exits into top viewport to hand off to Experience
           ======================================================== */}
       <div
         ref={headerPinRef}
-        className="projects-header-pin relative z-10 flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden"
+        className="projects-unified-stage relative z-10 flex h-[100svh] w-full items-center justify-center overflow-hidden px-4 md:px-8 lg:px-12"
       >
+        {/* Layer 1: Pinned Text Header */}
         <div
           ref={headerContentRef}
-          className="relative flex flex-col items-center justify-center text-center px-5 max-w-[840px] mx-auto will-change-transform"
+          className="absolute inset-0 flex flex-col items-center justify-center text-center px-5 max-w-[840px] mx-auto will-change-transform z-10"
         >
           <span className="text-[11px] font-semibold tracking-[0.28em] text-[#E1DCC9]/60 md:text-[12.5px] uppercase mb-4">
             PROJECTS / 03
@@ -737,16 +726,8 @@ function Projects() {
             ))}
           </p>
         </div>
-      </div>
 
-      {/* ========================================================
-          2. SHOWCASE STAGE: Tree comes from left, stays in center, goes to right
-          Responsive proportional scaler for compact mobile (iPhone SE & Samsung A55)
-          ======================================================== */}
-      <div
-        ref={stageRef}
-        className="relative z-20 flex h-[100svh] w-full items-center justify-center overflow-hidden px-4 md:px-8 lg:px-12"
-      >
+        {/* Layer 2: Interactive File Tree Showcase (Enters from top viewport) */}
         <div
           ref={treeWrapperRef}
           className="relative w-full max-w-[1420px] will-change-transform flex items-center justify-center"
