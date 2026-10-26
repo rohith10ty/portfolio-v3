@@ -58,13 +58,23 @@ function Hero() {
         },
       );
 
+      // Perfectly center the complete name "ROHITH NAIDU" over the photo at 50vw
+      const leftHeading = container.querySelector(".hero-panel-left .door-heading");
+      const rightHeading = container.querySelector(".hero-panel-right .door-heading");
+      const wL = leftHeading ? leftHeading.offsetWidth : 160;
+      const wR = rightHeading ? rightHeading.offsetWidth : 136;
+      const wordGap = 16; // clean 16px space between words
+      const centerOffset = (wL - wR) / 2; // offset to center whole phrase at 50vw
+      const initX_L = -wordGap / 2 + centerOffset;
+      const initX_R = wordGap / 2 + centerOffset;
+
       gsap.set(".hero-panel-left .panel-word", {
-        x: -16,
+        x: initX_L,
         y: 0,
       });
 
       gsap.set(".hero-panel-right .panel-word", {
-        x: 16,
+        x: initX_R,
         y: 0,
       });
 
@@ -224,23 +234,10 @@ function Hero() {
           },
           2.0,
         )
-        // Offset R leftward away from the door edge so it has a comfortable breathing gap
+        // R and N stay right on their door rims symmetrically as the portal opens
         .to(
-          ".hero-panel-left .char-r",
+          [".hero-panel-left .char-r", ".hero-panel-right .char-n"],
           {
-            x: -36,
-            scale: 1.15,
-            opacity: 0.85,
-            duration: 1.8,
-            ease: "power2.inOut",
-          },
-          2.0,
-        )
-        // Offset N rightward away from the door edge so it has a comfortable breathing gap
-        .to(
-          ".hero-panel-right .char-n",
-          {
-            x: 36,
             scale: 1.15,
             opacity: 0.85,
             duration: 1.8,
@@ -295,23 +292,7 @@ function Hero() {
               <span className="char initial char-r">
                 <span>R</span>
               </span>
-              <span className="rest word-ohith">
-                <span className="char">
-                  <span>O</span>
-                </span>
-                <span className="char">
-                  <span>H</span>
-                </span>
-                <span className="char">
-                  <span>I</span>
-                </span>
-                <span className="char">
-                  <span>T</span>
-                </span>
-                <span className="char">
-                  <span>H</span>
-                </span>
-              </span>
+              <span className="rest word-ohith"><span className="char"><span>O</span></span><span className="char"><span>H</span></span><span className="char"><span>I</span></span><span className="char"><span>T</span></span><span className="char"><span>H</span></span></span>
             </h1>
           </div>
         </div>
@@ -334,20 +315,7 @@ function Hero() {
               <span className="char initial char-n">
                 <span>N</span>
               </span>
-              <span className="rest word-aidu">
-                <span className="char">
-                  <span>A</span>
-                </span>
-                <span className="char">
-                  <span>I</span>
-                </span>
-                <span className="char">
-                  <span>D</span>
-                </span>
-                <span className="char">
-                  <span>U</span>
-                </span>
-              </span>
+              <span className="rest word-aidu"><span className="char"><span>A</span></span><span className="char"><span>I</span></span><span className="char"><span>D</span></span><span className="char"><span>U</span></span></span>
             </h1>
           </div>
         </div>
