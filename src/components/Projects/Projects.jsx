@@ -501,10 +501,11 @@ function Projects() {
 
     const ctx = gsap.context(() => {
       // Create color boxes covering each word
-      const createBoxes = (container, color) => {
+      const createBoxes = (container, defaultColor) => {
         const words = container.querySelectorAll(".fall-word-wrapper");
         return Array.from(words).map((word) => {
           const rect = word.getBoundingClientRect();
+          const color = word.getAttribute("data-box-color") || defaultColor;
           const box = document.createElement("div");
           box.className = "fall-color-box";
           box.style.position = "absolute";
@@ -694,18 +695,22 @@ function Projects() {
 
           <h2
             ref={titleRef}
-            className="text-[clamp(44px,7.5vw,84px)] font-semibold leading-[0.9] tracking-[-0.055em] text-[#E1DCC9] mb-6 select-none"
+            className="text-[clamp(44px,7.5vw,84px)] font-semibold leading-[0.9] tracking-[-0.055em] mb-6 select-none"
           >
             {[
-              { text: "Selected", brAfter: false },
-              { text: "work,", brAfter: true },
-              { text: "crafted", brAfter: false },
-              { text: "for", brAfter: false },
-              { text: "real", brAfter: false },
-              { text: "use.", brAfter: false },
+              { text: "Selected", brAfter: false, color: "#E1DCC9" },
+              { text: "work,", brAfter: true, color: "#E1DCC9" },
+              { text: "crafted", brAfter: false, color: "#9a6a35" },
+              { text: "for", brAfter: false, color: "#9a6a35" },
+              { text: "real", brAfter: false, color: "#9a6a35" },
+              { text: "use.", brAfter: false, color: "#9a6a35" },
             ].map((item, idx) => (
               <React.Fragment key={idx}>
-                <span className="fall-word-wrapper inline-block relative mx-[0.14em]">
+                <span
+                  data-box-color={item.color}
+                  style={{ color: item.color }}
+                  className="fall-word-wrapper inline-block relative mx-[0.14em]"
+                >
                   {item.text}
                 </span>
                 {item.brAfter && <br />}
@@ -715,7 +720,7 @@ function Projects() {
 
           <p
             ref={descRef}
-            className="mx-auto max-w-[600px] text-[clamp(14px,1.15vw,18px)] font-normal leading-relaxed text-[#E1DCC9]/75 select-none"
+            className="mx-auto max-w-[600px] text-[clamp(14px,1.15vw,18px)] font-normal leading-relaxed text-[#E1DCC9]/65 select-none"
           >
             {[
               "Explore", "my", "GitHub", "projects", "directly", "through", "the",
@@ -724,6 +729,7 @@ function Projects() {
             ].map((word, idx) => (
               <span
                 key={idx}
+                data-box-color="#C5BFA9"
                 className="fall-word-wrapper inline-block relative mx-[0.12em]"
               >
                 {word}
