@@ -562,8 +562,16 @@ function Projects() {
       const getOffscreenTop = () => -(window.innerHeight + 250);
 
       // Initial States:
-      // Header is centered, tree starts offscreen in the TOP viewport
+      // Header is centered, tiles are fully visible covering words, tree is offscreen at top
       gsap.set(headerContent, { y: 0, opacity: 1, pointerEvents: "auto" });
+      gsap.set(allBoxes, {
+        opacity: 1,
+        visibility: "visible",
+        display: "block",
+        x: 0,
+        y: 0,
+        rotation: 0,
+      });
       gsap.set(treeWrapper, {
         y: getOffscreenTop,
         opacity: 0,
@@ -599,9 +607,6 @@ function Projects() {
         },
         duration: 0.9,
       });
-
-      // Keep boxes completely hidden so they never reappear
-      masterTl.set(allBoxes, { autoAlpha: 0, display: "none" }, 0.95);
 
       // 2. Pause to comfortably read revealed text
       masterTl.to({}, { duration: 0.35 });
