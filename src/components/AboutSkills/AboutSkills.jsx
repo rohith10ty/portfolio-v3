@@ -440,8 +440,7 @@ function AboutSkills() {
 
                   <img
                     src={profileImage}
-                    alt=""
-                    aria-hidden="true"
+                    alt="Rohith Naidu portrait"
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                   <canvas
@@ -450,13 +449,6 @@ function AboutSkills() {
                     aria-label="Rohith Naidu portrait rotating from side profile to front view"
                     className="absolute inset-0 z-10 h-full w-full opacity-0 transition-opacity duration-200"
                   />
-
-                  <div className="pointer-events-none absolute inset-0 z-20 bg-[linear-gradient(to_top,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.08)_37%,transparent_66%)]" />
-                  <div className="absolute bottom-5 left-5 right-5 z-30 md:bottom-7 md:left-7 md:right-7">
-                    <strong className="block text-[clamp(22px,1.9vw,32px)] font-semibold tracking-[-0.045em] text-[#e1dcc9]">
-                      Rohith Naidu
-                    </strong>
-                  </div>
                 </div>
 
                 {/* Centered ROLE Badge below photo (Moved down with photo) */}
