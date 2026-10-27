@@ -514,21 +514,17 @@ function Projects() {
       const createBoxes = (container, defaultColor) => {
         const words = container.querySelectorAll(".fall-word-wrapper");
         return Array.from(words).map((word) => {
-          const rect = word.getBoundingClientRect();
           const color = word.getAttribute("data-box-color") || defaultColor;
           const box = document.createElement("div");
           box.className = "fall-color-box";
           box.style.position = "absolute";
-          box.style.top = "-4%";
-          box.style.bottom = "-4%";
-          box.style.left = "-6%";
-          box.style.right = "-6%";
+          box.style.inset = "0";
           box.style.zIndex = "10";
           box.style.backgroundColor = color;
-          box.style.borderRadius = "4px";
+          box.style.borderRadius = "5px";
           box.style.pointerEvents = "none";
           box.style.willChange = "transform, opacity";
-          box.style.boxShadow = "0 4px 14px rgba(0, 0, 0, 0.4)";
+          box.style.boxShadow = "0 3px 12px rgba(0, 0, 0, 0.28)";
           word.appendChild(box);
           return box;
         });
@@ -668,27 +664,40 @@ function Projects() {
 
           <h2
             ref={titleRef}
-            className="text-[clamp(44px,7.5vw,84px)] font-semibold leading-[0.9] tracking-[-0.055em] mb-6 select-none"
+            className="text-[clamp(36px,5.2vw,68px)] font-semibold leading-[1.2] tracking-[-0.04em] mb-6 select-none"
           >
-            {[
-              { text: "Selected", brAfter: false, color: "#E1DCC9" },
-              { text: "work,", brAfter: true, color: "#E1DCC9" },
-              { text: "crafted", brAfter: false, color: "#9a6a35" },
-              { text: "for", brAfter: false, color: "#9a6a35" },
-              { text: "real", brAfter: false, color: "#9a6a35" },
-              { text: "use.", brAfter: false, color: "#9a6a35" },
-            ].map((item, idx) => (
-              <React.Fragment key={idx}>
+            <div className="flex flex-wrap items-center justify-center gap-x-[0.32em] mb-[0.22em]">
+              {[
+                { text: "Selected", color: "#E1DCC9" },
+                { text: "work,", color: "#E1DCC9" },
+              ].map((item, idx) => (
                 <span
+                  key={idx}
                   data-box-color={item.color}
                   style={{ color: item.color }}
-                  className="fall-word-wrapper inline-block relative mx-[0.14em]"
+                  className="fall-word-wrapper inline-block relative px-[0.05em]"
                 >
                   {item.text}
                 </span>
-                {item.brAfter && <br />}
-              </React.Fragment>
-            ))}
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-[0.32em]">
+              {[
+                { text: "crafted", color: "#9a6a35" },
+                { text: "for", color: "#9a6a35" },
+                { text: "real", color: "#9a6a35" },
+                { text: "use.", color: "#9a6a35" },
+              ].map((item, idx) => (
+                <span
+                  key={idx}
+                  data-box-color={item.color}
+                  style={{ color: item.color }}
+                  className="fall-word-wrapper inline-block relative px-[0.05em]"
+                >
+                  {item.text}
+                </span>
+              ))}
+            </div>
           </h2>
 
           <p
