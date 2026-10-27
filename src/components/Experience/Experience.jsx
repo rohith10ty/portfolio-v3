@@ -73,7 +73,10 @@ function Experience() {
           const box = document.createElement("div");
           box.className = "fall-color-box";
           box.style.position = "absolute";
-          box.style.inset = "0";
+          box.style.top = "15%";
+          box.style.bottom = "-1%";
+          box.style.left = "0";
+          box.style.right = "0";
           box.style.zIndex = "10";
           box.style.backgroundColor = color;
           box.style.borderRadius = "5px";
